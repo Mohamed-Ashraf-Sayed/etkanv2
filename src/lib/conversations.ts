@@ -17,7 +17,9 @@ export interface Conversation {
 // In-memory stores
 const conversations = new Map<string, Conversation>();
 const telegramToConversation = new Map<number, string>();
+const clientNumberToConversation = new Map<number, string>();
 let clientCounter = 0;
+let lastActiveConversationId: string | null = null;
 
 // Cleanup conversations older than 24 hours
 const EXPIRY_MS = 24 * 60 * 60 * 1000;
@@ -29,6 +31,7 @@ function cleanup() {
       for (const msgId of conv.telegramMessageIds) {
         telegramToConversation.delete(msgId);
       }
+      clientNumberToConversation.delete(conv.clientNumber);
       conversations.delete(id);
     }
   }
@@ -54,6 +57,7 @@ export function createConversation(id: string): Conversation {
     lastActivity: Date.now(),
   };
   conversations.set(id, conv);
+  clientNumberToConversation.set(clientCounter, id);
   return conv;
 }
 
@@ -65,6 +69,33 @@ export function addMessage(convId: string, message: Message) {
   const conv = getOrCreateConversation(convId);
   conv.messages.push(message);
   conv.lastActivity = Date.now();
+}
+
+export function setLastActiveConversation(convId: string) {
+  lastActiveConversationId = convId;
+}
+
+export function getLastActiveConversation(): Conversation | undefined {
+  if (!lastActiveConversationId) return undefined;
+  return conversations.get(lastActiveConversationId);
+}
+
+export function findConversationByClientNumber(
+  num: number
+): Conversation | undefined {
+  const convId = clientNumberToConversation.get(num);
+  if (convId) return conversations.get(convId);
+  return undefined;
+}
+
+export function getActiveConversationsCount(): number {
+  const now = Date.now();
+  const ACTIVE_MS = 30 * 60 * 1000; // 30 minutes
+  let count = 0;
+  for (const conv of conversations.values()) {
+    if (now - conv.lastActivity < ACTIVE_MS) count++;
+  }
+  return count;
 }
 
 export function addTelegramMessageId(convId: string, messageId: number) {

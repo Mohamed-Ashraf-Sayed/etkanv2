@@ -5,6 +5,7 @@ import {
   addMessage,
   addTelegramMessageId,
   getFirstTelegramMessageId,
+  setLastActiveConversation,
 } from "@/lib/conversations";
 import {
   sendTelegramMessage,
@@ -30,12 +31,13 @@ export async function POST(req: Request) {
     const latestUserMessage =
       messages[messages.length - 1]?.content || "";
 
-    // Store user message
+    // Store user message & mark as last active
     addMessage(convId, {
       role: "user",
       content: latestUserMessage,
       timestamp: Date.now(),
     });
+    setLastActiveConversation(convId);
 
     const replyToId = getFirstTelegramMessageId(convId);
 
