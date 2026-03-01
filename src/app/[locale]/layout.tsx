@@ -102,7 +102,7 @@ export default async function LocaleLayout({
           }}
         />
       </head>
-      <body className="font-cairo antialiased bg-background text-text-primary min-h-screen">
+      <body className="font-cairo antialiased bg-background text-text-primary min-h-screen" suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>
             {children}
