@@ -1,4 +1,6 @@
-import { getTranslations } from "next-intl/server";
+"use client";
+
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ChevronLeft } from "lucide-react";
 
@@ -11,8 +13,8 @@ interface BreadcrumbProps {
   items: BreadcrumbItem[];
 }
 
-export default async function Breadcrumb({ items }: BreadcrumbProps) {
-  const t = await getTranslations("common");
+export default function Breadcrumb({ items }: BreadcrumbProps) {
+  const t = useTranslations("common");
 
   return (
     <nav className="mb-8">
