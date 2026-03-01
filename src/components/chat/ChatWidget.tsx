@@ -79,14 +79,32 @@ export default function ChatWidget() {
     setMessages(newMessages);
     setInput("");
     setShowSuggestions(false);
-    setIsStreaming(true);
 
     // Reset textarea height
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
     }
 
-    // Add empty assistant message for streaming
+    // In admin mode, just send and wait for admin reply via polling
+    if (isAdminMode) {
+      await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          conversationId,
+          messages: newMessages
+            .filter((m) => m.role !== "admin")
+            .map((m) => ({
+              role: m.role === "admin" ? "assistant" : m.role,
+              content: m.content,
+            })),
+        }),
+      });
+      return;
+    }
+
+    // AI mode: stream response
+    setIsStreaming(true);
     setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
 
     try {
@@ -126,6 +144,11 @@ export default function ChatWidget() {
           };
           return updated;
         });
+      }
+
+      // If response was empty, remove the empty assistant message
+      if (!accumulated.trim()) {
+        setMessages((prev) => prev.filter((_, i) => i !== prev.length - 1));
       }
     } catch {
       setMessages((prev) => {

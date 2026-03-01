@@ -39,7 +39,7 @@ export async function POST(req: Request) {
 
     const replyToId = getFirstTelegramMessageId(convId);
 
-    // If admin has taken over, don't use AI
+    // If admin has taken over, forward to Telegram silently
     if (conv.isAdminMode) {
       const msgId = await sendTelegramMessage(
         formatFollowUpMessage(conv.clientNumber, latestUserMessage),
@@ -47,15 +47,8 @@ export async function POST(req: Request) {
       );
       if (msgId) addTelegramMessageId(convId, msgId);
 
-      const text =
-        "تم تحويلك لفريق الدعم — هيردوا عليك في أقرب وقت 🙏";
-      addMessage(convId, {
-        role: "assistant",
-        content: text,
-        timestamp: Date.now(),
-      });
-
-      return new Response(text, {
+      // Return empty — admin reply will come via polling
+      return new Response("", {
         headers: { "Content-Type": "text/plain; charset=utf-8" },
       });
     }
