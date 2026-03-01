@@ -16,7 +16,7 @@ export default function ThemeToggle({ className }: { className?: string }) {
     return (
       <div
         className={cn(
-          "w-9 h-9 rounded-full bg-surface-light/50 border border-border",
+          "w-9 h-9 rounded-full bg-white/10 border border-white/20",
           className
         )}
       />
@@ -30,9 +30,9 @@ export default function ThemeToggle({ className }: { className?: string }) {
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className={cn(
         "relative w-9 h-9 rounded-full flex items-center justify-center",
-        "bg-surface-light/50 border border-border",
-        "hover:border-primary/30 hover:bg-surface-lighter/50",
-        "transition-all duration-300 cursor-pointer",
+        "bg-white/10 border border-white/20",
+        "hover:bg-white/20 hover:border-accent/40",
+        "transition-all duration-200 cursor-pointer",
         className
       )}
       aria-label={isDark ? "التبديل للوضع الفاتح" : "التبديل للوضع الداكن"}
@@ -46,7 +46,7 @@ export default function ThemeToggle({ className }: { className?: string }) {
             exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
             transition={{ duration: 0.2 }}
           >
-            <Sun className="w-4 h-4 text-accent" />
+            <Sun className="w-4 h-4 text-white" />
           </motion.div>
         ) : (
           <motion.div
@@ -56,7 +56,7 @@ export default function ThemeToggle({ className }: { className?: string }) {
             exit={{ rotate: -90, opacity: 0, scale: 0.5 }}
             transition={{ duration: 0.2 }}
           >
-            <Moon className="w-4 h-4 text-primary" />
+            <Moon className="w-4 h-4 text-white" />
           </motion.div>
         )}
       </AnimatePresence>

@@ -57,16 +57,16 @@ export default function AnimatedCounter({
   return (
     <div ref={ref} className="text-center">
       {IconComponent && (
-        <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-gradient-to-br from-primary/15 to-accent/10 flex items-center justify-center">
-          <IconComponent className="w-6 h-6 text-primary-light" />
+        <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center">
+          <IconComponent className="w-6 h-6 text-accent" />
         </div>
       )}
-      <div className="text-h1 font-bold font-cairo gradient-text mb-2">
+      <div className="text-h1 font-bold font-cairo text-accent mb-2">
         {prefix}
         {displayValue}
         {suffix}
       </div>
-      <p className="text-text-secondary text-sm sm:text-base font-tajawal">
+      <p className="text-text-secondary text-sm sm:text-base font-cairo">
         {label}
       </p>
     </div>

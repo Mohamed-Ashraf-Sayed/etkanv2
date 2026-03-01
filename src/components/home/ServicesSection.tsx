@@ -1,114 +1,36 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
-import { Globe, Building2, Server, Headphones, TrendingUp, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { serviceCategories } from "@/data/services";
 
-const iconMap: Record<string, React.ElementType> = {
-  Globe,
-  Building2,
-  Server,
-  Headphones,
-  TrendingUp,
+const serviceImages: Record<string, string> = {
+  "web-and-apps": "/images/service-web.jpg",
+  "enterprise-systems": "/images/service-enterprise.jpg",
+  infrastructure: "/images/service-infra.jpg",
+  support: "/images/service-support.jpg",
+  consulting: "/images/service-consulting.jpg",
 };
 
-const cardGradients: Record<string, string> = {
-  Globe: "from-primary/15 via-primary/8 to-transparent",
-  Building2: "from-secondary/15 via-secondary/8 to-transparent",
-  Server: "from-primary/12 via-accent/8 to-transparent",
-  Headphones: "from-accent/15 via-accent/8 to-transparent",
-  TrendingUp: "from-accent/15 via-primary/8 to-transparent",
-};
-
-function ServiceIllustration({ icon }: { icon: string }) {
-  if (icon === "Globe") {
-    return (
-      <svg viewBox="0 0 120 70" fill="none" className="w-full h-full text-primary-light">
-        <rect x="10" y="8" width="100" height="54" rx="6" fill="currentColor" fillOpacity="0.06" stroke="currentColor" strokeOpacity="0.1" strokeWidth="0.5" />
-        <rect x="10" y="8" width="100" height="14" rx="6" fill="currentColor" fillOpacity="0.04" />
-        <circle cx="20" cy="15" r="2" fill="currentColor" fillOpacity="0.15" />
-        <circle cx="27" cy="15" r="2" fill="currentColor" fillOpacity="0.15" />
-        <circle cx="34" cy="15" r="2" fill="currentColor" fillOpacity="0.15" />
-        <rect x="18" y="28" width="40" height="6" rx="1.5" fill="currentColor" fillOpacity="0.12" />
-        <rect x="18" y="38" width="30" height="4" rx="1" fill="currentColor" fillOpacity="0.06" />
-        <rect x="18" y="46" width="24" height="8" rx="4" fill="currentColor" fillOpacity="0.1" />
-        <rect x="70" y="26" width="32" height="28" rx="4" fill="currentColor" fillOpacity="0.06" />
-      </svg>
-    );
-  }
-  if (icon === "Building2") {
-    return (
-      <svg viewBox="0 0 120 70" fill="none" className="w-full h-full text-secondary">
-        <rect x="8" y="8" width="30" height="54" rx="4" fill="currentColor" fillOpacity="0.04" />
-        <rect x="12" y="14" width="8" height="4" rx="1" fill="currentColor" fillOpacity="0.06" />
-        <rect x="12" y="22" width="8" height="4" rx="1" fill="currentColor" fillOpacity="0.06" />
-        <rect x="12" y="30" width="8" height="4" rx="1" fill="currentColor" fillOpacity="0.06" />
-        <rect x="24" y="14" width="8" height="4" rx="1" fill="currentColor" fillOpacity="0.06" />
-        <rect x="24" y="22" width="8" height="4" rx="1" fill="currentColor" fillOpacity="0.06" />
-        <rect x="24" y="30" width="8" height="4" rx="1" fill="currentColor" fillOpacity="0.06" />
-        <rect x="44" y="10" width="68" height="52" rx="6" fill="currentColor" fillOpacity="0.05" stroke="currentColor" strokeOpacity="0.08" strokeWidth="0.5" />
-        <rect x="50" y="18" width="28" height="6" rx="1.5" fill="currentColor" fillOpacity="0.1" />
-        <rect x="50" y="30" width="56" height="6" rx="1.5" fill="currentColor" fillOpacity="0.06" />
-        <rect x="50" y="40" width="56" height="6" rx="1.5" fill="currentColor" fillOpacity="0.04" />
-        <rect x="50" y="50" width="56" height="6" rx="1.5" fill="currentColor" fillOpacity="0.04" />
-        <circle cx="100" cy="20" r="6" fill="currentColor" fillOpacity="0.08" />
-      </svg>
-    );
-  }
-  if (icon === "Server") {
-    return (
-      <svg viewBox="0 0 120 70" fill="none" className="w-full h-full text-primary-light">
-        <rect x="20" y="6" width="50" height="16" rx="4" fill="currentColor" fillOpacity="0.06" stroke="currentColor" strokeOpacity="0.08" strokeWidth="0.5" />
-        <circle cx="30" cy="14" r="2.5" fill="#22c55e" fillOpacity="0.4" />
-        <circle cx="38" cy="14" r="2.5" fill="#22c55e" fillOpacity="0.3" />
-        <rect x="52" y="11" width="12" height="5" rx="1" fill="currentColor" fillOpacity="0.05" />
-        <rect x="20" y="26" width="50" height="16" rx="4" fill="currentColor" fillOpacity="0.06" stroke="currentColor" strokeOpacity="0.08" strokeWidth="0.5" />
-        <circle cx="30" cy="34" r="2.5" fill="#22c55e" fillOpacity="0.4" />
-        <circle cx="38" cy="34" r="2.5" fill="#f59e0b" fillOpacity="0.3" />
-        <rect x="52" y="31" width="12" height="5" rx="1" fill="currentColor" fillOpacity="0.05" />
-        <rect x="20" y="46" width="50" height="16" rx="4" fill="currentColor" fillOpacity="0.06" stroke="currentColor" strokeOpacity="0.08" strokeWidth="0.5" />
-        <circle cx="30" cy="54" r="2.5" fill="#22c55e" fillOpacity="0.4" />
-        <circle cx="38" cy="54" r="2.5" fill="#22c55e" fillOpacity="0.3" />
-        <rect x="52" y="51" width="12" height="5" rx="1" fill="currentColor" fillOpacity="0.05" />
-        <line x1="70" y1="14" x2="80" y2="14" stroke="currentColor" strokeOpacity="0.1" strokeDasharray="2" />
-        <line x1="70" y1="34" x2="80" y2="34" stroke="currentColor" strokeOpacity="0.1" strokeDasharray="2" />
-        <line x1="70" y1="54" x2="80" y2="54" stroke="currentColor" strokeOpacity="0.1" strokeDasharray="2" />
-        <rect x="80" y="8" width="30" height="50" rx="4" fill="currentColor" fillOpacity="0.04" stroke="currentColor" strokeOpacity="0.06" strokeWidth="0.5" />
-        <polyline points="86,48 92,40 98,44 104,32" fill="none" stroke="currentColor" strokeOpacity="0.15" strokeWidth="1" />
-      </svg>
-    );
-  }
-  // Headphones - support
-  return (
-    <svg viewBox="0 0 120 70" fill="none" className="w-full h-full text-accent">
-      <rect x="15" y="10" width="90" height="50" rx="8" fill="currentColor" fillOpacity="0.04" stroke="currentColor" strokeOpacity="0.06" strokeWidth="0.5" />
-      <circle cx="38" cy="28" r="10" fill="currentColor" fillOpacity="0.06" />
-      <rect x="54" y="22" width="40" height="4" rx="1.5" fill="currentColor" fillOpacity="0.1" />
-      <rect x="54" y="30" width="30" height="3" rx="1" fill="currentColor" fillOpacity="0.06" />
-      <rect x="28" y="44" width="64" height="8" rx="4" fill="currentColor" fillOpacity="0.06" />
-      <rect x="34" y="46" width="24" height="4" rx="2" fill="currentColor" fillOpacity="0.1" />
-    </svg>
-  );
-}
-
-const containerVariants = {
-  hidden: {},
+const fadeIn = {
+  hidden: { opacity: 0, x: 20 },
   visible: {
-    transition: {
-      staggerChildren: 0.15,
-    },
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] as const },
   },
 };
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
+const fadeInReverse = {
+  hidden: { opacity: 0, x: -20 },
   visible: {
     opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
+    x: 0,
+    transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] as const },
   },
 };
 
@@ -121,62 +43,72 @@ export default function ServicesSection() {
           subtitle="حلول تقنية شاملة تلبي كل احتياجات عملك"
         />
 
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          {serviceCategories.map((category) => {
-            const Icon = iconMap[category.icon] || Globe;
-            const gradient = cardGradients[category.icon] || cardGradients.Globe;
+        <div className="flex flex-col gap-20 lg:gap-28">
+          {serviceCategories.map((category, index) => {
+            const isEven = index % 2 === 0;
+            const imageSrc = serviceImages[category.slug] || "/images/service-web.jpg";
 
             return (
               <motion.div
                 key={category.slug}
-                variants={cardVariants}
-                whileHover={{ y: -6, transition: { duration: 0.3 } }}
-                className="card-premium rounded-2xl overflow-hidden h-full flex flex-col"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+                className={`flex flex-col lg:flex-row items-center gap-10 lg:gap-16 ${
+                  isEven ? "" : "lg:flex-row-reverse"
+                }`}
               >
-                {/* Visual header area */}
-                <div
-                  className={`relative h-24 bg-gradient-to-b ${gradient} flex items-center justify-center overflow-hidden`}
+                {/* Image */}
+                <motion.div
+                  variants={isEven ? fadeIn : fadeInReverse}
+                  className="w-full lg:w-5/12 flex-shrink-0"
                 >
-                  {/* Abstract illustration behind icon */}
-                  <div className="absolute inset-0 opacity-60">
-                    <ServiceIllustration icon={category.icon} />
-                  </div>
-                  {/* Icon */}
-                  <div className="relative w-14 h-14 rounded-2xl bg-surface/80 backdrop-blur-sm border border-border/50 flex items-center justify-center shadow-sm">
-                    <Icon className="w-7 h-7 text-primary-light" />
-                  </div>
-                </div>
+                  <div className="group relative overflow-hidden rounded-2xl aspect-[4/3]">
+                    <Image
+                      src={imageSrc}
+                      alt={category.title}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      sizes="(max-width: 1024px) 100vw, 40vw"
+                    />
+                    <div className="absolute inset-0 bg-navy/30 group-hover:bg-navy/20 transition-colors duration-500" />
 
-                <div className="p-6 flex flex-col flex-1">
-                  {/* Title */}
-                  <h3 className="text-lg font-bold font-cairo text-text-primary mb-3">
+                    {/* Number badge */}
+                    <div className="absolute top-4 right-4 w-12 h-12 rounded-xl bg-accent/90 flex items-center justify-center">
+                      <span className="text-lg font-bold text-navy font-cairo">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Text */}
+                <motion.div
+                  variants={isEven ? fadeInReverse : fadeIn}
+                  className="w-full lg:w-7/12"
+                >
+                  <div className="gold-line mb-4" />
+
+                  <h3 className="text-h3 font-bold font-cairo text-text-primary mb-4 lg:mb-5">
                     {category.title}
                   </h3>
 
-                  {/* Description */}
-                  <p className="text-text-secondary text-sm leading-relaxed font-tajawal mb-5 flex-1">
+                  <p className="text-text-secondary text-body-lg font-cairo leading-relaxed mb-6 max-w-xl">
                     {category.description}
                   </p>
 
-                  {/* Link */}
                   <Link
                     href="/services"
-                    className="inline-flex items-center gap-2 text-primary-light text-sm font-semibold hover:text-accent transition-colors group"
+                    className="inline-flex items-center gap-2.5 text-accent font-semibold font-cairo transition-all duration-300 hover:gap-4 group/link"
                   >
-                    اعرف أكثر
-                    <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+                    <span>اعرف المزيد</span>
+                    <ArrowLeft className="w-4 h-4 transition-transform duration-300 group-hover/link:-translate-x-1" />
                   </Link>
-                </div>
+                </motion.div>
               </motion.div>
             );
           })}
-        </motion.div>
+        </div>
       </Container>
     </section>
   );

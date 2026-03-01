@@ -6,6 +6,7 @@ import { Calendar, Clock, User } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Badge from "@/components/ui/Badge";
 import Card from "@/components/ui/Card";
+import SectionTitle from "@/components/ui/SectionTitle";
 import { blogPosts } from "@/data/blog";
 import { formatDate } from "@/lib/utils";
 import Breadcrumb from "@/components/shared/Breadcrumb";
@@ -19,11 +20,11 @@ const containerVariants = {
 } as const;
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 15 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: "easeOut" as const },
+    transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] as const },
   },
 } as const;
 
@@ -31,23 +32,21 @@ export default function BlogPageContent() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
-        <div className="absolute top-20 left-1/3 w-96 h-96 bg-primary/8 rounded-full blur-[150px]" />
-
-        <Container className="relative z-10">
+      <section className="section-navy pt-32 pb-20">
+        <Container>
           <Breadcrumb items={[{ label: "المدونة" }]} />
           <motion.div
             className="text-center max-w-4xl mx-auto"
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
+            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            <Badge variant="secondary">مقالات تقنية</Badge>
-            <h1 className="text-h1 font-bold font-cairo gradient-text mt-6 mb-6">
+            <Badge variant="gold">مقالات تقنية</Badge>
+            <h1 className="text-h1 font-bold font-cairo text-white mt-6 mb-6">
               المدونة
             </h1>
-            <p className="text-xl sm:text-2xl text-text-secondary font-tajawal leading-relaxed">
+            <div className="gold-line mx-auto mb-6" />
+            <p className="text-xl sm:text-2xl text-white/70 font-cairo leading-relaxed">
               مقالات ونصائح تقنية من فريق خبراء إتقان
             </p>
           </motion.div>
@@ -69,7 +68,7 @@ export default function BlogPageContent() {
                   <Card className="h-full flex flex-col" hover>
                     {/* Category */}
                     <div className="mb-4">
-                      <Badge variant="accent">{post.category}</Badge>
+                      <Badge variant="gold">{post.category}</Badge>
                     </div>
 
                     {/* Title */}
@@ -78,29 +77,29 @@ export default function BlogPageContent() {
                     </h2>
 
                     {/* Excerpt */}
-                    <p className="text-text-secondary text-sm font-tajawal leading-relaxed mb-6 line-clamp-3 flex-1">
+                    <p className="text-text-secondary text-sm font-cairo leading-relaxed mb-6 line-clamp-3 flex-1">
                       {post.excerpt}
                     </p>
 
                     {/* Footer */}
                     <div className="flex items-center justify-between pt-4 border-t border-border">
                       <div className="flex items-center gap-2">
-                        <User className="w-4 h-4 text-text-muted" />
-                        <span className="text-xs text-text-secondary font-tajawal">
+                        <User className="w-4 h-4 text-accent" />
+                        <span className="text-xs text-text-secondary font-cairo">
                           {post.author}
                         </span>
                       </div>
 
                       <div className="flex items-center gap-4">
                         <div className="flex items-center gap-1.5">
-                          <Calendar className="w-3.5 h-3.5 text-text-muted" />
-                          <span className="text-xs text-text-secondary font-tajawal">
+                          <Calendar className="w-3.5 h-3.5 text-accent" />
+                          <span className="text-xs text-text-secondary font-cairo">
                             {formatDate(post.date)}
                           </span>
                         </div>
                         <div className="flex items-center gap-1.5">
-                          <Clock className="w-3.5 h-3.5 text-text-muted" />
-                          <span className="text-xs text-text-secondary font-tajawal">
+                          <Clock className="w-3.5 h-3.5 text-accent" />
+                          <span className="text-xs text-text-secondary font-cairo">
                             {post.readingTime} دقائق قراءة
                           </span>
                         </div>

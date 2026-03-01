@@ -24,7 +24,7 @@ export default function ScrollToTop() {
   return (
     <button
       onClick={scrollToTop}
-      className="fixed bottom-6 left-6 z-50 w-10 h-10 rounded-xl bg-primary/90 hover:bg-primary text-white flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-105"
+      className="fixed bottom-6 left-6 z-50 w-10 h-10 rounded-xl bg-accent hover:bg-accent-light text-navy flex items-center justify-center shadow-lg shadow-accent/20 transition-all duration-200 border border-accent/30"
       aria-label="العودة للأعلى"
     >
       <ChevronUp className="w-5 h-5" />

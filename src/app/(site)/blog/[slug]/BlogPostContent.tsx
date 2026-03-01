@@ -18,6 +18,7 @@ import Container from "@/components/ui/Container";
 import Badge from "@/components/ui/Badge";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
+import SectionTitle from "@/components/ui/SectionTitle";
 import type { BlogPost } from "@/data/blog";
 import { formatDate } from "@/lib/utils";
 
@@ -70,7 +71,7 @@ function renderMarkdown(content: string): React.ReactNode[] {
       elements.push(
         <ul
           key={`list-${listKey++}`}
-          className="list-disc list-inside space-y-2 text-text-secondary font-tajawal leading-relaxed mr-4 my-4"
+          className="list-disc list-inside space-y-2 text-text-secondary font-cairo leading-relaxed mr-4 my-4"
         >
           {listItems.map((item, i) => (
             <li key={i}>{renderInline(item)}</li>
@@ -142,9 +143,9 @@ function renderMarkdown(content: string): React.ReactNode[] {
       elements.push(
         <div
           key={`num-${i}`}
-          className="flex gap-3 items-start text-text-secondary font-tajawal leading-relaxed my-2"
+          className="flex gap-3 items-start text-text-secondary font-cairo leading-relaxed my-2"
         >
-          <span className="text-primary-light font-bold shrink-0">
+          <span className="text-accent font-bold shrink-0">
             {numberedMatch[1]}.
           </span>
           <span>{renderInline(numberedMatch[2])}</span>
@@ -158,7 +159,7 @@ function renderMarkdown(content: string): React.ReactNode[] {
     elements.push(
       <p
         key={`p-${i}`}
-        className="text-text-secondary font-tajawal leading-relaxed my-4"
+        className="text-text-secondary font-cairo leading-relaxed my-4"
       >
         {renderInline(line)}
       </p>
@@ -224,68 +225,67 @@ export default function BlogPostContent({
   return (
     <>
       {/* Hero / Header */}
-      <section className="relative pt-32 pb-16 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
-        <div className="absolute top-20 left-1/3 w-72 h-72 bg-secondary/8 rounded-full blur-[120px]" />
-
-        <Container className="relative z-10">
+      <section className="section-navy pt-32 pb-16">
+        <Container>
           {/* Breadcrumb */}
           <motion.nav
-            className="flex items-center gap-2 text-sm text-text-secondary font-tajawal mb-8"
-            initial={{ opacity: 0, y: 20 }}
+            className="flex items-center gap-2 text-sm text-white/60 font-cairo mb-8"
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
           >
             <Link
               href="/"
-              className="hover:text-primary-light transition-colors"
+              className="hover:text-accent transition-colors"
             >
               الرئيسية
             </Link>
             <ChevronLeft className="w-4 h-4" />
             <Link
               href="/blog"
-              className="hover:text-primary-light transition-colors"
+              className="hover:text-accent transition-colors"
             >
               المدونة
             </Link>
             <ChevronLeft className="w-4 h-4" />
-            <span className="text-text-muted line-clamp-1 max-w-[200px]">
+            <span className="text-white/40 line-clamp-1 max-w-[200px]">
               {post.title}
             </span>
           </motion.nav>
 
           <motion.div
             className="max-w-4xl"
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            transition={{ duration: 0.5, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
           >
             <div className="flex flex-wrap gap-2 mb-4">
-              <Badge variant="accent">{post.category}</Badge>
+              <Badge variant="gold">{post.category}</Badge>
               {post.tags.map((tag) => (
-                <Badge key={tag} variant="primary">
+                <Badge key={tag} variant="muted">
                   {tag}
                 </Badge>
               ))}
             </div>
 
-            <h1 className="text-h2 font-bold font-cairo text-text-primary leading-tight mb-6">
+            <h1 className="text-h2 font-bold font-cairo text-white leading-tight mb-6">
               {post.title}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-6 text-text-secondary">
+            <div className="gold-line mb-6" />
+
+            <div className="flex flex-wrap items-center gap-6 text-white/70">
               <div className="flex items-center gap-2">
-                <User className="w-4 h-4" />
-                <span className="font-tajawal">{post.author}</span>
+                <User className="w-4 h-4 text-accent" />
+                <span className="font-cairo">{post.author}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
-                <span className="font-tajawal">{formatDate(post.date)}</span>
+                <Calendar className="w-4 h-4 text-accent" />
+                <span className="font-cairo">{formatDate(post.date)}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4" />
-                <span className="font-tajawal">
+                <Clock className="w-4 h-4 text-accent" />
+                <span className="font-cairo">
                   {post.readingTime} دقائق قراءة
                 </span>
               </div>
@@ -301,59 +301,61 @@ export default function BlogPostContent({
             {/* Main Article */}
             <motion.article
               className="min-w-0"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              <div className="glass-card rounded-2xl p-6 sm:p-10">
+              <Card className="p-6 sm:p-10">
                 {renderedContent}
-              </div>
+              </Card>
 
               {/* Share Buttons */}
               <motion.div
-                className="mt-10 glass-card rounded-2xl p-6"
-                initial={{ opacity: 0, y: 20 }}
+                className="mt-10"
+                initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
               >
-                <h3 className="text-lg font-bold font-cairo text-text-primary mb-4">
-                  شارك المقال
-                </h3>
-                <div className="flex flex-wrap gap-3">
-                  <button
-                    onClick={handleCopyLink}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface-light border border-border hover:border-primary/40 text-text-primary text-sm font-tajawal transition-colors cursor-pointer"
-                  >
-                    {copied ? (
-                      <>
-                        <CheckCircle2 className="w-4 h-4 text-success" />
-                        تم النسخ!
-                      </>
-                    ) : (
-                      <>
-                        <Link2 className="w-4 h-4" />
-                        نسخ الرابط
-                      </>
-                    )}
-                  </button>
+                <Card className="p-6">
+                  <h3 className="text-lg font-bold font-cairo text-text-primary mb-4">
+                    شارك المقال
+                  </h3>
+                  <div className="flex flex-wrap gap-3">
+                    <button
+                      onClick={handleCopyLink}
+                      className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface border border-border hover:border-accent/30 hover:text-accent text-text-primary text-sm font-cairo transition-colors cursor-pointer"
+                    >
+                      {copied ? (
+                        <>
+                          <CheckCircle2 className="w-4 h-4 text-accent" />
+                          تم النسخ!
+                        </>
+                      ) : (
+                        <>
+                          <Link2 className="w-4 h-4" />
+                          نسخ الرابط
+                        </>
+                      )}
+                    </button>
 
-                  <button
-                    onClick={handleShareTwitter}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface-light border border-border hover:border-primary/40 text-text-primary text-sm font-tajawal transition-colors cursor-pointer"
-                  >
-                    <Twitter className="w-4 h-4" />
-                    تويتر
-                  </button>
+                    <button
+                      onClick={handleShareTwitter}
+                      className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface border border-border hover:border-accent/30 hover:text-accent text-text-primary text-sm font-cairo transition-colors cursor-pointer"
+                    >
+                      <Twitter className="w-4 h-4" />
+                      تويتر
+                    </button>
 
-                  <button
-                    onClick={handleShareLinkedin}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface-light border border-border hover:border-primary/40 text-text-primary text-sm font-tajawal transition-colors cursor-pointer"
-                  >
-                    <Linkedin className="w-4 h-4" />
-                    لينكدإن
-                  </button>
-                </div>
+                    <button
+                      onClick={handleShareLinkedin}
+                      className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface border border-border hover:border-accent/30 hover:text-accent text-text-primary text-sm font-cairo transition-colors cursor-pointer"
+                    >
+                      <Linkedin className="w-4 h-4" />
+                      لينكدإن
+                    </button>
+                  </div>
+                </Card>
               </motion.div>
             </motion.article>
 
@@ -362,22 +364,23 @@ export default function BlogPostContent({
               className="hidden lg:block"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
+              transition={{ duration: 0.5, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
             >
               <div className="sticky top-28">
-                <div className="glass-card rounded-2xl p-6">
+                <Card className="p-6">
                   <div className="flex items-center gap-2 mb-4">
-                    <List className="w-5 h-5 text-primary-light" />
+                    <List className="w-5 h-5 text-accent" />
                     <h3 className="text-lg font-bold font-cairo text-text-primary">
                       محتويات المقال
                     </h3>
                   </div>
+                  <div className="gold-line mb-4" />
                   <nav className="space-y-1">
                     {toc.map((item) => (
                       <a
                         key={item.id}
                         href={`#${item.id}`}
-                        className={`block py-1.5 text-sm font-tajawal transition-colors hover:text-primary-light ${
+                        className={`block py-1.5 text-sm font-cairo transition-colors hover:text-accent ${
                           item.level === 3
                             ? "text-text-muted pr-4"
                             : "text-text-secondary"
@@ -387,7 +390,7 @@ export default function BlogPostContent({
                       </a>
                     ))}
                   </nav>
-                </div>
+                </Card>
               </div>
             </motion.aside>
           </div>
@@ -396,27 +399,28 @@ export default function BlogPostContent({
 
       {/* Related Posts */}
       {relatedPosts.length > 0 && (
-        <section className="section-padding bg-surface/50">
+        <section className="section-padding section-navy">
           <Container>
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              <h2 className="text-h2 font-bold font-cairo gradient-text text-center mb-12">
-                مقالات ذات صلة
-              </h2>
+              <SectionTitle
+                title="مقالات ذات صلة"
+                light
+              />
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               {relatedPosts.map((related, index) => (
                 <motion.div
                   key={related.slug}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 15 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.15 }}
+                  transition={{ duration: 0.5, delay: index * 0.15, ease: [0.25, 0.1, 0.25, 1] }}
                 >
                   <Link
                     href={`/blog/${related.slug}`}
@@ -424,17 +428,17 @@ export default function BlogPostContent({
                   >
                     <Card className="h-full flex flex-col" hover>
                       <div className="mb-3">
-                        <Badge variant="accent">{related.category}</Badge>
+                        <Badge variant="gold">{related.category}</Badge>
                       </div>
                       <h3 className="text-lg font-bold font-cairo text-text-primary mb-3 line-clamp-2 leading-relaxed">
                         {related.title}
                       </h3>
-                      <p className="text-text-secondary text-sm font-tajawal line-clamp-2 leading-relaxed flex-1 mb-4">
+                      <p className="text-text-secondary text-sm font-cairo line-clamp-2 leading-relaxed flex-1 mb-4">
                         {related.excerpt}
                       </p>
-                      <div className="flex items-center gap-4 pt-3 border-t border-border text-xs text-text-secondary font-tajawal">
+                      <div className="flex items-center gap-4 pt-3 border-t border-border text-xs text-text-secondary font-cairo">
                         <span>{related.author}</span>
-                        <span>{formatDate(related.date)}</span>
+                        <span className="text-accent">{formatDate(related.date)}</span>
                         <span>{related.readingTime} دقائق قراءة</span>
                       </div>
                     </Card>
@@ -450,7 +454,7 @@ export default function BlogPostContent({
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <Button href="/blog" variant="outline">
+              <Button href="/blog" variant="outline" className="border-white text-white hover:border-accent hover:text-accent">
                 عرض جميع المقالات
               </Button>
             </motion.div>

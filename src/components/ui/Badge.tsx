@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-type BadgeVariant = "primary" | "secondary" | "accent";
+type BadgeVariant = "gold" | "navy" | "muted";
 
 interface BadgeProps {
   children: React.ReactNode;
@@ -8,16 +8,16 @@ interface BadgeProps {
 }
 
 const variantStyles: Record<BadgeVariant, string> = {
-  primary: "bg-primary/10 dark:bg-gradient-to-l dark:from-primary/20 dark:to-secondary/20 text-primary dark:text-primary-light border-primary/20",
-  secondary: "bg-secondary/10 dark:bg-gradient-to-l dark:from-secondary/20 dark:to-secondary-light/20 text-secondary dark:text-secondary-light border-secondary/20",
-  accent: "bg-accent/10 dark:bg-gradient-to-l dark:from-accent/20 dark:to-primary/20 text-accent-dark dark:text-accent border-accent/20",
+  gold: "bg-accent/10 text-accent border-accent/30",
+  navy: "bg-navy/10 text-navy dark:bg-white/10 dark:text-white border-navy/20 dark:border-white/20",
+  muted: "bg-surface-light text-text-secondary border-border",
 };
 
-export default function Badge({ children, variant = "primary" }: BadgeProps) {
+export default function Badge({ children, variant = "gold" }: BadgeProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold border",
+        "inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold border font-cairo",
         variantStyles[variant]
       )}
     >

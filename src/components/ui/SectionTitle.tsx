@@ -14,13 +14,12 @@ export default function SectionTitle({
   light = false,
 }: SectionTitleProps) {
   return (
-    <div
-      className={cn("mb-12", center && "text-center")}
-    >
+    <div className={cn("mb-14", center && "text-center")}>
+      <div className={cn("gold-line mb-4", center && "mx-auto")} />
       <h2
         className={cn(
           "text-h2 font-bold mb-4 font-cairo",
-          light ? "text-text-primary" : "gradient-text"
+          light ? "text-white" : "text-text-primary"
         )}
       >
         {title}
@@ -28,7 +27,8 @@ export default function SectionTitle({
       {subtitle && (
         <p
           className={cn(
-            "text-text-secondary text-body-lg max-w-2xl font-tajawal",
+            "text-body-lg max-w-2xl font-cairo",
+            light ? "text-white/70" : "text-text-secondary",
             center && "mx-auto"
           )}
         >

@@ -6,55 +6,35 @@ import Button from "@/components/ui/Button";
 
 export default function CTABanner() {
   return (
-    <section className="section-padding relative overflow-hidden">
-      {/* Background: central radial glow */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(37,99,235,0.12), transparent)",
-        }}
-      />
+    <section className="py-24 md:py-32 bg-navy relative overflow-hidden">
+      {/* Subtle decorative elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-0 w-72 h-72 bg-accent/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl translate-x-1/3 translate-y-1/3" />
+      </div>
 
-      {/* Noise overlay */}
-      <div className="noise-overlay absolute inset-0" />
-
-      {/* Content */}
-      <Container className="relative z-10">
+      <Container>
         <motion.div
-          className="text-center max-w-3xl mx-auto"
-          initial={{ opacity: 0, y: 30 }}
+          className="text-center max-w-3xl mx-auto relative z-10"
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] as const }}
         >
-          {/* Main heading */}
-          <h2 className="text-h2 font-bold font-cairo mb-6">
-            <span className="text-text-primary">جاهز تبدأ </span>
-            <span className="gradient-text">مشروعك القادم</span>
-            <span className="text-text-primary">؟</span>
+          {/* Gold accent line */}
+          <div className="gold-line mx-auto mb-8" />
+
+          <h2 className="text-h2 md:text-h1 font-bold font-cairo text-white mb-6 leading-tight">
+            جاهز تبدأ مشروعك القادم؟
           </h2>
 
-          {/* Subtitle */}
-          <p className="text-text-secondary text-lg font-tajawal leading-relaxed mb-10 max-w-2xl mx-auto">
+          <p className="text-white/60 text-lg md:text-xl font-cairo leading-relaxed mb-12 max-w-2xl mx-auto">
             تواصل معنا اليوم واحصل على استشارة مجانية لمشروعك
           </p>
 
-          {/* Buttons */}
-          <motion.div
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <Button variant="primary" size="lg" href="/contact">
-              تواصل معنا الآن
-            </Button>
-            <Button variant="outline" size="lg" href="/services">
-              شاهد خدماتنا
-            </Button>
-          </motion.div>
+          <Button variant="gold" size="lg" href="/contact">
+            تواصل معنا الآن
+          </Button>
         </motion.div>
       </Container>
     </section>

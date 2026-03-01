@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cairo, Tajawal } from "next/font/google";
+import { Cairo } from "next/font/google";
 import ThemeProvider from "@/components/providers/ThemeProvider";
 import "./globals.css";
 
@@ -7,13 +7,6 @@ const cairo = Cairo({
   variable: "--font-cairo-var",
   subsets: ["arabic", "latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
-  display: "swap",
-});
-
-const tajawal = Tajawal({
-  variable: "--font-tajawal-var",
-  subsets: ["arabic", "latin"],
-  weight: ["300", "400", "500", "700", "800"],
   display: "swap",
 });
 
@@ -57,7 +50,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl" className={`${cairo.variable} ${tajawal.variable}`} suppressHydrationWarning>
+    <html lang="ar" dir="rtl" className={cairo.variable} suppressHydrationWarning>
       <body className="font-cairo antialiased bg-background text-text-primary min-h-screen">
         <ThemeProvider>
           {children}
