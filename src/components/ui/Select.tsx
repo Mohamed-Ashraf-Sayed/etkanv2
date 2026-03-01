@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 interface SelectOption {
@@ -16,6 +17,7 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
 
 const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
   ({ label, error, options, className, id, ...props }, ref) => {
+    const t = useTranslations("common");
     const selectId = id || props.name || label;
 
     return (
@@ -44,7 +46,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           {...props}
         >
           <option value="" disabled>
-            اختر...
+            {t("select")}
           </option>
           {options.map((option) => (
             <option key={option.value} value={option.value}>

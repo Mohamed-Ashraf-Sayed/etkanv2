@@ -4,8 +4,11 @@ import { motion } from "framer-motion";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
 import MagneticButton from "@/components/shared/MagneticButton";
+import { useTranslations } from "next-intl";
 
 export default function CTABanner() {
+  const t = useTranslations("cta");
+
   return (
     <section className="py-24 md:py-32 bg-navy relative overflow-hidden">
       {/* Subtle decorative elements */}
@@ -26,16 +29,16 @@ export default function CTABanner() {
           <div className="gold-line mx-auto mb-8" />
 
           <h2 className="text-h2 md:text-h1 font-bold font-cairo text-white mb-6 leading-tight">
-            جاهز تبدأ مشروعك القادم؟
+            {t("title")}
           </h2>
 
           <p className="text-white/60 text-lg md:text-xl font-cairo leading-relaxed mb-12 max-w-2xl mx-auto">
-            تواصل معنا اليوم واحصل على استشارة مجانية لمشروعك
+            {t("subtitle")}
           </p>
 
           <MagneticButton strength={0.3} className="inline-block">
             <Button variant="gold" size="lg" href="/contact">
-              تواصل معنا الآن
+              {t("button")}
             </Button>
           </MagneticButton>
         </motion.div>

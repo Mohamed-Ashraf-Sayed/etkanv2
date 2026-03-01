@@ -6,6 +6,7 @@ import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
 import AnimatedCounter from "@/components/shared/AnimatedCounter";
 import { stats } from "@/data/team";
+import { useTranslations } from "next-intl";
 
 const companies = [
   { name: "تقنية المستقبل", logo: "/images/logos/logo-1.svg" },
@@ -37,12 +38,14 @@ const fadeUp = {
 };
 
 export default function TrustSection() {
+  const t = useTranslations("trust");
+
   return (
     <section className="section-padding section-alt">
       <Container>
         <SectionTitle
-          title="أكثر من 75 شركة وثقت بنا"
-          subtitle="نفتخر بثقة عملائنا ونعمل باستمرار لنكون شريكهم التقني الأول"
+          title={t("title")}
+          subtitle={t("subtitle")}
         />
 
         {/* Stats counters */}
@@ -72,7 +75,7 @@ export default function TrustSection() {
 
         {/* Company logos label */}
         <p className="text-center text-sm text-text-muted font-cairo mb-8">
-          عملاء وثقوا بنا
+          {t("clientsLabel")}
         </p>
 
         {/* Company logos grid */}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import {
@@ -44,7 +45,7 @@ const fadeUp = {
 };
 
 /* ── Service Card ── */
-function ServiceCard({ service }: { service: Service }) {
+function ServiceCard({ service, detailsLabel }: { service: Service; detailsLabel: string }) {
   const IconComponent = iconMap[service.icon] || Globe;
 
   return (
@@ -83,7 +84,7 @@ function ServiceCard({ service }: { service: Service }) {
               {service.techStack.slice(0, 3).join(" · ")}
             </div>
             <span className="inline-flex items-center gap-1 text-sm font-semibold text-accent group-hover:text-accent transition-colors font-cairo">
-              التفاصيل
+              {detailsLabel}
               <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
             </span>
           </div>
@@ -98,6 +99,7 @@ function ServiceCard({ service }: { service: Service }) {
 /* ══════════════════════════════════════ */
 
 export default function ServicesPageClient() {
+  const t = useTranslations("services");
   const [activeCategory, setActiveCategory] = useState(serviceCategories[0].slug);
 
   const activeCategoryData = serviceCategories.find((c) => c.slug === activeCategory);
@@ -108,7 +110,7 @@ export default function ServicesPageClient() {
       {/* ── Hero ── */}
       <section className="relative pt-32 pb-20 overflow-hidden section-navy">
         <Container className="relative z-10">
-          <Breadcrumb items={[{ label: "خدماتنا" }]} />
+          <Breadcrumb items={[{ label: t("title") }]} />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center mt-4">
             <motion.div
@@ -117,16 +119,15 @@ export default function ServicesPageClient() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              <Badge variant="gold">حلول تقنية شاملة</Badge>
+              <Badge variant="gold">{t("overviewBadge")}</Badge>
               <h1 className="text-h1 font-bold font-cairo text-white mt-6 mb-6">
-                نقدم لك أفضل الخدمات
+                {t("overviewTitle1")}
                 <br />
-                <span className="text-accent">التقنية</span>
+                <span className="text-accent">{t("overviewTitle2")}</span>
               </h1>
               <div className="gold-line mb-6" />
               <p className="text-lg text-white/70 font-cairo max-w-xl leading-relaxed">
-                من تطوير المواقع والتطبيقات إلى بناء الأنظمة الداخلية وتجهيز البنية
-                التحتية والدعم الفني المستمر
+                {t("overviewSubtitle")}
               </p>
 
               <div className="flex flex-wrap gap-5 mt-8 justify-center lg:justify-start">
@@ -233,7 +234,7 @@ export default function ServicesPageClient() {
               transition={{ duration: 0.4 }}
             >
               {categoryServices.map((service) => (
-                <ServiceCard key={service.slug} service={service} />
+                <ServiceCard key={service.slug} service={service} detailsLabel={t("details")} />
               ))}
             </motion.div>
           </AnimatePresence>
@@ -244,8 +245,8 @@ export default function ServicesPageClient() {
       <section className="relative section-padding section-navy">
         <Container>
           <SectionTitle
-            title="لمحة سريعة عن كل خدماتنا"
-            subtitle="اكتشف مجموعة كاملة من الحلول التقنية اللي نقدمها"
+            title={t("quickOverview")}
+            subtitle={t("quickOverviewSub")}
             light
           />
 
@@ -292,7 +293,7 @@ export default function ServicesPageClient() {
                       }}
                       className="text-xs text-accent font-semibold font-cairo hover:text-accent-light transition-colors inline-flex items-center gap-1"
                     >
-                      عرض الخدمات
+                      {t("viewServices")}
                       <ArrowLeft className="w-3 h-3" />
                     </button>
                   </div>
@@ -315,18 +316,17 @@ export default function ServicesPageClient() {
           >
             <div className="gold-line mx-auto mb-6" />
             <h2 className="text-h2 font-bold font-cairo text-text-primary mb-6">
-              مش متأكد من الخدمة المناسبة؟
+              {t("notSure")}
             </h2>
             <p className="text-text-secondary text-lg font-cairo mb-10 max-w-2xl mx-auto leading-relaxed">
-              تواصل معنا النهاردة واحصل على استشارة مجانية وعرض سعر مخصص
-              لاحتياجات شركتك
+              {t("notSureSub")}
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Button href="/contact" variant="gold" size="lg">
-                اطلب استشارة مجانية
+                {t("freeConsultation")}
               </Button>
               <Button href="/portfolio" size="lg" variant="outline">
-                شوف أعمالنا
+                {t("viewWork")}
               </Button>
             </div>
           </motion.div>

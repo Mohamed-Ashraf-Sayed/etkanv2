@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Clock } from "lucide-react";
 import { timeSlots } from "@/data/booking";
 
@@ -14,6 +15,7 @@ export default function TimeSlotPicker({
   onSelectSlot,
   error,
 }: TimeSlotPickerProps) {
+  const t = useTranslations("consultation");
   const morningSlots = timeSlots.filter((s) => s.period === "morning");
   const afternoonSlots = timeSlots.filter((s) => s.period === "afternoon");
 
@@ -29,7 +31,7 @@ export default function TimeSlotPicker({
           <div className="flex items-center gap-2 mb-3">
             <Clock className="w-4 h-4 text-accent" />
             <span className="text-sm font-bold font-cairo text-text-primary">
-              صباحاً
+              {t("morning")}
             </span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -61,7 +63,7 @@ export default function TimeSlotPicker({
           <div className="flex items-center gap-2 mb-3">
             <Clock className="w-4 h-4 text-accent" />
             <span className="text-sm font-bold font-cairo text-text-primary">
-              مساءً
+              {t("evening")}
             </span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">

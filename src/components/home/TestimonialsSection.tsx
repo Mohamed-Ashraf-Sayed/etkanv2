@@ -6,6 +6,7 @@ import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
 import AvatarPlaceholder from "@/components/shared/AvatarPlaceholder";
 import { projects } from "@/data/projects";
+import { useTranslations } from "next-intl";
 
 const testimonials = projects
   .filter((p) => p.testimonial)
@@ -37,6 +38,8 @@ const cardVariants = {
 };
 
 export default function TestimonialsSection() {
+  const t = useTranslations("testimonials");
+
   return (
     <section className="section-navy section-padding relative overflow-hidden">
       {/* Subtle background pattern */}
@@ -53,8 +56,8 @@ export default function TestimonialsSection() {
 
       <Container className="relative z-10">
         <SectionTitle
-          title="ماذا يقول عملاؤنا"
-          subtitle="آراء عملائنا هي أفضل دليل على جودة خدماتنا"
+          title={t("title")}
+          subtitle={t("subtitle")}
           light
         />
 

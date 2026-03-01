@@ -239,7 +239,9 @@
     "errorName": "Name must be at least 3 characters",
     "errorEmail": "Invalid email address",
     "errorPhone": "Invalid phone number",
-    "errorService": "Please select a service type"
+    "errorService": "Please select a service type",
+    "morning": "Morning",
+    "evening": "Evening"
   },
   "quote": {
     "stepServices": "Services",
@@ -365,7 +367,8 @@
     "error": "An error occurred, please try again",
     "backHome": "Back to Home",
     "bookAnother": "Book Another",
-    "home": "Home"
+    "home": "Home",
+    "select": "Select..."
   },
   "bookingSuccess": {
     "backHome": "Back to Home",

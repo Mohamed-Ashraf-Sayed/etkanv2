@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import {
   Lightbulb,
@@ -26,14 +27,7 @@ import { team, milestones, stats, values } from "@/data/team";
 /* ── Icons ── */
 const valueIcons = [Lightbulb, Target, Users, Shield];
 
-const whyUsReasons = [
-  { title: "خبرة تقنية عميقة", description: "فريق من المهندسين المتخصصين بخبرة تتجاوز 10 سنوات", icon: Wrench },
-  { title: "حلول مخصصة 100%", description: "كل مشروع يُبنى من الصفر حسب احتياجاتك الفعلية", icon: Target },
-  { title: "التزام بالمواعيد", description: "نلتزم بالجدول الزمني ونسلم في الوقت المحدد", icon: Clock },
-  { title: "دعم مستمر", description: "فريق دعم متاح لمساعدتك حتى بعد تسليم المشروع", icon: HeadphonesIcon },
-  { title: "أسعار تنافسية", description: "جودة عالية بأسعار تناسب ميزانيتك", icon: BadgeDollarSign },
-  { title: "تواجد محلي", description: "مكاتب في مصر والسعودية لخدمة أفضل", icon: MapPin },
-];
+const whyUsIcons = [Wrench, Target, Clock, HeadphonesIcon, BadgeDollarSign, MapPin];
 
 /* ── Animation Variants ── */
 const staggerContainer = {
@@ -50,12 +44,23 @@ const fadeUp = {
 /* ══════════════════════════════════════ */
 
 export default function AboutPageContent() {
+  const t = useTranslations("about");
+
+  const whyUsReasons = [
+    { title: t("whyUs1"), description: t("whyUs1Desc"), icon: whyUsIcons[0] },
+    { title: t("whyUs2"), description: t("whyUs2Desc"), icon: whyUsIcons[1] },
+    { title: t("whyUs3"), description: t("whyUs3Desc"), icon: whyUsIcons[2] },
+    { title: t("whyUs4"), description: t("whyUs4Desc"), icon: whyUsIcons[3] },
+    { title: t("whyUs5"), description: t("whyUs5Desc"), icon: whyUsIcons[4] },
+    { title: t("whyUs6"), description: t("whyUs6Desc"), icon: whyUsIcons[5] },
+  ];
+
   return (
     <>
       {/* ── Hero Section ── */}
       <section className="relative pt-32 pb-20 overflow-hidden section-navy">
         <Container className="relative z-10">
-          <Breadcrumb items={[{ label: "من نحن" }]} />
+          <Breadcrumb items={[{ label: t("title") }]} />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center mt-4">
             {/* Text side */}
@@ -65,24 +70,22 @@ export default function AboutPageContent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              <Badge variant="gold">تعرف علينا</Badge>
+              <Badge variant="gold">{t("badge")}</Badge>
               <h1 className="text-h1 font-bold font-cairo text-white mt-6 mb-6">
-                نبني المستقبل الرقمي
+                {t("heroTitle1")}
                 <br />
-                <span className="text-accent">لعملائنا</span>
+                <span className="text-accent">{t("heroTitle2")}</span>
               </h1>
               <p className="text-lg text-white/80 font-cairo leading-relaxed max-w-xl">
-                من فريق صغير في 2018 لأكثر من 30 مهندس متخصص يخدمون
-                عملاء في مصر والسعودية والخليج. نقدم حلول تقنية مبتكرة
-                بأعلى معايير الجودة العالمية.
+                {t("heroDesc")}
               </p>
 
               {/* Quick stats row */}
               <div className="flex flex-wrap gap-6 mt-8 justify-center lg:justify-start">
                 {[
-                  { num: "200+", label: "مشروع" },
-                  { num: "75+", label: "عميل" },
-                  { num: "6+", label: "سنوات" },
+                  { num: "200+", label: t("project") },
+                  { num: "75+", label: t("client") },
+                  { num: "6+", label: t("yearsLabel") },
                 ].map((s) => (
                   <div key={s.label} className="text-center">
                     <div className="text-2xl font-black font-cairo text-accent">{s.num}</div>
@@ -102,19 +105,19 @@ export default function AboutPageContent() {
               <div className="grid grid-cols-2 gap-4 w-full max-w-md">
                 <div className="rounded-xl p-6 text-center bg-white/10 border border-white/10 backdrop-blur-sm">
                   <div className="text-3xl font-black font-cairo text-accent mb-1">+200</div>
-                  <div className="text-sm text-white/70 font-cairo">مشروع ناجح</div>
+                  <div className="text-sm text-white/70 font-cairo">{t("successfulProject")}</div>
                 </div>
                 <div className="rounded-xl p-6 text-center bg-white/10 border border-white/10 backdrop-blur-sm">
                   <div className="text-3xl font-black font-cairo text-accent mb-1">+30</div>
-                  <div className="text-sm text-white/70 font-cairo">مهندس متخصص</div>
+                  <div className="text-sm text-white/70 font-cairo">{t("specializedEngineer")}</div>
                 </div>
                 <div className="rounded-xl p-6 text-center bg-white/10 border border-white/10 backdrop-blur-sm">
                   <div className="text-3xl font-black font-cairo text-accent mb-1">+75</div>
-                  <div className="text-sm text-white/70 font-cairo">عميل راضي</div>
+                  <div className="text-sm text-white/70 font-cairo">{t("satisfiedClient")}</div>
                 </div>
                 <div className="rounded-xl p-6 text-center bg-white/10 border border-white/10 backdrop-blur-sm">
                   <div className="text-3xl font-black font-cairo text-accent mb-1">6+</div>
-                  <div className="text-sm text-white/70 font-cairo">سنوات خبرة</div>
+                  <div className="text-sm text-white/70 font-cairo">{t("yearsExperience")}</div>
                 </div>
               </div>
             </motion.div>
@@ -125,7 +128,7 @@ export default function AboutPageContent() {
       {/* ── Story + Vision/Mission ── */}
       <section className="section-padding section-alt">
         <Container>
-          <SectionTitle title="قصتنا" subtitle="من البداية للنجاح" />
+          <SectionTitle title={t("storyTitle")} subtitle={t("storySub")} />
 
           <div className="max-w-5xl mx-auto space-y-8">
             {/* Story card */}
@@ -141,10 +144,7 @@ export default function AboutPageContent() {
                   <Quote className="w-6 h-6 text-accent" />
                 </div>
                 <p className="text-text-secondary text-lg leading-relaxed font-cairo">
-                  إتقان تأسست في 2018 بهدف واحد: تقديم حلول تقنية بجودة
-                  عالمية للشركات في المنطقة العربية. بدأنا بفريق صغير من 3
-                  مهندسين شغوفين بالتكنولوجيا، واليوم أصبحنا فريقاً من أكثر من
-                  30 متخصصاً يخدمون عملاء في مصر والسعودية والخليج.
+                  {t("storyText")}
                 </p>
               </div>
             </motion.div>
@@ -168,12 +168,11 @@ export default function AboutPageContent() {
                       <Lightbulb className="w-5 h-5 text-accent" />
                     </div>
                     <h3 className="text-xl font-bold font-cairo text-text-primary">
-                      رؤيتنا
+                      {t("vision")}
                     </h3>
                   </div>
                   <p className="text-text-secondary font-cairo leading-relaxed">
-                    أن نكون الشريك التقني الأول لكل شركة تسعى للتميز الرقمي في
-                    المنطقة العربية.
+                    {t("visionText")}
                   </p>
                 </div>
               </motion.div>
@@ -189,12 +188,11 @@ export default function AboutPageContent() {
                       <Target className="w-5 h-5 text-accent" />
                     </div>
                     <h3 className="text-xl font-bold font-cairo text-text-primary">
-                      مهمتنا
+                      {t("mission")}
                     </h3>
                   </div>
                   <p className="text-text-secondary font-cairo leading-relaxed">
-                    تمكين الشركات من تحقيق أهدافها من خلال حلول تقنية مبتكرة
-                    وموثوقة.
+                    {t("missionText")}
                   </p>
                 </div>
               </motion.div>
@@ -230,7 +228,7 @@ export default function AboutPageContent() {
       {/* ── Values Section ── */}
       <section className="section-padding section-alt">
         <Container>
-          <SectionTitle title="قيمنا" subtitle="المبادئ التي توجه عملنا" />
+          <SectionTitle title={t("valuesTitle")} subtitle={t("valuesSub")} />
 
           <motion.div
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
@@ -270,8 +268,8 @@ export default function AboutPageContent() {
       <section className="section-padding">
         <Container>
           <SectionTitle
-            title="فريقنا"
-            subtitle="الخبراء الذين يقفون وراء نجاحك"
+            title={t("teamTitle")}
+            subtitle={t("teamSub")}
           />
 
           <motion.div
@@ -318,8 +316,8 @@ export default function AboutPageContent() {
       <section className="section-padding section-alt">
         <Container>
           <SectionTitle
-            title="رحلتنا عبر السنين"
-            subtitle="من البداية المتواضعة إلى قيادة السوق"
+            title={t("timelineTitle")}
+            subtitle={t("timelineSub")}
           />
 
           <motion.div
@@ -417,8 +415,8 @@ export default function AboutPageContent() {
       <section className="section-padding">
         <Container>
           <SectionTitle
-            title="ليه تختارنا؟"
-            subtitle="6 أسباب تخليك تثق فينا"
+            title={t("whyUsTitle")}
+            subtitle={t("whyUsSub")}
           />
 
           <motion.div
@@ -471,18 +469,18 @@ export default function AboutPageContent() {
           >
             <div className="gold-line mx-auto mb-6" />
             <h2 className="text-h2 font-bold font-cairo text-white mb-4">
-              جاهز تبدأ مشروعك معنا؟
+              {t("readyCta")}
             </h2>
             <p className="text-white/80 text-lg font-cairo mb-8 leading-relaxed">
-              تواصل معنا اليوم واحصل على استشارة مجانية لمشروعك
+              {t("readyCtaSub")}
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Button href="/contact" size="lg" variant="gold">
-                <span>تواصل معنا</span>
+                <span>{t("contactUs")}</span>
                 <ArrowLeft className="w-5 h-5 mr-2" />
               </Button>
               <Button href="/portfolio" size="lg" variant="outline" className="border-white/50 text-white hover:bg-white/10">
-                شاهد أعمالنا
+                {t("viewWork")}
               </Button>
             </div>
           </motion.div>

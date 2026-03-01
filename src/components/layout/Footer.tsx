@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import {
   Twitter,
@@ -12,21 +13,6 @@ import {
   Send,
 } from "lucide-react";
 import Container from "@/components/ui/Container";
-
-const quickLinks = [
-  { href: "/", label: "الرئيسية" },
-  { href: "/about", label: "من نحن" },
-  { href: "/portfolio", label: "أعمالنا" },
-  { href: "/blog", label: "المدونة" },
-  { href: "/contact", label: "تواصل معنا" },
-];
-
-const serviceLinks = [
-  { href: "/services/web-dev", label: "تطوير المواقع والتطبيقات" },
-  { href: "/services/crm", label: "الأنظمة الداخلية (ERP/CRM)" },
-  { href: "/services/networks", label: "البنية التحتية والشبكات" },
-  { href: "/services/it-support", label: "الدعم الفني والصيانة" },
-];
 
 const socialLinks = [
   { href: "#", icon: Twitter, label: "Twitter" },
@@ -42,6 +28,24 @@ const partnerships = [
 ];
 
 export default function Footer() {
+  const t = useTranslations("footer");
+  const tn = useTranslations("nav");
+
+  const quickLinks = [
+    { href: "/", label: tn("home") },
+    { href: "/about", label: tn("about") },
+    { href: "/portfolio", label: tn("portfolio") },
+    { href: "/blog", label: tn("blog") },
+    { href: "/contact", label: tn("contact") },
+  ];
+
+  const serviceLinks = [
+    { href: "/services/web-dev", label: t("serviceWeb") },
+    { href: "/services/crm", label: t("serviceEnterprise") },
+    { href: "/services/networks", label: t("serviceInfra") },
+    { href: "/services/it-support", label: t("serviceSupport") },
+  ];
+
   return (
     <footer className="bg-navy text-white">
       {/* Gold top line */}
@@ -53,18 +57,17 @@ export default function Footer() {
           <div className="lg:col-span-4">
             <Link href="/" className="inline-block mb-4">
               <span className="text-2xl font-black tracking-tight text-white font-cairo">
-                إتقان
+                {tn("brand")}
               </span>
             </Link>
             <p className="text-sm text-white/60 font-cairo leading-relaxed max-w-xs mb-6">
-              شريكك التقني الموثوق لتطوير الحلول البرمجية والبنية التحتية.
-              نخدم عملاءنا في مصر والسعودية.
+              {t("description")}
             </p>
 
             {/* Newsletter */}
             <div className="mb-6">
               <p className="text-xs font-cairo font-semibold text-accent mb-3">
-                اشترك في نشرتنا البريدية
+                {t("newsletter")}
               </p>
               <form
                 className="flex gap-2"
@@ -72,7 +75,7 @@ export default function Footer() {
               >
                 <input
                   type="email"
-                  placeholder="بريدك الإلكتروني"
+                  placeholder={t("emailPlaceholder")}
                   dir="ltr"
                   className="flex-1 px-3 py-2 text-sm rounded-lg bg-white/10 border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:border-accent transition-colors font-cairo"
                 />
@@ -105,7 +108,7 @@ export default function Footer() {
           {/* Column 2: Quick Links */}
           <div className="lg:col-span-2">
             <h3 className="text-sm font-bold font-cairo text-accent uppercase tracking-wider mb-5">
-              روابط سريعة
+              {t("quickLinks")}
             </h3>
             <ul className="space-y-3">
               {quickLinks.map((link) => (
@@ -124,7 +127,7 @@ export default function Footer() {
           {/* Column 3: Services */}
           <div className="lg:col-span-3">
             <h3 className="text-sm font-bold font-cairo text-accent uppercase tracking-wider mb-5">
-              خدماتنا
+              {t("ourServices")}
             </h3>
             <ul className="space-y-3">
               {serviceLinks.map((link) => (
@@ -143,7 +146,7 @@ export default function Footer() {
           {/* Column 4: Contact Info */}
           <div className="lg:col-span-3">
             <h3 className="text-sm font-bold font-cairo text-accent uppercase tracking-wider mb-5">
-              تواصل معنا
+              {t("contactUs")}
             </h3>
             <ul className="space-y-3.5">
               <li className="flex items-start gap-3">
@@ -178,7 +181,7 @@ export default function Footer() {
                   className="text-accent mt-0.5 shrink-0"
                 />
                 <span className="text-sm text-white/60 font-cairo">
-                  القاهرة، مصر
+                  {t("cairo")}
                 </span>
               </li>
               <li className="flex items-start gap-3">
@@ -187,7 +190,7 @@ export default function Footer() {
                   className="text-accent mt-0.5 shrink-0"
                 />
                 <span className="text-sm text-white/60 font-cairo">
-                  الرياض، السعودية
+                  {t("riyadh")}
                 </span>
               </li>
             </ul>
@@ -217,21 +220,21 @@ export default function Footer() {
         <Container className="py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-xs text-white/40 font-cairo">
-              &copy; 2025 إتقان للحلول البرمجية. جميع الحقوق محفوظة.
+              {t("copyright")}
             </p>
             <div className="flex items-center gap-4">
               <Link
                 href="#"
                 className="text-xs text-white/40 font-cairo hover:text-accent transition-colors"
               >
-                سياسة الخصوصية
+                {t("privacy")}
               </Link>
               <span className="text-white/20">|</span>
               <Link
                 href="#"
                 className="text-xs text-white/40 font-cairo hover:text-accent transition-colors"
               >
-                الشروط والأحكام
+                {t("terms")}
               </Link>
             </div>
           </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import { TrendingUp } from "lucide-react";
@@ -98,6 +99,7 @@ function ProjectCard({ project }: { project: Project }) {
 }
 
 export default function PortfolioPageClient() {
+  const t = useTranslations("portfolio");
   const [activeFilter, setActiveFilter] = useState("all");
 
   const filteredProjects = getProjectsByCategory(activeFilter);
@@ -107,21 +109,20 @@ export default function PortfolioPageClient() {
       {/* Hero Section */}
       <section className="section-navy pt-32 pb-20">
         <Container>
-          <Breadcrumb items={[{ label: "أعمالنا" }]} />
+          <Breadcrumb items={[{ label: t("title") }]} />
           <motion.div
             className="text-center max-w-4xl mx-auto"
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            <Badge variant="gold">معرض الأعمال</Badge>
+            <Badge variant="gold">{t("badge")}</Badge>
             <h1 className="text-h1 font-bold font-cairo text-white mt-6 mb-6">
-              أعمالنا
+              {t("title")}
             </h1>
             <div className="gold-line mx-auto mb-6" />
             <p className="text-lg sm:text-xl text-white/70 font-cairo max-w-3xl mx-auto leading-relaxed">
-              مشاريع حقيقية حققنا فيها نتائج استثنائية لعملائنا. اكتشف كيف
-              ساعدنا الشركات في تحويل أفكارهم لمنتجات تقنية ناجحة
+              {t("subtitle")}
             </p>
           </motion.div>
         </Container>
@@ -176,7 +177,7 @@ export default function PortfolioPageClient() {
               animate={{ opacity: 1 }}
             >
               <p className="text-text-secondary text-lg font-cairo">
-                لا توجد مشاريع في هذا القسم حالياً
+                {t("empty")}
               </p>
             </motion.div>
           )}
@@ -189,18 +190,17 @@ export default function PortfolioPageClient() {
           <div className="text-center max-w-3xl mx-auto">
             <div className="gold-line mx-auto mb-6" />
             <h2 className="text-h2 font-bold font-cairo text-white mb-6">
-              عندك فكرة مشروع؟
+              {t("ctaTitle")}
             </h2>
             <p className="text-white/70 text-lg font-cairo mb-8 leading-relaxed">
-              خلينا نحول فكرتك لمنتج تقني ناجح. تواصل معنا النهاردة واحصل على
-              استشارة مجانية
+              {t("ctaSub")}
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Button href="/contact" size="lg" variant="gold">
-                ابدأ مشروعك الآن
+                {t("ctaButton")}
               </Button>
               <Button href="/services" size="lg" variant="outline" className="border-white/30 text-white hover:border-accent hover:text-accent">
-                تعرف على خدماتنا
+                {t("ctaSecondary")}
               </Button>
             </div>
           </div>

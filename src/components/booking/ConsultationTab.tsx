@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,17 +16,15 @@ import TimeSlotPicker from "./TimeSlotPicker";
 import BookingSuccessState from "./BookingSuccessState";
 import { consultationServices, timeSlots } from "@/data/booking";
 
-const schema = z.object({
-  date: z.date({ error: "اختر تاريخ الموعد" }),
-  timeSlot: z.string().min(1, "اختر وقت الموعد"),
-  name: z.string().min(3, "الاسم يجب أن يكون ٣ أحرف على الأقل"),
-  email: z.string().email("البريد الإلكتروني غير صحيح"),
-  phone: z.string().min(8, "رقم الهاتف غير صحيح"),
-  serviceType: z.string().min(1, "اختر نوع الخدمة"),
-  notes: z.string().optional(),
-});
-
-type FormData = z.infer<typeof schema>;
+type FormData = {
+  date: Date;
+  timeSlot: string;
+  name: string;
+  email: string;
+  phone: string;
+  serviceType: string;
+  notes?: string;
+};
 
 const dateFormatter = new Intl.DateTimeFormat("ar-EG", {
   weekday: "long",
@@ -35,6 +34,18 @@ const dateFormatter = new Intl.DateTimeFormat("ar-EG", {
 });
 
 export default function ConsultationTab() {
+  const t = useTranslations("consultation");
+  const tc = useTranslations("common");
+
+  const schema = z.object({
+    date: z.date({ error: t("errorDate") }),
+    timeSlot: z.string().min(1, t("errorTime")),
+    name: z.string().min(3, t("errorName")),
+    email: z.string().email(t("errorEmail")),
+    phone: z.string().min(8, t("errorPhone")),
+    serviceType: z.string().min(1, t("errorService")),
+    notes: z.string().optional(),
+  });
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [formSnapshot, setFormSnapshot] = useState<FormData | null>(null);
@@ -85,7 +96,7 @@ export default function ConsultationTab() {
       setFormSnapshot(data);
       setSubmitted(true);
     } catch {
-      setError("حصل خطأ، حاول تاني");
+      setError(tc("error"));
     } finally {
       setSubmitting(false);
     }
@@ -105,16 +116,16 @@ export default function ConsultationTab() {
 
     return (
       <BookingSuccessState
-        title="تم حجز الموعد بنجاح!"
-        subtitle="هنتواصل معاك قبل الموعد للتأكيد"
+        title={t("successTitle")}
+        subtitle={t("successSub")}
         details={[
           {
-            label: "التاريخ",
+            label: t("dateLabel"),
             value: dateFormatter.format(formSnapshot.date),
           },
-          { label: "الوقت", value: slot?.label || "" },
-          { label: "الخدمة", value: service?.label || "" },
-          { label: "الاسم", value: formSnapshot.name },
+          { label: t("timeLabel"), value: slot?.label || "" },
+          { label: t("serviceLabel"), value: service?.label || "" },
+          { label: t("nameLabel"), value: formSnapshot.name },
         ]}
         onReset={handleReset}
       />
@@ -127,7 +138,7 @@ export default function ConsultationTab() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <div>
           <label className="block text-sm font-semibold font-cairo text-text-primary mb-2">
-            اختر التاريخ
+            {t("selectDate")}
           </label>
           <Controller
             name="date"
@@ -144,7 +155,7 @@ export default function ConsultationTab() {
 
         <div>
           <label className="block text-sm font-semibold font-cairo text-text-primary mb-2">
-            اختر الوقت
+            {t("selectTime")}
           </label>
           <Controller
             name="timeSlot"
@@ -163,13 +174,13 @@ export default function ConsultationTab() {
       {/* Client Info */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
         <Input
-          label="الاسم الكامل"
+          label={t("fullName")}
           {...register("name")}
           error={errors.name?.message}
-          placeholder="محمد أحمد"
+          placeholder={t("namePlaceholder")}
         />
         <Input
-          label="البريد الإلكتروني"
+          label={t("email")}
           type="email"
           {...register("email")}
           error={errors.email?.message}
@@ -180,7 +191,7 @@ export default function ConsultationTab() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
         <Input
-          label="رقم الهاتف"
+          label={t("phone")}
           type="tel"
           {...register("phone")}
           error={errors.phone?.message}
@@ -188,7 +199,7 @@ export default function ConsultationTab() {
           dir="ltr"
         />
         <Select
-          label="نوع الخدمة"
+          label={t("serviceType")}
           options={consultationServices}
           {...register("serviceType")}
           error={errors.serviceType?.message}
@@ -197,9 +208,9 @@ export default function ConsultationTab() {
 
       <div className="mb-8">
         <Textarea
-          label="ملاحظات إضافية (اختياري)"
+          label={t("notes")}
           {...register("notes")}
-          placeholder="اكتب أي تفاصيل إضافية عن اللي محتاجه..."
+          placeholder={t("notesPlaceholder")}
           rows={3}
         />
       </div>
@@ -215,10 +226,10 @@ export default function ConsultationTab() {
         {submitting ? (
           <>
             <Loader2 className="w-5 h-5 animate-spin" />
-            <span>جاري الحجز...</span>
+            <span>{t("submitting")}</span>
           </>
         ) : (
-          "تأكيد الحجز"
+          t("submit")
         )}
       </Button>
 

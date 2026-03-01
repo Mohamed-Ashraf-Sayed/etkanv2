@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import {
@@ -191,6 +192,9 @@ export default function BlogPostContent({
   post,
   relatedPosts,
 }: BlogPostContentProps) {
+  const t = useTranslations("blogPost");
+  const tn = useTranslations("nav");
+  const tb = useTranslations("blog");
   const [copied, setCopied] = useState(false);
 
   const toc = useMemo(() => extractToc(post.content), [post.content]);
@@ -238,14 +242,14 @@ export default function BlogPostContent({
               href="/"
               className="hover:text-accent transition-colors"
             >
-              الرئيسية
+              {tn("home")}
             </Link>
             <ChevronLeft className="w-4 h-4" />
             <Link
               href="/blog"
               className="hover:text-accent transition-colors"
             >
-              المدونة
+              {tb("title")}
             </Link>
             <ChevronLeft className="w-4 h-4" />
             <span className="text-white/40 line-clamp-1 max-w-[200px]">
@@ -286,7 +290,7 @@ export default function BlogPostContent({
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-accent" />
                 <span className="font-cairo">
-                  {post.readingTime} دقائق قراءة
+                  {post.readingTime} {tb("readingTime")}
                 </span>
               </div>
             </div>
@@ -319,7 +323,7 @@ export default function BlogPostContent({
               >
                 <Card className="p-6">
                   <h3 className="text-lg font-bold font-cairo text-text-primary mb-4">
-                    شارك المقال
+                    {t("share")}
                   </h3>
                   <div className="flex flex-wrap gap-3">
                     <button
@@ -329,12 +333,12 @@ export default function BlogPostContent({
                       {copied ? (
                         <>
                           <CheckCircle2 className="w-4 h-4 text-accent" />
-                          تم النسخ!
+                          {t("copied")}
                         </>
                       ) : (
                         <>
                           <Link2 className="w-4 h-4" />
-                          نسخ الرابط
+                          {t("copyLink")}
                         </>
                       )}
                     </button>
@@ -344,7 +348,7 @@ export default function BlogPostContent({
                       className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface border border-border hover:border-accent/30 hover:text-accent text-text-primary text-sm font-cairo transition-colors cursor-pointer"
                     >
                       <Twitter className="w-4 h-4" />
-                      تويتر
+                      {t("twitter")}
                     </button>
 
                     <button
@@ -352,7 +356,7 @@ export default function BlogPostContent({
                       className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface border border-border hover:border-accent/30 hover:text-accent text-text-primary text-sm font-cairo transition-colors cursor-pointer"
                     >
                       <Linkedin className="w-4 h-4" />
-                      لينكدإن
+                      {t("linkedin")}
                     </button>
                   </div>
                 </Card>
@@ -371,7 +375,7 @@ export default function BlogPostContent({
                   <div className="flex items-center gap-2 mb-4">
                     <List className="w-5 h-5 text-accent" />
                     <h3 className="text-lg font-bold font-cairo text-text-primary">
-                      محتويات المقال
+                      {t("toc")}
                     </h3>
                   </div>
                   <div className="gold-line mb-4" />
@@ -408,7 +412,7 @@ export default function BlogPostContent({
               transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
             >
               <SectionTitle
-                title="مقالات ذات صلة"
+                title={t("related")}
                 light
               />
             </motion.div>
@@ -439,7 +443,7 @@ export default function BlogPostContent({
                       <div className="flex items-center gap-4 pt-3 border-t border-border text-xs text-text-secondary font-cairo">
                         <span>{related.author}</span>
                         <span className="text-accent">{formatDate(related.date)}</span>
-                        <span>{related.readingTime} دقائق قراءة</span>
+                        <span>{related.readingTime} {tb("readingTime")}</span>
                       </div>
                     </Card>
                   </Link>
@@ -455,7 +459,7 @@ export default function BlogPostContent({
               transition={{ duration: 0.5, delay: 0.3 }}
             >
               <Button href="/blog" variant="outline" className="border-white text-white hover:border-accent hover:text-accent">
-                عرض جميع المقالات
+                {t("viewAll")}
               </Button>
             </motion.div>
           </Container>

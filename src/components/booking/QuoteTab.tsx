@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,26 +34,17 @@ const iconMap: Record<string, React.ElementType> = {
   Wrench,
 };
 
-const schema = z.object({
-  serviceCategories: z.array(z.string()).min(1, "اختر خدمة واحدة على الأقل"),
-  features: z.array(z.string()).min(1, "اختر ميزة واحدة على الأقل"),
-  budgetRange: z.string().min(1, "اختر نطاق الميزانية"),
-  timeline: z.string().min(1, "اختر الجدول الزمني"),
-  name: z.string().min(3, "الاسم يجب أن يكون ٣ أحرف على الأقل"),
-  email: z.string().email("البريد الإلكتروني غير صحيح"),
-  phone: z.string().min(8, "رقم الهاتف غير صحيح"),
-  companyName: z.string().optional(),
-  projectDescription: z.string().min(20, "وصف المشروع يجب أن يكون ٢٠ حرف على الأقل"),
-});
-
-type FormData = z.infer<typeof schema>;
-
-const steps = [
-  { label: "الخدمات" },
-  { label: "الميزانية" },
-  { label: "البيانات" },
-  { label: "مراجعة" },
-];
+type FormData = {
+  serviceCategories: string[];
+  features: string[];
+  budgetRange: string;
+  timeline: string;
+  name: string;
+  email: string;
+  phone: string;
+  companyName?: string;
+  projectDescription: string;
+};
 
 // Step validation field groups
 const stepFields: (keyof FormData)[][] = [
@@ -75,6 +67,28 @@ const slideVariants = {
 };
 
 export default function QuoteTab() {
+  const t = useTranslations("quote");
+  const tc = useTranslations("common");
+
+  const schema = z.object({
+    serviceCategories: z.array(z.string()).min(1, t("errorService")),
+    features: z.array(z.string()).min(1, t("errorFeature")),
+    budgetRange: z.string().min(1, t("errorBudget")),
+    timeline: z.string().min(1, t("errorTimeline")),
+    name: z.string().min(3, t("errorName")),
+    email: z.string().email(t("errorEmail")),
+    phone: z.string().min(8, t("errorPhone")),
+    companyName: z.string().optional(),
+    projectDescription: z.string().min(20, t("errorDesc")),
+  });
+
+  const steps = [
+    { label: t("stepServices") },
+    { label: t("stepBudget") },
+    { label: t("stepInfo") },
+    { label: t("stepReview") },
+  ];
+
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(1);
   const [submitted, setSubmitted] = useState(false);
@@ -177,7 +191,7 @@ export default function QuoteTab() {
       if (!res.ok) throw new Error("API error");
       setSubmitted(true);
     } catch {
-      setError("حصل خطأ، حاول تاني");
+      setError(tc("error"));
     } finally {
       setSubmitting(false);
     }
@@ -191,8 +205,8 @@ export default function QuoteTab() {
   if (submitted) {
     return (
       <BookingSuccessState
-        title="تم إرسال طلب عرض السعر!"
-        subtitle="هنراجع طلبك ونرد عليك خلال ٢٤ ساعة"
+        title={t("successTitle")}
+        subtitle={t("successSub")}
         onReset={handleReset}
       />
     );
@@ -222,10 +236,10 @@ export default function QuoteTab() {
             {step === 0 && (
               <div>
                 <h3 className="text-lg font-bold font-cairo text-text-primary mb-2">
-                  اختر الخدمات المطلوبة
+                  {t("selectServices")}
                 </h3>
                 <p className="text-sm text-text-secondary font-cairo mb-6">
-                  يمكنك اختيار أكثر من خدمة
+                  {t("selectServicesSub")}
                 </p>
 
                 {/* Service category cards */}
@@ -272,7 +286,7 @@ export default function QuoteTab() {
                 {visibleFeatures.length > 0 && (
                   <div>
                     <p className="text-sm font-semibold font-cairo text-text-primary mb-3">
-                      اختر الميزات المحددة
+                      {t("selectFeatures")}
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {visibleFeatures.map((f) => {
@@ -311,10 +325,10 @@ export default function QuoteTab() {
               <div>
                 {/* Budget */}
                 <h3 className="text-lg font-bold font-cairo text-text-primary mb-2">
-                  الميزانية المتوقعة
+                  {t("budgetTitle")}
                 </h3>
                 <p className="text-sm text-text-secondary font-cairo mb-5">
-                  اختر النطاق الأقرب لميزانيتك
+                  {t("budgetSub")}
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
@@ -344,10 +358,10 @@ export default function QuoteTab() {
 
                 {/* Timeline */}
                 <h3 className="text-lg font-bold font-cairo text-text-primary mb-2">
-                  الجدول الزمني
+                  {t("timelineTitle")}
                 </h3>
                 <p className="text-sm text-text-secondary font-cairo mb-5">
-                  امتى محتاج المشروع يكون جاهز؟
+                  {t("timelineSub")}
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -381,18 +395,18 @@ export default function QuoteTab() {
             {step === 2 && (
               <div>
                 <h3 className="text-lg font-bold font-cairo text-text-primary mb-5">
-                  بياناتك
+                  {t("yourInfo")}
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
                   <Input
-                    label="الاسم الكامل"
+                    label={t("fullName")}
                     {...register("name")}
                     error={errors.name?.message}
-                    placeholder="محمد أحمد"
+                    placeholder={t("fullName")}
                   />
                   <Input
-                    label="البريد الإلكتروني"
+                    label={t("email")}
                     type="email"
                     {...register("email")}
                     error={errors.email?.message}
@@ -403,7 +417,7 @@ export default function QuoteTab() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
                   <Input
-                    label="رقم الهاتف"
+                    label={t("phone")}
                     type="tel"
                     {...register("phone")}
                     error={errors.phone?.message}
@@ -411,17 +425,17 @@ export default function QuoteTab() {
                     dir="ltr"
                   />
                   <Input
-                    label="اسم الشركة (اختياري)"
+                    label={t("company")}
                     {...register("companyName")}
-                    placeholder="اسم الشركة"
+                    placeholder={t("companyPlaceholder")}
                   />
                 </div>
 
                 <Textarea
-                  label="وصف المشروع"
+                  label={t("projectDesc")}
                   {...register("projectDescription")}
                   error={errors.projectDescription?.message}
-                  placeholder="اوصف لنا مشروعك والنتيجة اللي عايز توصل ليها..."
+                  placeholder={t("projectDescPlaceholder")}
                   rows={4}
                 />
               </div>
@@ -431,13 +445,14 @@ export default function QuoteTab() {
             {step === 3 && (
               <div>
                 <h3 className="text-lg font-bold font-cairo text-text-primary mb-5">
-                  مراجعة الطلب
+                  {t("review")}
                 </h3>
 
                 {/* Services */}
                 <ReviewSection
-                  title="الخدمات المطلوبة"
+                  title={t("reviewServices")}
                   onEdit={() => goToStep(0)}
+                  editLabel={t("edit")}
                 >
                   <div className="flex flex-wrap gap-2">
                     {selectedCategories.map((cat) => (
@@ -470,23 +485,25 @@ export default function QuoteTab() {
 
                 {/* Budget & Timeline */}
                 <ReviewSection
-                  title="الميزانية والجدول الزمني"
+                  title={t("reviewBudget")}
                   onEdit={() => goToStep(1)}
+                  editLabel={t("edit")}
                 >
                   <p className="text-sm text-text-secondary font-cairo">
-                    <span className="font-semibold text-text-primary">الميزانية:</span>{" "}
+                    <span className="font-semibold text-text-primary">{t("budgetLabel")}</span>{" "}
                     {budgetRanges.find((b) => b.value === selectedBudget)?.label}
                   </p>
                   <p className="text-sm text-text-secondary font-cairo mt-1">
-                    <span className="font-semibold text-text-primary">المدة:</span>{" "}
-                    {timelineOptions.find((t) => t.value === selectedTimeline)?.label}
+                    <span className="font-semibold text-text-primary">{t("durationLabel")}</span>{" "}
+                    {timelineOptions.find((tl) => tl.value === selectedTimeline)?.label}
                   </p>
                 </ReviewSection>
 
                 {/* Client Info */}
                 <ReviewSection
-                  title="بياناتك"
+                  title={t("reviewInfo")}
                   onEdit={() => goToStep(2)}
+                  editLabel={t("edit")}
                 >
                   <p className="text-sm text-text-secondary font-cairo">
                     {watch("name")} — {watch("email")} — {watch("phone")}
@@ -514,7 +531,7 @@ export default function QuoteTab() {
               className="flex items-center gap-2 text-sm font-cairo font-semibold text-text-secondary hover:text-accent transition-colors"
             >
               <ArrowRight className="w-4 h-4" />
-              السابق
+              {t("prev")}
             </button>
           ) : (
             <div />
@@ -522,7 +539,7 @@ export default function QuoteTab() {
 
           {step < 3 ? (
             <Button type="button" variant="gold" onClick={goNext}>
-              التالي
+              {t("next")}
               <ArrowLeft className="w-4 h-4" />
             </Button>
           ) : (
@@ -535,10 +552,10 @@ export default function QuoteTab() {
               {submitting ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>جاري الإرسال...</span>
+                  <span>{t("submitting")}</span>
                 </>
               ) : (
-                "تأكيد وإرسال"
+                t("submit")
               )}
             </Button>
           )}
@@ -557,10 +574,12 @@ function ReviewSection({
   title,
   children,
   onEdit,
+  editLabel,
 }: {
   title: string;
   children: React.ReactNode;
   onEdit: () => void;
+  editLabel: string;
 }) {
   return (
     <div className="rounded-xl border border-border bg-surface p-5 mb-4">
@@ -574,7 +593,7 @@ function ReviewSection({
           className="flex items-center gap-1 text-xs text-accent font-cairo font-semibold hover:underline"
         >
           <Edit3 className="w-3.5 h-3.5" />
-          تعديل
+          {editLabel}
         </button>
       </div>
       {children}

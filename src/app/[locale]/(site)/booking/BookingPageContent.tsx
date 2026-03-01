@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import {
@@ -16,13 +17,15 @@ import Button from "@/components/ui/Button";
 import ConsultationTab from "@/components/booking/ConsultationTab";
 import QuoteTab from "@/components/booking/QuoteTab";
 
-const tabs = [
-  { id: "consultation", label: "حجز موعد استشارة", icon: Calendar },
-  { id: "quote", label: "طلب عرض سعر", icon: FileText },
-];
-
 export default function BookingPageContent() {
+  const t = useTranslations("booking");
+  const tn = useTranslations("nav");
   const [activeTab, setActiveTab] = useState("consultation");
+
+  const tabs = [
+    { id: "consultation", label: t("tabConsultation"), icon: Calendar },
+    { id: "quote", label: t("tabQuote"), icon: FileText },
+  ];
 
   return (
     <>
@@ -46,13 +49,13 @@ export default function BookingPageContent() {
                   href="/"
                   className="hover:text-accent transition-colors"
                 >
-                  الرئيسية
+                  {tn("home")}
                 </Link>
               </li>
               <li>
                 <ChevronLeft className="w-3.5 h-3.5" />
               </li>
-              <li className="text-accent">حجز موعد</li>
+              <li className="text-accent">{tn("booking")}</li>
             </ol>
           </motion.nav>
 
@@ -65,17 +68,16 @@ export default function BookingPageContent() {
             }}
             className="max-w-3xl"
           >
-            <Badge variant="gold">احجز الآن</Badge>
+            <Badge variant="gold">{t("badge")}</Badge>
 
             <h1 className="text-display font-bold font-cairo text-white mt-5 mb-5">
-              احجز موعد أو اطلب عرض سعر
+              {t("heading")}
             </h1>
 
             <div className="w-16 h-0.5 bg-accent mb-5" />
 
             <p className="text-lg text-white/60 font-cairo leading-relaxed">
-              احجز استشارة مجانية مع فريقنا أو اطلب عرض سعر مخصص لمشروعك —
-              هنرد عليك في أسرع وقت.
+              {t("subtitle")}
             </p>
           </motion.div>
         </Container>
@@ -147,10 +149,10 @@ export default function BookingPageContent() {
           >
             <div className="w-12 h-0.5 bg-accent mx-auto mb-6" />
             <h2 className="text-h2 font-bold font-cairo text-white mb-4">
-              لسه عندك أسئلة؟
+              {t("questionsTitle")}
             </h2>
             <p className="text-white/60 font-cairo mb-8 leading-relaxed">
-              تواصل معنا مباشرة عبر الواتساب أو اتصل بينا
+              {t("questionsSub")}
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Button
@@ -159,7 +161,7 @@ export default function BookingPageContent() {
                 href="https://wa.me/201234567890"
               >
                 <MessageCircle className="w-5 h-5" />
-                واتساب
+                {t("whatsapp")}
               </Button>
               <Button
                 variant="ghost"
@@ -168,7 +170,7 @@ export default function BookingPageContent() {
                 className="text-white/70 hover:text-accent border border-white/10"
               >
                 <Phone className="w-5 h-5" />
-                اتصل بنا
+                {t("callUs")}
               </Button>
             </div>
           </motion.div>

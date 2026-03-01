@@ -239,7 +239,9 @@
     "errorName": "الاسم يجب أن يكون ٣ أحرف على الأقل",
     "errorEmail": "البريد الإلكتروني غير صحيح",
     "errorPhone": "رقم الهاتف غير صحيح",
-    "errorService": "اختر نوع الخدمة"
+    "errorService": "اختر نوع الخدمة",
+    "morning": "صباحاً",
+    "evening": "مساءً"
   },
   "quote": {
     "stepServices": "الخدمات",
@@ -365,7 +367,8 @@
     "error": "حصل خطأ، حاول تاني",
     "backHome": "العودة للرئيسية",
     "bookAnother": "حجز آخر",
-    "home": "الرئيسية"
+    "home": "الرئيسية",
+    "select": "اختر..."
   },
   "bookingSuccess": {
     "backHome": "العودة للرئيسية",

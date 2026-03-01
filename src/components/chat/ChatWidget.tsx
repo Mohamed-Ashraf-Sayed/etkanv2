@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, Bot, Headset } from "lucide-react";
 import { WELCOME_MESSAGE, SUGGESTED_QUESTIONS } from "@/data/chatbot";
@@ -15,6 +16,7 @@ function generateId() {
 }
 
 export default function ChatWidget() {
+  const t = useTranslations("chat");
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -155,7 +157,7 @@ export default function ChatWidget() {
         const updated = [...prev];
         updated[updated.length - 1] = {
           role: "assistant",
-          content: "عذراً، حصل خطأ. حاول تاني أو تواصل معنا مباشرة.",
+          content: t("error"),
         };
         return updated;
       });
@@ -201,7 +203,7 @@ export default function ChatWidget() {
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-accent text-navy flex items-center justify-center shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-shadow duration-300"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        aria-label={isOpen ? "إغلاق الشات" : "فتح الشات"}
+        aria-label={isOpen ? t("closeChat") : t("openChat")}
       >
         <AnimatePresence mode="wait">
           {isOpen ? (
@@ -257,14 +259,14 @@ export default function ChatWidget() {
               </div>
               <div className="flex-1">
                 <h3 className="text-white font-cairo font-bold text-sm">
-                  {isAdminMode ? "فريق إتقان" : "مساعد إتقان"}
+                  {isAdminMode ? t("adminTitle") : t("aiTitle")}
                 </h3>
                 <p className="text-white/50 text-xs font-cairo">
                   {isStreaming
-                    ? "بيكتب..."
+                    ? t("typing")
                     : isAdminMode
-                      ? "متصل — فريق الدعم"
-                      : "متصل"}
+                      ? t("adminStatus")
+                      : t("onlineStatus")}
                 </p>
               </div>
               <button
@@ -328,7 +330,7 @@ export default function ChatWidget() {
                   >
                     {msg.role === "admin" && (
                       <span className="text-[10px] font-cairo text-emerald-500 font-bold block mb-1">
-                        فريق الدعم
+                        {t("adminBadge")}
                       </span>
                     )}
                     <p className="text-sm font-cairo text-text-primary leading-relaxed whitespace-pre-wrap">
@@ -372,7 +374,7 @@ export default function ChatWidget() {
                   value={input}
                   onChange={handleTextareaInput}
                   onKeyDown={handleKeyDown}
-                  placeholder="اكتب رسالتك..."
+                  placeholder={t("placeholder")}
                   rows={1}
                   disabled={isStreaming}
                   className="flex-1 resize-none bg-surface border border-border rounded-xl px-4 py-2.5 text-sm font-cairo text-text-primary placeholder:text-text-secondary/50 focus:outline-none focus:border-accent/50 transition-colors disabled:opacity-50"

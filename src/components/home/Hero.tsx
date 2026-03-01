@@ -7,15 +7,17 @@ import { ArrowLeft, Shield, Zap, Globe, Server, ChevronDown } from "lucide-react
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import MagneticButton from "@/components/shared/MagneticButton";
-
-const services = [
-  { icon: Globe, label: "تطوير الويب" },
-  { icon: Zap, label: "تطبيقات الموبايل" },
-  { icon: Server, label: "البنية التحتية" },
-  { icon: Shield, label: "الأمن السيبراني" },
-];
+import { useTranslations } from "next-intl";
 
 export default function Hero() {
+  const t = useTranslations("hero");
+
+  const services = [
+    { icon: Globe, key: "serviceWeb" },
+    { icon: Zap, key: "serviceMobile" },
+    { icon: Server, key: "serviceInfra" },
+    { icon: Shield, key: "serviceSecurity" },
+  ];
   const sectionRef = useRef<HTMLElement>(null);
   const tagRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -104,7 +106,7 @@ export default function Hero() {
           <div ref={tagRef} className="mb-8">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.08] border border-white/[0.1] text-accent text-sm font-cairo font-semibold backdrop-blur-sm">
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-              شريكك التقني الموثوق منذ 2019
+              {t("badge")}
             </span>
           </div>
 
@@ -113,9 +115,9 @@ export default function Hero() {
             ref={headingRef}
             className="text-display font-black font-cairo text-white max-w-5xl"
           >
-            نبني حلول تقنية
-            <span className="text-accent"> تحرّك </span>
-            أعمالك للأمام
+            {t("titleLine1")}
+            <span className="text-accent"> {t("titleHighlight")} </span>
+            {t("titleLine2")}
           </h1>
 
           {/* Subtitle */}
@@ -123,15 +125,14 @@ export default function Hero() {
             ref={subtitleRef}
             className="text-lg sm:text-xl text-white/50 max-w-2xl font-cairo mt-6 leading-relaxed"
           >
-            من تطوير المواقع والتطبيقات لتصميم الأنظمة الداخلية والبنية التحتية —
-            نقدم حلول متكاملة بمعايير عالمية لعملائنا في مصر والسعودية.
+            {t("subtitle")}
           </p>
 
           {/* CTA Buttons */}
           <div ref={ctaRef} className="flex flex-col sm:flex-row gap-4 mt-10">
             <MagneticButton strength={0.25}>
               <Button variant="gold" size="lg" href="/contact">
-                <span>ابدأ مشروعك الآن</span>
+                <span>{t("ctaPrimary")}</span>
                 <ArrowLeft className="w-5 h-5" />
               </Button>
             </MagneticButton>
@@ -142,7 +143,7 @@ export default function Hero() {
                 href="/portfolio"
                 className="text-white/70 hover:text-white hover:bg-white/5 border border-white/10 hover:border-white/20"
               >
-                استعرض أعمالنا
+                {t("ctaSecondary")}
               </Button>
             </MagneticButton>
           </div>
@@ -153,10 +154,10 @@ export default function Hero() {
             className="flex flex-wrap items-center gap-x-10 gap-y-4 mt-14 pt-8 border-t border-white/[0.08]"
           >
             {[
-              { value: "+50", label: "عميل يثق بنا" },
-              { value: "+100", label: "مشروع ناجح" },
-              { value: "+5", label: "سنوات خبرة" },
-              { value: "٪98", label: "رضا العملاء" },
+              { value: "+50", label: t("clients") },
+              { value: "+100", label: t("projects") },
+              { value: "+5", label: t("years") },
+              { value: "٪98", label: t("satisfaction") },
             ].map((stat) => (
               <div key={stat.label} className="flex items-center gap-3">
                 <span className="text-3xl font-bold text-accent font-cairo">
@@ -176,14 +177,14 @@ export default function Hero() {
           >
             {services.map((service) => (
               <div
-                key={service.label}
+                key={service.key}
                 className="group flex items-center gap-3 p-4 rounded-xl bg-white/[0.05] border border-white/[0.08] hover:border-accent/30 hover:bg-white/[0.08] backdrop-blur-sm transition-all duration-300 cursor-default"
               >
                 <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0 group-hover:bg-accent/20 transition-colors duration-300">
                   <service.icon className="w-5 h-5 text-accent" />
                 </div>
                 <span className="text-sm font-cairo font-semibold text-white/70 group-hover:text-white transition-colors duration-300">
-                  {service.label}
+                  {t(service.key)}
                 </span>
               </div>
             ))}
@@ -196,9 +197,9 @@ export default function Hero() {
         <button
           onClick={() => window.scrollTo({ top: window.innerHeight, behavior: "smooth" })}
           className="flex flex-col items-center gap-2 text-white/40 hover:text-accent transition-colors duration-300 cursor-pointer"
-          aria-label="انزل لتحت"
+          aria-label={t("scrollAria")}
         >
-          <span className="text-xs font-cairo">اكتشف المزيد</span>
+          <span className="text-xs font-cairo">{t("scrollDown")}</span>
           <ChevronDown className="w-5 h-5 animate-bounce" />
         </button>
       </div>

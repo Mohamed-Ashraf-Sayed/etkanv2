@@ -3,29 +3,7 @@
 import { motion } from "framer-motion";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
-
-const steps = [
-  {
-    num: "01",
-    title: "اكتشاف وتحليل",
-    desc: "نفهم احتياجاتك وأهدافك بعمق ونحلل متطلبات المشروع لوضع أساس قوي للنجاح.",
-  },
-  {
-    num: "02",
-    title: "تصميم وتخطيط",
-    desc: "نصمم الحل الأمثل ونضع خطة تنفيذ واضحة ومفصلة تضمن تحقيق أهدافك.",
-  },
-  {
-    num: "03",
-    title: "تطوير وبناء",
-    desc: "نبني الحل بأحدث التقنيات مع مراجعات واختبارات مستمرة لضمان أعلى جودة.",
-  },
-  {
-    num: "04",
-    title: "إطلاق ودعم",
-    desc: "نطلق المشروع ونقدم دعم مستمر وصيانة دورية لضمان النجاح على المدى الطويل.",
-  },
-];
+import { useTranslations } from "next-intl";
 
 const containerVariants = {
   hidden: {},
@@ -44,6 +22,15 @@ const stepVariants = {
 };
 
 export default function HowWeWork() {
+  const t = useTranslations("howWeWork");
+
+  const steps = [
+    { num: "01", title: t("step1"), desc: t("step1Desc") },
+    { num: "02", title: t("step2"), desc: t("step2Desc") },
+    { num: "03", title: t("step3"), desc: t("step3Desc") },
+    { num: "04", title: t("step4"), desc: t("step4Desc") },
+  ];
+
   return (
     <section className="section-navy section-padding relative overflow-hidden">
       {/* Subtle decorative background elements */}
@@ -54,8 +41,8 @@ export default function HowWeWork() {
 
       <Container className="relative z-10">
         <SectionTitle
-          title="كيف نعمل"
-          subtitle="منهجية واضحة ومجربة لضمان نجاح مشروعك من البداية للنهاية"
+          title={t("title")}
+          subtitle={t("subtitle")}
           light
         />
 

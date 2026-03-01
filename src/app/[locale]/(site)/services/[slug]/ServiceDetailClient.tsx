@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import {
@@ -87,6 +88,8 @@ export default function ServiceDetailClient({
 }: {
   service: Service;
 }) {
+  const t = useTranslations("serviceDetail");
+  const tn = useTranslations("nav");
   const IconComponent = iconMap[service.icon] || Globe;
 
   return (
@@ -99,13 +102,13 @@ export default function ServiceDetailClient({
             <ol className="flex items-center gap-2 text-sm font-cairo text-white/60">
               <li>
                 <Link href="/" className="hover:text-accent transition-colors">
-                  الرئيسية
+                  {tn("home")}
                 </Link>
               </li>
               <li><ChevronLeft className="w-4 h-4" /></li>
               <li>
                 <Link href="/services" className="hover:text-accent transition-colors">
-                  خدماتنا
+                  {tn("services")}
                 </Link>
               </li>
               <li><ChevronLeft className="w-4 h-4" /></li>
@@ -138,17 +141,17 @@ export default function ServiceDetailClient({
               <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10">
                 <Clock className="w-5 h-5 text-accent" />
                 <span className="text-white/70 font-cairo text-sm">
-                  المدة المتوقعة: <strong className="text-white">{service.timeline}</strong>
+                  {t("expectedDuration")} <strong className="text-white">{service.timeline}</strong>
                 </span>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10">
                 <Layers className="w-5 h-5 text-accent" />
                 <span className="text-white/70 font-cairo text-sm">
-                  <strong className="text-white">{service.techStack.length}</strong> تقنية مستخدمة
+                  <strong className="text-white">{service.techStack.length}</strong> {t("techUsed")}
                 </span>
               </div>
               <Button href="/contact" variant="gold" size="lg">
-                اطلب عرض أسعار
+                {t("getQuote")}
               </Button>
             </div>
           </motion.div>
@@ -159,8 +162,8 @@ export default function ServiceDetailClient({
       <section className="relative section-padding section-alt">
         <Container className="relative z-10">
           <SectionTitle
-            title="المميزات والفوائد"
-            subtitle="ليه تختار خدمتنا؟"
+            title={t("benefits")}
+            subtitle={t("benefitsSub")}
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
             {service.benefits.map((benefit, i) => (
@@ -188,8 +191,8 @@ export default function ServiceDetailClient({
       <section className="relative section-padding section-navy">
         <Container>
           <SectionTitle
-            title="منهجية العمل"
-            subtitle="خطوات واضحة ومنظمة لضمان أفضل نتيجة"
+            title={t("process")}
+            subtitle={t("processSub")}
             light
           />
           <div className="max-w-3xl mx-auto relative">
@@ -231,8 +234,8 @@ export default function ServiceDetailClient({
       <section className="relative section-padding section-alt">
         <Container className="relative z-10">
           <SectionTitle
-            title="التسليمات"
-            subtitle="إيه اللي هتحصل عليه في نهاية المشروع"
+            title={t("deliverables")}
+            subtitle={t("deliverablesSub")}
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
             {service.deliverables.map((deliverable, i) => (
@@ -264,8 +267,8 @@ export default function ServiceDetailClient({
       <section className="section-padding section-navy">
         <Container>
           <SectionTitle
-            title="التقنيات المستخدمة"
-            subtitle="أحدث التقنيات والأدوات لضمان أعلى جودة"
+            title={t("techStack")}
+            subtitle={t("techStackSub")}
             light
           />
           <div className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto">
@@ -293,8 +296,8 @@ export default function ServiceDetailClient({
         <section className="relative section-padding section-alt">
           <Container className="relative z-10">
             <SectionTitle
-              title="أسئلة شائعة"
-              subtitle="إجابات على أكثر الأسئلة اللي بتوصلنا عن الخدمة"
+              title={t("faqs")}
+              subtitle={t("faqsSub")}
             />
             <div className="max-w-3xl mx-auto space-y-4">
               {service.faqs.map((faq, i) => (
@@ -321,21 +324,21 @@ export default function ServiceDetailClient({
           >
             <div className="gold-line mx-auto mb-6" />
             <h2 className="text-h2 font-bold font-cairo text-white mb-6">
-              جاهز تبدأ؟
+              {t("readyToStart")}
             </h2>
             <p className="text-white/70 text-lg font-cairo mb-10 max-w-2xl mx-auto leading-relaxed">
-              تواصل معنا النهاردة واحصل على استشارة مجانية وعرض سعر مخصص لخدمة{" "}
+              {t("readyToStartSub")}{" "}
               <span className="text-accent font-semibold">
                 {service.shortTitle}
               </span>
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Button href="/contact" variant="gold" size="lg">
-                تواصل معنا الآن
+                {t("contactUs")}
               </Button>
               <Button href="/services" size="lg" variant="outline">
                 <ArrowLeft className="w-5 h-5 ml-2" />
-                كل الخدمات
+                {t("allServices")}
               </Button>
             </div>
           </motion.div>

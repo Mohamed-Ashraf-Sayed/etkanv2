@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { motion, useInView, animate } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import {
@@ -100,6 +101,10 @@ export default function ProjectDetailClient({
 }: {
   project: Project;
 }) {
+  const t = useTranslations("projectDetail");
+  const tn = useTranslations("nav");
+  const tp = useTranslations("portfolio");
+
   return (
     <>
       {/* ═══════════════ HERO ═══════════════ */}
@@ -124,7 +129,7 @@ export default function ProjectDetailClient({
                   href="/"
                   className="hover:text-accent transition-colors duration-200"
                 >
-                  الرئيسية
+                  {tn("home")}
                 </Link>
               </li>
               <li>
@@ -135,7 +140,7 @@ export default function ProjectDetailClient({
                   href="/portfolio"
                   className="hover:text-accent transition-colors duration-200"
                 >
-                  أعمالنا
+                  {tp("title")}
                 </Link>
               </li>
               <li>
@@ -182,7 +187,7 @@ export default function ProjectDetailClient({
             >
               <div className="rounded-2xl bg-white/[0.05] border border-white/10 p-6 lg:p-8">
                 <h3 className="text-sm font-bold font-cairo text-accent mb-6 uppercase tracking-wider">
-                  تفاصيل المشروع
+                  {t("details")}
                 </h3>
 
                 <div className="space-y-5">
@@ -192,7 +197,7 @@ export default function ProjectDetailClient({
                     </div>
                     <div>
                       <p className="text-xs text-white/40 font-cairo">
-                        العميل
+                        {t("client")}
                       </p>
                       <p className="text-sm text-white font-cairo font-medium">
                         {project.client}
@@ -206,7 +211,7 @@ export default function ProjectDetailClient({
                     </div>
                     <div>
                       <p className="text-xs text-white/40 font-cairo">
-                        المجال
+                        {t("industry")}
                       </p>
                       <p className="text-sm text-white font-cairo font-medium">
                         {project.industry}
@@ -219,7 +224,7 @@ export default function ProjectDetailClient({
                       <Calendar className="w-5 h-5 text-accent" />
                     </div>
                     <div>
-                      <p className="text-xs text-white/40 font-cairo">السنة</p>
+                      <p className="text-xs text-white/40 font-cairo">{t("year")}</p>
                       <p className="text-sm text-white font-cairo font-medium">
                         {project.year}
                       </p>
@@ -231,7 +236,7 @@ export default function ProjectDetailClient({
                       <Clock className="w-5 h-5 text-accent" />
                     </div>
                     <div>
-                      <p className="text-xs text-white/40 font-cairo">المدة</p>
+                      <p className="text-xs text-white/40 font-cairo">{t("duration")}</p>
                       <p className="text-sm text-white font-cairo font-medium">
                         {project.duration}
                       </p>
@@ -242,7 +247,7 @@ export default function ProjectDetailClient({
                 {/* Tech Stack inside card */}
                 <div className="mt-6 pt-6 border-t border-white/10">
                   <p className="text-xs text-white/40 font-cairo mb-3">
-                    التقنيات
+                    {t("technologies")}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {project.techStack.map((tech) => (
@@ -264,7 +269,7 @@ export default function ProjectDetailClient({
                     size="md"
                     className="w-full"
                   >
-                    عندك مشروع مشابه؟
+                    {t("similarProject")}
                   </Button>
                 </div>
               </div>
@@ -302,7 +307,7 @@ export default function ProjectDetailClient({
                     <span className="text-red-500 text-lg font-bold">!</span>
                   </div>
                   <h2 className="text-h3 font-bold font-cairo text-text-primary">
-                    التحدي
+                    {t("challenge")}
                   </h2>
                 </div>
                 <p className="text-text-secondary font-cairo leading-loose">
@@ -326,7 +331,7 @@ export default function ProjectDetailClient({
                     <CheckCircle2 className="w-5 h-5 text-accent" />
                   </div>
                   <h2 className="text-h3 font-bold font-cairo text-text-primary">
-                    الحل
+                    {t("solution")}
                   </h2>
                 </div>
                 <p className="text-text-secondary font-cairo leading-loose">
@@ -344,14 +349,14 @@ export default function ProjectDetailClient({
           <motion.div {...fadeIn} className="text-center mb-12">
             <div className="w-12 h-0.5 bg-accent mx-auto mb-4" />
             <h2 className="text-h2 font-bold font-cairo text-text-primary">
-              لقطات من المشروع
+              {t("gallery")}
             </h2>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-6xl mx-auto">
             {[
               {
-                label: "واجهة المستخدم الرئيسية",
+                label: t("galleryMain"),
                 svg: (
                   <svg
                     viewBox="0 0 400 250"
@@ -397,7 +402,7 @@ export default function ProjectDetailClient({
                 ),
               },
               {
-                label: "تصميم الموبايل",
+                label: t("galleryMobile"),
                 svg: (
                   <svg
                     viewBox="0 0 400 250"
@@ -454,7 +459,7 @@ export default function ProjectDetailClient({
                 ),
               },
               {
-                label: "لوحة التحكم والتحليلات",
+                label: t("galleryDashboard"),
                 svg: (
                   <svg
                     viewBox="0 0 400 250"
@@ -551,17 +556,17 @@ export default function ProjectDetailClient({
           <motion.div className="text-center max-w-2xl mx-auto" {...fadeIn}>
             <div className="w-12 h-0.5 bg-accent mx-auto mb-6" />
             <h2 className="text-h2 font-bold font-cairo text-white mb-4">
-              عندك مشروع مشابه؟
+              {t("ctaTitle")}
             </h2>
             <p className="text-white/60 font-cairo mb-3 leading-relaxed">
-              تواصل معنا وخلينا نحقق لك نفس النتائج الاستثنائية
+              {t("ctaSub")}
             </p>
             <p className="text-accent text-sm font-semibold font-cairo mb-8">
-              استشارة مجانية + عرض سعر مخصص
+              {t("ctaOffer")}
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Button href="/contact" size="lg" variant="gold">
-                تواصل معنا
+                {t("ctaButton")}
               </Button>
               <Button
                 href="/portfolio"
@@ -570,7 +575,7 @@ export default function ProjectDetailClient({
                 className="text-white/70 hover:text-accent"
               >
                 <ArrowLeft className="w-4 h-4 ml-2" />
-                كل الأعمال
+                {t("ctaAll")}
               </Button>
             </div>
           </motion.div>

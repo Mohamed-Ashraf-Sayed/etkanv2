@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -42,13 +43,13 @@ const fadeUp = {
   },
 };
 
-// --- Schema & Data ---
+// --- Schema ---
 const contactSchema = z.object({
-  name: z.string().min(3, "الاسم يجب أن يكون 3 أحرف على الأقل"),
-  email: z.string().email("البريد الإلكتروني غير صحيح"),
-  phone: z.string().min(8, "رقم الهاتف غير صحيح"),
-  serviceType: z.string().min(1, "اختر نوع الخدمة"),
-  message: z.string().min(10, "الرسالة يجب أن تكون 10 أحرف على الأقل"),
+  name: z.string().min(3),
+  email: z.string().email(),
+  phone: z.string().min(8),
+  serviceType: z.string().min(1),
+  message: z.string().min(10),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
@@ -63,49 +64,50 @@ const serviceOptions = [
   { value: "other", label: "أخرى" },
 ];
 
-const offices = [
-  {
-    country: "مصر",
-    city: "القاهرة",
-    address: "مدينة نصر، شارع مصطفى النحاس، برج الياسمين، الدور 5",
-    icon: Building2,
-  },
-  {
-    country: "السعودية",
-    city: "الرياض",
-    address: "حي العليا، طريق الملك فهد، برج الفيصلية، الدور 12",
-    icon: Building2,
-  },
-];
-
-const contactMethods = [
-  {
-    icon: Mail,
-    label: "البريد الإلكتروني",
-    value: "info@devixtech.com",
-    href: "mailto:info@devixtech.com",
-    dir: "ltr" as const,
-  },
-  {
-    icon: Phone,
-    label: "الهاتف",
-    value: "+20 123 456 7890",
-    href: "tel:+201234567890",
-    dir: "ltr" as const,
-  },
-  {
-    icon: Clock,
-    label: "ساعات العمل",
-    value: "الأحد - الخميس، 9 ص - 6 م",
-    href: null,
-    dir: "rtl" as const,
-  },
-];
-
 // --- Main Component ---
 export default function ContactPageContent() {
+  const t = useTranslations("contact");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const offices = [
+    {
+      country: t("egypt"),
+      city: t("cairo"),
+      address: t("cairoAddress"),
+      icon: Building2,
+    },
+    {
+      country: t("saudi"),
+      city: t("riyadh"),
+      address: t("riyadhAddress"),
+      icon: Building2,
+    },
+  ];
+
+  const contactMethods = [
+    {
+      icon: Mail,
+      label: t("emailContact"),
+      value: "info@devixtech.com",
+      href: "mailto:info@devixtech.com",
+      dir: "ltr" as const,
+    },
+    {
+      icon: Phone,
+      label: t("phoneContact"),
+      value: "+20 123 456 7890",
+      href: "tel:+201234567890",
+      dir: "ltr" as const,
+    },
+    {
+      icon: Clock,
+      label: t("workingHours"),
+      value: t("workingHoursValue"),
+      href: null,
+      dir: "rtl" as const,
+    },
+  ];
 
   const {
     register,
@@ -136,7 +138,7 @@ export default function ContactPageContent() {
       {/* Hero Section */}
       <section className="relative pt-32 pb-16 overflow-hidden section-navy">
         <Container className="relative z-10">
-          <Breadcrumb items={[{ label: "تواصل معنا" }]} />
+          <Breadcrumb items={[{ label: t("title") }]} />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mt-8">
             {/* Text Content */}
@@ -145,15 +147,13 @@ export default function ContactPageContent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              <Badge variant="gold">نحب نسمع منك</Badge>
+              <Badge variant="gold">{t("badge")}</Badge>
 
               <h1 className="text-h1 font-bold font-cairo text-white mt-6 mb-6">
-                تواصل معنا
+                {t("title")}
               </h1>
               <p className="text-lg sm:text-xl text-white/80 font-cairo leading-relaxed mb-8">
-                عندك مشروع جديد أو استفسار؟ فريقنا جاهز يساعدك.
-                <br />
-                تواصل معنا وخلينا نبدأ رحلة النجاح سوا.
+                {t("subtitle")}
               </p>
 
               {/* Quick Contact Methods */}
@@ -212,8 +212,8 @@ export default function ContactPageContent() {
                     <MessageCircle className="w-5 h-5 text-navy" />
                   </div>
                   <div>
-                    <p className="text-white font-cairo font-bold">رد سريع</p>
-                    <p className="text-white/60 text-sm font-cairo">نرد خلال ساعات</p>
+                    <p className="text-white font-cairo font-bold">{t("quickResponse")}</p>
+                    <p className="text-white/60 text-sm font-cairo">{t("quickResponseSub")}</p>
                   </div>
                 </div>
                 <div className="h-px bg-white/10 my-4" />
@@ -222,19 +222,19 @@ export default function ContactPageContent() {
                     <Headphones className="w-5 h-5 text-navy" />
                   </div>
                   <div>
-                    <p className="text-white font-cairo font-bold">دعم مستمر</p>
-                    <p className="text-white/60 text-sm font-cairo">فريق دعم متاح لمساعدتك</p>
+                    <p className="text-white font-cairo font-bold">{t("continuousSupport")}</p>
+                    <p className="text-white/60 text-sm font-cairo">{t("continuousSupportSub")}</p>
                   </div>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="rounded-xl p-5 text-center bg-white/10 border border-white/10 backdrop-blur-sm">
                   <div className="text-2xl font-black font-cairo text-accent mb-1">24h</div>
-                  <div className="text-xs text-white/60 font-cairo">متوسط وقت الرد</div>
+                  <div className="text-xs text-white/60 font-cairo">{t("avgResponseTime")}</div>
                 </div>
                 <div className="rounded-xl p-5 text-center bg-white/10 border border-white/10 backdrop-blur-sm">
                   <div className="text-2xl font-black font-cairo text-accent mb-1">98%</div>
-                  <div className="text-xs text-white/60 font-cairo">رضا العملاء</div>
+                  <div className="text-xs text-white/60 font-cairo">{t("clientSatisfaction")}</div>
                 </div>
               </div>
             </motion.div>
@@ -262,7 +262,7 @@ export default function ContactPageContent() {
                       <Send className="w-4 h-4 text-accent" />
                     </div>
                     <h2 className="text-xl font-bold font-cairo text-white">
-                      أرسل لنا رسالة
+                      {t("formTitle")}
                     </h2>
                   </div>
                 </div>
@@ -292,16 +292,16 @@ export default function ContactPageContent() {
                           <CheckCircle2 className="w-10 h-10 text-success" />
                         </motion.div>
                         <h3 className="text-2xl font-bold font-cairo text-text-primary mb-3">
-                          تم إرسال رسالتك بنجاح!
+                          {t("successTitle")}
                         </h3>
                         <p className="text-text-secondary font-cairo mb-6">
-                          شكراً لتواصلك معنا. فريقنا هيتواصل معاك في أقرب وقت.
+                          {t("successSub")}
                         </p>
                         <Button
                           variant="outline"
                           onClick={() => setIsSubmitted(false)}
                         >
-                          إرسال رسالة أخرى
+                          {t("sendAnother")}
                         </Button>
                       </motion.div>
                     ) : (
@@ -315,16 +315,16 @@ export default function ContactPageContent() {
                       >
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                           <Input
-                            label="الاسم"
-                            placeholder="أدخل اسمك الكامل"
-                            error={errors.name?.message}
+                            label={t("nameLabel")}
+                            placeholder={t("namePlaceholder")}
+                            error={errors.name ? t("errorName") : undefined}
                             {...register("name")}
                           />
                           <Input
-                            label="البريد الإلكتروني"
+                            label={t("emailLabel")}
                             type="email"
                             placeholder="example@email.com"
-                            error={errors.email?.message}
+                            error={errors.email ? t("errorEmail") : undefined}
                             dir="ltr"
                             className="text-left"
                             {...register("email")}
@@ -333,27 +333,27 @@ export default function ContactPageContent() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                           <Input
-                            label="رقم الهاتف"
+                            label={t("phoneLabel")}
                             type="tel"
                             placeholder="+20 XXX XXX XXXX"
-                            error={errors.phone?.message}
+                            error={errors.phone ? t("errorPhone") : undefined}
                             dir="ltr"
                             className="text-left"
                             {...register("phone")}
                           />
                           <Select
-                            label="نوع الخدمة"
+                            label={t("serviceLabel")}
                             options={serviceOptions}
-                            error={errors.serviceType?.message}
+                            error={errors.serviceType ? t("errorService") : undefined}
                             {...register("serviceType")}
                           />
                         </div>
 
                         <Textarea
-                          label="الرسالة"
-                          placeholder="اكتب رسالتك هنا..."
+                          label={t("messageLabel")}
+                          placeholder={t("messagePlaceholder")}
                           rows={5}
-                          error={errors.message?.message}
+                          error={errors.message ? t("errorMessage") : undefined}
                           {...register("message")}
                         />
 
@@ -375,12 +375,12 @@ export default function ContactPageContent() {
                                   ease: "linear",
                                 }}
                               />
-                              جاري الإرسال...
+                              {t("submitting")}
                             </span>
                           ) : (
                             <span className="flex items-center gap-2">
                               <Send className="w-5 h-5" />
-                              أرسل رسالتك
+                              {t("submit")}
                             </span>
                           )}
                         </Button>
@@ -412,10 +412,10 @@ export default function ContactPageContent() {
                   </div>
                   <div>
                     <p className="text-text-primary font-cairo font-bold text-base">
-                      تواصل عبر واتساب
+                      {t("whatsapp")}
                     </p>
                     <p className="text-text-secondary text-sm font-cairo">
-                      رد فوري خلال دقائق
+                      {t("whatsappSub")}
                     </p>
                   </div>
                 </a>
@@ -435,7 +435,7 @@ export default function ContactPageContent() {
                       </div>
                       <div>
                         <p className="text-text-primary font-cairo font-bold text-base mb-1">
-                          مكتب {office.city}
+                          {office.city === t("cairo") ? t("officeCairo") : t("officeRiyadh")}
                         </p>
                         <p className="text-text-secondary text-sm font-cairo leading-relaxed">
                           {office.address}
@@ -485,7 +485,7 @@ export default function ContactPageContent() {
                     </div>
                     <div className="mt-1.5 px-2.5 py-1 rounded-lg bg-white/10 border border-white/10">
                       <span className="text-xs text-white font-cairo font-semibold">
-                        القاهرة
+                        {t("cairo")}
                       </span>
                     </div>
                   </motion.div>
@@ -508,7 +508,7 @@ export default function ContactPageContent() {
                     </div>
                     <div className="mt-1.5 px-2.5 py-1 rounded-lg bg-white/10 border border-white/10">
                       <span className="text-xs text-white font-cairo font-semibold">
-                        الرياض
+                        {t("riyadh")}
                       </span>
                     </div>
                   </motion.div>
@@ -549,10 +549,10 @@ export default function ContactPageContent() {
             <div className="px-8 py-14 sm:px-14 text-center">
               <div className="gold-line mx-auto mb-6" />
               <h2 className="text-h2 font-bold font-cairo text-white mb-4">
-                مستعد تبدأ مشروعك؟
+                {t("readyCta")}
               </h2>
               <p className="text-white/80 font-cairo text-lg max-w-2xl mx-auto mb-8">
-                فريقنا جاهز يساعدك تحول فكرتك لواقع. احجز استشارة مجانية دلوقتي.
+                {t("readyCtaSub")}
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <a
@@ -562,13 +562,13 @@ export default function ContactPageContent() {
                 >
                   <Button size="lg" variant="gold">
                     <MessageCircle className="w-5 h-5 ml-2" />
-                    احجز استشارة مجانية
+                    {t("freeConsultation")}
                   </Button>
                 </a>
                 <a href="tel:+201234567890">
                   <Button variant="outline" size="lg" className="border-white/50 text-white hover:bg-white/10">
                     <Phone className="w-5 h-5 ml-2" />
-                    اتصل بنا
+                    {t("callUsButton")}
                   </Button>
                 </a>
               </div>

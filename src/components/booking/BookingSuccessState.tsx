@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import Button from "@/components/ui/Button";
@@ -17,6 +18,8 @@ export default function BookingSuccessState({
   details,
   onReset,
 }: BookingSuccessStateProps) {
+  const t = useTranslations("bookingSuccess");
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -67,10 +70,10 @@ export default function BookingSuccessState({
 
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <Button variant="gold" href="/">
-          العودة للرئيسية
+          {t("backHome")}
         </Button>
         <Button variant="outline" onClick={onReset}>
-          حجز آخر
+          {t("bookAnother")}
         </Button>
       </div>
     </motion.div>

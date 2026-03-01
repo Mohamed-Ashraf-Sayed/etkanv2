@@ -7,6 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { serviceCategories } from "@/data/services";
+import { useTranslations } from "next-intl";
 
 const serviceImages: Record<string, string> = {
   "web-and-apps": "/images/service-web.jpg",
@@ -35,12 +36,14 @@ const fadeInReverse = {
 };
 
 export default function ServicesSection() {
+  const t = useTranslations("services");
+
   return (
     <section className="section-padding relative">
       <Container>
         <SectionTitle
-          title="خدماتنا"
-          subtitle="حلول تقنية شاملة تلبي كل احتياجات عملك"
+          title={t("title")}
+          subtitle={t("subtitle")}
         />
 
         <div className="flex flex-col gap-20 lg:gap-28">
@@ -101,7 +104,7 @@ export default function ServicesSection() {
                     href="/services"
                     className="inline-flex items-center gap-2.5 text-accent font-semibold font-cairo transition-all duration-300 hover:gap-4 group/link"
                   >
-                    <span>اعرف المزيد</span>
+                    <span>{t("learnMore")}</span>
                     <ArrowLeft className="w-4 h-4 transition-transform duration-300 group-hover/link:-translate-x-1" />
                   </Link>
                 </motion.div>

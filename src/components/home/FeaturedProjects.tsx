@@ -8,6 +8,7 @@ import SectionTitle from "@/components/ui/SectionTitle";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import { projects } from "@/data/projects";
+import { useTranslations } from "next-intl";
 
 const containerVariants = {
   hidden: {},
@@ -26,6 +27,7 @@ const cardVariants = {
 };
 
 export default function FeaturedProjects() {
+  const t = useTranslations("featuredProjects");
   const featuredProjects = projects.slice(0, 3);
 
   return (
@@ -38,8 +40,8 @@ export default function FeaturedProjects() {
 
       <Container className="relative z-10">
         <SectionTitle
-          title="مشاريع مميزة"
-          subtitle="نماذج من أعمالنا التي نفتخر بها"
+          title={t("title")}
+          subtitle={t("subtitle")}
           light
         />
 
@@ -105,7 +107,7 @@ export default function FeaturedProjects() {
 
                     {/* View link */}
                     <div className="flex items-center gap-2 text-accent text-sm font-semibold font-cairo group-hover:gap-3 transition-all duration-300">
-                      <span>عرض المشروع</span>
+                      <span>{t("viewProject")}</span>
                       <ArrowLeft className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1" />
                     </div>
                   </div>
@@ -118,7 +120,7 @@ export default function FeaturedProjects() {
         {/* View all button */}
         <div className="text-center mt-14">
           <Button variant="gold" size="lg" href="/portfolio">
-            شاهد كل أعمالنا
+            {t("viewAll")}
           </Button>
         </div>
       </Container>

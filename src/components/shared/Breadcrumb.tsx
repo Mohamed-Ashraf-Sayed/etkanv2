@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { ChevronLeft } from "lucide-react";
 
@@ -10,13 +11,15 @@ interface BreadcrumbProps {
   items: BreadcrumbItem[];
 }
 
-export default function Breadcrumb({ items }: BreadcrumbProps) {
+export default async function Breadcrumb({ items }: BreadcrumbProps) {
+  const t = await getTranslations("common");
+
   return (
     <nav className="mb-8">
       <ol className="flex items-center gap-2 text-sm font-cairo text-white/70">
         <li>
           <Link href="/" className="hover:text-accent transition-colors">
-            الرئيسية
+            {t("home")}
           </Link>
         </li>
         {items.map((item, index) => (

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import { Calendar, Clock, User } from "lucide-react";
@@ -29,25 +30,27 @@ const itemVariants = {
 } as const;
 
 export default function BlogPageContent() {
+  const t = useTranslations("blog");
+
   return (
     <>
       {/* Hero Section */}
       <section className="section-navy pt-32 pb-20">
         <Container>
-          <Breadcrumb items={[{ label: "المدونة" }]} />
+          <Breadcrumb items={[{ label: t("title") }]} />
           <motion.div
             className="text-center max-w-4xl mx-auto"
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            <Badge variant="gold">مقالات تقنية</Badge>
+            <Badge variant="gold">{t("badge")}</Badge>
             <h1 className="text-h1 font-bold font-cairo text-white mt-6 mb-6">
-              المدونة
+              {t("title")}
             </h1>
             <div className="gold-line mx-auto mb-6" />
             <p className="text-xl sm:text-2xl text-white/70 font-cairo leading-relaxed">
-              مقالات ونصائح تقنية من فريق خبراء إتقان
+              {t("subtitle")}
             </p>
           </motion.div>
         </Container>
@@ -100,7 +103,7 @@ export default function BlogPageContent() {
                         <div className="flex items-center gap-1.5">
                           <Clock className="w-3.5 h-3.5 text-accent" />
                           <span className="text-xs text-text-secondary font-cairo">
-                            {post.readingTime} دقائق قراءة
+                            {post.readingTime} {t("readingTime")}
                           </span>
                         </div>
                       </div>
