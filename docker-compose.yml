@@ -5,4 +5,9 @@ services:
       - "3000:3000"
     env_file:
       - .env.local
+    volumes:
+      - sqlite-data:/app/data
     restart: unless-stopped
+
+volumes:
+  sqlite-data:

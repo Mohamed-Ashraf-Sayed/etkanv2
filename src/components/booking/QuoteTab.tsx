@@ -152,11 +152,35 @@ export default function QuoteTab() {
     setStep(s);
   };
 
-  const onSubmit = async () => {
+  const [error, setError] = useState<string | null>(null);
+
+  const onSubmit = async (formData: FormData) => {
     setSubmitting(true);
-    await new Promise((r) => setTimeout(r, 1500));
-    setSubmitting(false);
-    setSubmitted(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/booking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "quote",
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          companyName: formData.companyName || "",
+          serviceCategories: formData.serviceCategories,
+          features: formData.features,
+          budgetRange: budgetRanges.find((b) => b.value === formData.budgetRange)?.label || formData.budgetRange,
+          timeline: timelineOptions.find((t) => t.value === formData.timeline)?.label || formData.timeline,
+          projectDescription: formData.projectDescription,
+        }),
+      });
+      if (!res.ok) throw new Error("API error");
+      setSubmitted(true);
+    } catch {
+      setError("حصل خطأ، حاول تاني");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleReset = () => {
@@ -519,6 +543,10 @@ export default function QuoteTab() {
             </Button>
           )}
         </div>
+
+        {error && (
+          <p className="text-red-500 text-sm font-cairo text-center mt-4">{error}</p>
+        )}
       </form>
     </div>
   );

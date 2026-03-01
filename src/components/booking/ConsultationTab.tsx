@@ -59,13 +59,36 @@ export default function ConsultationTab() {
     },
   });
 
+  const [error, setError] = useState<string | null>(null);
+
   const onSubmit = async (data: FormData) => {
     setSubmitting(true);
-    // Simulate API call
-    await new Promise((r) => setTimeout(r, 1500));
-    setFormSnapshot(data);
-    setSubmitting(false);
-    setSubmitted(true);
+    setError(null);
+    try {
+      const slot = timeSlots.find((s) => s.id === data.timeSlot);
+      const service = consultationServices.find((s) => s.value === data.serviceType);
+      const res = await fetch("/api/booking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "consultation",
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          date: data.date.toLocaleDateString("ar-EG", { weekday: "long", year: "numeric", month: "long", day: "numeric" }),
+          timeSlot: slot?.label || data.timeSlot,
+          serviceType: service?.label || data.serviceType,
+          notes: data.notes || "",
+        }),
+      });
+      if (!res.ok) throw new Error("API error");
+      setFormSnapshot(data);
+      setSubmitted(true);
+    } catch {
+      setError("حصل خطأ، حاول تاني");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleReset = () => {
@@ -198,6 +221,10 @@ export default function ConsultationTab() {
           "تأكيد الحجز"
         )}
       </Button>
+
+      {error && (
+        <p className="text-red-500 text-sm font-cairo text-center mt-4">{error}</p>
+      )}
     </form>
   );
 }

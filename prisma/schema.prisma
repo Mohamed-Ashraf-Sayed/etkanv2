@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Booking {
+  id          String   @id @default(cuid())
+  type        String   // consultation | quote
+  status      String   @default("pending") // pending | confirmed | cancelled | completed
+  name        String
+  email       String
+  phone       String
+  date        String?
+  timeSlot    String?
+  serviceType String?
+  notes       String?
+  services    String?
+  features    String?
+  budget      String?
+  timeline    String?
+  company     String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+}

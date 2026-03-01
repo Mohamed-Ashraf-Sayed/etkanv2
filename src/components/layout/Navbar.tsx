@@ -1,28 +1,30 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Button from "@/components/ui/Button";
 import ThemeToggle from "@/components/shared/ThemeToggle";
-
-const navLinks = [
-  { href: "/", label: "الرئيسية" },
-  { href: "/about", label: "من نحن" },
-  { href: "/services", label: "خدماتنا" },
-  { href: "/portfolio", label: "أعمالنا" },
-  { href: "/blog", label: "المدونة" },
-  { href: "/booking", label: "احجز موعد" },
-  { href: "/contact", label: "تواصل معنا" },
-];
+import LocaleSwitcher from "@/components/shared/LocaleSwitcher";
 
 export default function Navbar() {
+  const t = useTranslations("nav");
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+
+  const navLinks = [
+    { href: "/" as const, label: t("home") },
+    { href: "/about" as const, label: t("about") },
+    { href: "/services" as const, label: t("services") },
+    { href: "/portfolio" as const, label: t("portfolio") },
+    { href: "/blog" as const, label: t("blog") },
+    { href: "/booking" as const, label: t("booking") },
+    { href: "/contact" as const, label: t("contact") },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,10 +56,10 @@ export default function Navbar() {
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2">
               <span className="text-2xl font-black tracking-tight text-white font-cairo">
-                إتقان
+                {t("brand")}
               </span>
               <span className="hidden sm:inline text-accent text-xs font-cairo opacity-80">
-                للحلول البرمجية
+                {t("brandSub")}
               </span>
             </Link>
 
@@ -86,8 +88,9 @@ export default function Navbar() {
               })}
             </div>
 
-            {/* CTA + Theme Toggle + Mobile Toggle */}
+            {/* CTA + Language + Theme Toggle + Mobile Toggle */}
             <div className="flex items-center gap-3">
+              <LocaleSwitcher />
               <ThemeToggle />
               <div className="hidden lg:block">
                 <Button
@@ -95,7 +98,7 @@ export default function Navbar() {
                   size="sm"
                   variant="gold"
                 >
-                  اطلب استشارة
+                  {t("cta")}
                 </Button>
               </div>
 
@@ -103,7 +106,7 @@ export default function Navbar() {
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="lg:hidden p-2.5 text-white/70 hover:text-white transition-colors duration-200"
-                aria-label={isOpen ? "إغلاق القائمة" : "فتح القائمة"}
+                aria-label={isOpen ? t("closeMenu") : t("openMenu")}
               >
                 {isOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
@@ -116,7 +119,6 @@ export default function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <>
-            {/* Overlay */}
             <motion.div
               className="fixed inset-0 z-40 bg-black/60 lg:hidden"
               initial={{ opacity: 0 }}
@@ -126,7 +128,6 @@ export default function Navbar() {
               onClick={() => setIsOpen(false)}
             />
 
-            {/* Drawer */}
             <motion.div
               className="fixed top-0 right-0 z-50 h-full w-[280px] bg-navy border-l border-white/10 lg:hidden overflow-hidden"
               initial={{ x: "100%" }}
@@ -135,21 +136,19 @@ export default function Navbar() {
               transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
             >
               <div className="flex flex-col h-full">
-                {/* Drawer Header */}
                 <div className="flex items-center justify-between p-5 border-b border-white/10">
                   <span className="text-lg font-black tracking-tight text-white font-cairo">
-                    إتقان
+                    {t("brand")}
                   </span>
                   <button
                     onClick={() => setIsOpen(false)}
                     className="p-2 text-white/60 hover:text-white transition-colors duration-200"
-                    aria-label="إغلاق القائمة"
+                    aria-label={t("closeMenu")}
                   >
                     <X size={20} />
                   </button>
                 </div>
 
-                {/* Drawer Links */}
                 <div className="flex-1 py-3 overflow-y-auto">
                   {navLinks.map((link, index) => {
                     const isActive =
@@ -184,7 +183,6 @@ export default function Navbar() {
                   })}
                 </div>
 
-                {/* Drawer CTA */}
                 <div className="p-4 border-t border-white/10">
                   <Button
                     href="/contact"
@@ -192,7 +190,7 @@ export default function Navbar() {
                     size="md"
                     className="w-full"
                   >
-                    اطلب استشارة
+                    {t("cta")}
                   </Button>
                 </div>
               </div>
