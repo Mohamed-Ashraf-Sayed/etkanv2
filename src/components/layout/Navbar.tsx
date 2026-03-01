@@ -15,6 +15,7 @@ const navLinks = [
   { href: "/services", label: "خدماتنا" },
   { href: "/portfolio", label: "أعمالنا" },
   { href: "/blog", label: "المدونة" },
+  { href: "/booking", label: "احجز موعد" },
   { href: "/contact", label: "تواصل معنا" },
 ];
 

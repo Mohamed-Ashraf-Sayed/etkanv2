@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
+import MagneticButton from "@/components/shared/MagneticButton";
 
 export default function CTABanner() {
   return (
@@ -32,9 +33,11 @@ export default function CTABanner() {
             تواصل معنا اليوم واحصل على استشارة مجانية لمشروعك
           </p>
 
-          <Button variant="gold" size="lg" href="/contact">
-            تواصل معنا الآن
-          </Button>
+          <MagneticButton strength={0.3} className="inline-block">
+            <Button variant="gold" size="lg" href="/contact">
+              تواصل معنا الآن
+            </Button>
+          </MagneticButton>
         </motion.div>
       </Container>
     </section>

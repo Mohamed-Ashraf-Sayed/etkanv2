@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import { ArrowLeft, Shield, Zap, Globe, Server, ChevronDown } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
+import MagneticButton from "@/components/shared/MagneticButton";
 
 const services = [
   { icon: Globe, label: "تطوير الويب" },
@@ -128,18 +129,22 @@ export default function Hero() {
 
           {/* CTA Buttons */}
           <div ref={ctaRef} className="flex flex-col sm:flex-row gap-4 mt-10">
-            <Button variant="gold" size="lg" href="/contact">
-              <span>ابدأ مشروعك الآن</span>
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="lg"
-              href="/portfolio"
-              className="text-white/70 hover:text-white hover:bg-white/5 border border-white/10 hover:border-white/20"
-            >
-              استعرض أعمالنا
-            </Button>
+            <MagneticButton strength={0.25}>
+              <Button variant="gold" size="lg" href="/contact">
+                <span>ابدأ مشروعك الآن</span>
+                <ArrowLeft className="w-5 h-5" />
+              </Button>
+            </MagneticButton>
+            <MagneticButton strength={0.25}>
+              <Button
+                variant="ghost"
+                size="lg"
+                href="/portfolio"
+                className="text-white/70 hover:text-white hover:bg-white/5 border border-white/10 hover:border-white/20"
+              >
+                استعرض أعمالنا
+              </Button>
+            </MagneticButton>
           </div>
 
           {/* Stats row */}

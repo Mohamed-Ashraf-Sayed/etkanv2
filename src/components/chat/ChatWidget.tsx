@@ -1,0 +1,371 @@
+"use client";
+
+import { useState, useRef, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { MessageCircle, X, Send, Bot, Headset } from "lucide-react";
+import { WELCOME_MESSAGE, SUGGESTED_QUESTIONS } from "@/data/chatbot";
+
+interface Message {
+  role: "user" | "assistant" | "admin";
+  content: string;
+}
+
+function generateId() {
+  return Math.random().toString(36).substring(2) + Date.now().toString(36);
+}
+
+export default function ChatWidget() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState("");
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(true);
+  const [conversationId] = useState(() => generateId());
+  const [isAdminMode, setIsAdminMode] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const pollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const scrollToBottom = useCallback(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, scrollToBottom]);
+
+  // Poll for admin messages
+  useEffect(() => {
+    if (!isOpen || messages.length === 0) return;
+
+    const poll = async () => {
+      try {
+        const res = await fetch(
+          `/api/chat/poll?conversationId=${conversationId}`
+        );
+        const data = await res.json();
+
+        if (data.isAdminMode) {
+          setIsAdminMode(true);
+        }
+
+        if (data.messages && data.messages.length > 0) {
+          setMessages((prev) => [
+            ...prev,
+            ...data.messages.map((content: string) => ({
+              role: "admin" as const,
+              content,
+            })),
+          ]);
+        }
+      } catch {
+        // Ignore polling errors
+      }
+    };
+
+    pollIntervalRef.current = setInterval(poll, 3000);
+    return () => {
+      if (pollIntervalRef.current) {
+        clearInterval(pollIntervalRef.current);
+      }
+    };
+  }, [isOpen, messages.length, conversationId]);
+
+  const sendMessage = async (text: string) => {
+    if (!text.trim() || isStreaming) return;
+
+    const userMessage: Message = { role: "user", content: text.trim() };
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
+    setInput("");
+    setShowSuggestions(false);
+    setIsStreaming(true);
+
+    // Reset textarea height
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
+
+    // Add empty assistant message for streaming
+    setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          conversationId,
+          messages: newMessages
+            .filter((m) => m.role !== "admin")
+            .map((m) => ({
+              role: m.role === "admin" ? "assistant" : m.role,
+              content: m.content,
+            })),
+        }),
+      });
+
+      if (!res.ok) throw new Error("API error");
+
+      const reader = res.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (!reader) throw new Error("No reader");
+
+      let accumulated = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        accumulated += decoder.decode(value, { stream: true });
+        const current = accumulated;
+        setMessages((prev) => {
+          const updated = [...prev];
+          updated[updated.length - 1] = {
+            role: "assistant",
+            content: current,
+          };
+          return updated;
+        });
+      }
+    } catch {
+      setMessages((prev) => {
+        const updated = [...prev];
+        updated[updated.length - 1] = {
+          role: "assistant",
+          content: "عذراً، حصل خطأ. حاول تاني أو تواصل معنا مباشرة.",
+        };
+        return updated;
+      });
+    } finally {
+      setIsStreaming(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage(input);
+    }
+  };
+
+  const handleTextareaInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInput(e.target.value);
+    const el = e.target;
+    el.style.height = "auto";
+    el.style.height = Math.min(el.scrollHeight, 100) + "px";
+  };
+
+  const renderMessageIcon = (role: "assistant" | "admin") => {
+    if (role === "admin") {
+      return (
+        <div className="w-7 h-7 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0 mt-1">
+          <Headset className="w-4 h-4 text-emerald-500" />
+        </div>
+      );
+    }
+    return (
+      <div className="w-7 h-7 rounded-full bg-accent/10 flex items-center justify-center shrink-0 mt-1">
+        <Bot className="w-4 h-4 text-accent" />
+      </div>
+    );
+  };
+
+  return (
+    <>
+      {/* Floating Button */}
+      <motion.button
+        onClick={() => setIsOpen(!isOpen)}
+        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-accent text-navy flex items-center justify-center shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-shadow duration-300"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        aria-label={isOpen ? "إغلاق الشات" : "فتح الشات"}
+      >
+        <AnimatePresence mode="wait">
+          {isOpen ? (
+            <motion.div
+              key="close"
+              initial={{ rotate: -90, opacity: 0 }}
+              animate={{ rotate: 0, opacity: 1 }}
+              exit={{ rotate: 90, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <X className="w-6 h-6" />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="open"
+              initial={{ rotate: 90, opacity: 0 }}
+              animate={{ rotate: 0, opacity: 1 }}
+              exit={{ rotate: -90, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <MessageCircle className="w-6 h-6" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Pulse ring */}
+        {!isOpen && messages.length === 0 && (
+          <span className="absolute inset-0 rounded-full bg-accent/30 animate-ping" />
+        )}
+      </motion.button>
+
+      {/* Chat Window */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{
+              duration: 0.25,
+              ease: [0.25, 0.1, 0.25, 1] as const,
+            }}
+            className="fixed bottom-24 right-6 z-50 w-[calc(100vw-3rem)] sm:w-[380px] h-[520px] max-h-[80vh] rounded-2xl overflow-hidden shadow-2xl shadow-navy/20 border border-border flex flex-col bg-background"
+          >
+            {/* Header */}
+            <div className="bg-navy px-5 py-4 flex items-center gap-3 shrink-0">
+              <div className="w-9 h-9 rounded-full bg-accent/20 flex items-center justify-center">
+                {isAdminMode ? (
+                  <Headset className="w-5 h-5 text-accent" />
+                ) : (
+                  <Bot className="w-5 h-5 text-accent" />
+                )}
+              </div>
+              <div className="flex-1">
+                <h3 className="text-white font-cairo font-bold text-sm">
+                  {isAdminMode ? "فريق إتقان" : "مساعد إتقان"}
+                </h3>
+                <p className="text-white/50 text-xs font-cairo">
+                  {isStreaming
+                    ? "بيكتب..."
+                    : isAdminMode
+                      ? "متصل — فريق الدعم"
+                      : "متصل"}
+                </p>
+              </div>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Messages */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin">
+              {/* Welcome */}
+              <div className="flex gap-2.5 items-start">
+                <div className="w-7 h-7 rounded-full bg-accent/10 flex items-center justify-center shrink-0 mt-1">
+                  <Bot className="w-4 h-4 text-accent" />
+                </div>
+                <div className="bg-surface border border-border rounded-2xl rounded-tr-sm px-4 py-3 max-w-[85%]">
+                  <p className="text-sm font-cairo text-text-primary leading-relaxed">
+                    {WELCOME_MESSAGE}
+                  </p>
+                </div>
+              </div>
+
+              {/* Suggested Questions */}
+              {showSuggestions && messages.length === 0 && (
+                <div className="flex flex-wrap gap-2 pr-10">
+                  {SUGGESTED_QUESTIONS.map((q) => (
+                    <button
+                      key={q}
+                      onClick={() => sendMessage(q)}
+                      className="text-xs font-cairo px-3 py-2 rounded-xl border border-accent/30 text-accent hover:bg-accent/10 transition-colors duration-200"
+                    >
+                      {q}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Chat Messages */}
+              {messages.map((msg, i) => (
+                <div
+                  key={i}
+                  className={`flex gap-2.5 items-start ${
+                    msg.role === "user" ? "flex-row-reverse" : ""
+                  }`}
+                >
+                  {(msg.role === "assistant" || msg.role === "admin") &&
+                    renderMessageIcon(msg.role)}
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className={`rounded-2xl px-4 py-3 max-w-[85%] ${
+                      msg.role === "user"
+                        ? "bg-accent/10 border border-accent/20 rounded-tl-sm"
+                        : msg.role === "admin"
+                          ? "bg-emerald-500/5 border border-emerald-500/20 rounded-tr-sm"
+                          : "bg-surface border border-border rounded-tr-sm"
+                    }`}
+                  >
+                    {msg.role === "admin" && (
+                      <span className="text-[10px] font-cairo text-emerald-500 font-bold block mb-1">
+                        فريق الدعم
+                      </span>
+                    )}
+                    <p className="text-sm font-cairo text-text-primary leading-relaxed whitespace-pre-wrap">
+                      {msg.content}
+                      {msg.role === "assistant" &&
+                        i === messages.length - 1 &&
+                        isStreaming && (
+                          <span className="inline-block w-1.5 h-4 bg-accent/60 rounded-full ml-1 animate-pulse align-middle" />
+                        )}
+                    </p>
+                  </motion.div>
+                </div>
+              ))}
+
+              {/* Typing indicator */}
+              {isStreaming &&
+                messages.length > 0 &&
+                messages[messages.length - 1].content === "" && (
+                  <div className="flex gap-2.5 items-start">
+                    <div className="w-7 h-7 rounded-full bg-accent/10 flex items-center justify-center shrink-0 mt-1">
+                      <Bot className="w-4 h-4 text-accent" />
+                    </div>
+                    <div className="bg-surface border border-border rounded-2xl rounded-tr-sm px-4 py-3">
+                      <div className="flex gap-1.5 items-center h-5">
+                        <span className="w-2 h-2 rounded-full bg-accent/40 animate-bounce [animation-delay:0ms]" />
+                        <span className="w-2 h-2 rounded-full bg-accent/40 animate-bounce [animation-delay:150ms]" />
+                        <span className="w-2 h-2 rounded-full bg-accent/40 animate-bounce [animation-delay:300ms]" />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input */}
+            <div className="border-t border-border p-3 shrink-0 bg-background">
+              <div className="flex items-end gap-2">
+                <textarea
+                  ref={textareaRef}
+                  value={input}
+                  onChange={handleTextareaInput}
+                  onKeyDown={handleKeyDown}
+                  placeholder="اكتب رسالتك..."
+                  rows={1}
+                  disabled={isStreaming}
+                  className="flex-1 resize-none bg-surface border border-border rounded-xl px-4 py-2.5 text-sm font-cairo text-text-primary placeholder:text-text-secondary/50 focus:outline-none focus:border-accent/50 transition-colors disabled:opacity-50"
+                />
+                <button
+                  onClick={() => sendMessage(input)}
+                  disabled={!input.trim() || isStreaming}
+                  className="w-10 h-10 rounded-xl bg-accent text-navy flex items-center justify-center shrink-0 hover:bg-accent-light transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  <Send className="w-4 h-4 rotate-180" />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}

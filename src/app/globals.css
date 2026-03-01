@@ -159,6 +159,12 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Hide default cursor on desktop when custom cursor is active */
+@media (pointer: fine) {
+  body { cursor: none; }
+  a, button, [role="button"], input, textarea, select { cursor: none; }
+}
+
 ::selection { background: rgba(212, 175, 55, 0.2); color: #0B1F3F; }
 .dark ::selection { background: rgba(212, 175, 55, 0.3); color: #fff; }
 
