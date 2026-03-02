@@ -12,7 +12,9 @@ import {
   Briefcase,
   ArrowLeft,
   CheckCircle2,
+  X,
 } from "lucide-react";
+import Image from "next/image";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
@@ -95,6 +97,57 @@ function ResultCard({
   );
 }
 
+/* ── Lightbox ── */
+function ImageLightbox({ images, startIdx, onClose }: { images: string[]; startIdx: number; onClose: () => void }) {
+  const [idx, setIdx] = useState(startIdx);
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") setIdx((i) => (i + 1) % images.length);
+      if (e.key === "ArrowRight") setIdx((i) => (i - 1 + images.length) % images.length);
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [images.length, onClose]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <button
+        onClick={onClose}
+        className="absolute top-4 left-4 p-2 text-white/70 hover:text-white transition-colors z-10"
+      >
+        <X className="w-6 h-6" />
+      </button>
+      <div className="relative w-full max-w-5xl aspect-video" onClick={(e) => e.stopPropagation()}>
+        <Image
+          src={images[idx]}
+          alt={`Image ${idx + 1}`}
+          fill
+          className="object-contain"
+          unoptimized
+        />
+      </div>
+      {images.length > 1 && (
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+          {images.map((_, i) => (
+            <button
+              key={i}
+              onClick={(e) => { e.stopPropagation(); setIdx(i); }}
+              className={`w-2.5 h-2.5 rounded-full transition-colors ${i === idx ? "bg-[#D4AF37]" : "bg-white/30"}`}
+            />
+          ))}
+        </div>
+      )}
+    </motion.div>
+  );
+}
+
 /* ── Main Component ── */
 export default function ProjectDetailClient({
   project,
@@ -104,6 +157,11 @@ export default function ProjectDetailClient({
   const t = useTranslations("projectDetail");
   const tn = useTranslations("nav");
   const tp = useTranslations("portfolio");
+  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  const allImages = [
+    ...(project.thumbnail ? [project.thumbnail] : []),
+    ...(project.images || []),
+  ];
 
   return (
     <>
@@ -250,14 +308,22 @@ export default function ProjectDetailClient({
                     {t("technologies")}
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    {project.techStack.map((tech) => (
-                      <span
-                        key={tech}
-                        className="text-[11px] px-2.5 py-1 rounded-md bg-accent/10 text-accent border border-accent/20 font-cairo"
-                      >
-                        {tech}
-                      </span>
-                    ))}
+                    {project.techStack.map((tech, idx) => {
+                      const colors = [
+                        "bg-accent/10 text-accent border-accent/20",
+                        "bg-blue-400/10 text-blue-300 border-blue-400/20",
+                        "bg-emerald-400/10 text-emerald-300 border-emerald-400/20",
+                        "bg-purple-400/10 text-purple-300 border-purple-400/20",
+                      ];
+                      return (
+                        <span
+                          key={tech}
+                          className={`text-[11px] px-2.5 py-1 rounded-md border font-cairo ${colors[idx % colors.length]}`}
+                        >
+                          {tech}
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -344,210 +410,56 @@ export default function ProjectDetailClient({
       </section>
 
       {/* ═══════════════ GALLERY ═══════════════ */}
-      <section className="section-padding section-alt">
-        <Container>
-          <motion.div {...fadeIn} className="text-center mb-12">
-            <div className="w-12 h-0.5 bg-accent mx-auto mb-4" />
-            <h2 className="text-h2 font-bold font-cairo text-text-primary">
-              {t("gallery")}
-            </h2>
-          </motion.div>
+      {allImages.length > 0 && (
+        <section className="section-padding section-alt">
+          <Container>
+            <motion.div {...fadeIn} className="text-center mb-12">
+              <div className="w-12 h-0.5 bg-accent mx-auto mb-4" />
+              <h2 className="text-h2 font-bold font-cairo text-text-primary">
+                {t("gallery")}
+              </h2>
+            </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-6xl mx-auto">
-            {[
-              {
-                label: t("galleryMain"),
-                svg: (
-                  <svg
-                    viewBox="0 0 400 250"
-                    className="w-full h-full opacity-30"
-                  >
-                    <rect
-                      x="20"
-                      y="20"
-                      width="360"
-                      height="30"
-                      rx="6"
-                      fill="currentColor"
-                      opacity="0.3"
-                    />
-                    <rect
-                      x="20"
-                      y="70"
-                      width="170"
-                      height="100"
-                      rx="8"
-                      fill="currentColor"
-                      opacity="0.2"
-                    />
-                    <rect
-                      x="210"
-                      y="70"
-                      width="170"
-                      height="100"
-                      rx="8"
-                      fill="currentColor"
-                      opacity="0.2"
-                    />
-                    <rect
-                      x="20"
-                      y="190"
-                      width="360"
-                      height="40"
-                      rx="8"
-                      fill="currentColor"
-                      opacity="0.15"
-                    />
-                  </svg>
-                ),
-              },
-              {
-                label: t("galleryMobile"),
-                svg: (
-                  <svg
-                    viewBox="0 0 400 250"
-                    className="w-full h-full opacity-30"
-                  >
-                    <rect
-                      x="140"
-                      y="10"
-                      width="120"
-                      height="230"
-                      rx="16"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      opacity="0.3"
-                    />
-                    <rect
-                      x="150"
-                      y="40"
-                      width="100"
-                      height="15"
-                      rx="4"
-                      fill="currentColor"
-                      opacity="0.25"
-                    />
-                    <rect
-                      x="150"
-                      y="65"
-                      width="100"
-                      height="60"
-                      rx="8"
-                      fill="currentColor"
-                      opacity="0.15"
-                    />
-                    <rect
-                      x="150"
-                      y="135"
-                      width="100"
-                      height="10"
-                      rx="3"
-                      fill="currentColor"
-                      opacity="0.2"
-                    />
-                    <rect
-                      x="150"
-                      y="180"
-                      width="100"
-                      height="30"
-                      rx="6"
-                      fill="currentColor"
-                      opacity="0.2"
-                    />
-                  </svg>
-                ),
-              },
-              {
-                label: t("galleryDashboard"),
-                svg: (
-                  <svg
-                    viewBox="0 0 400 250"
-                    className="w-full h-full opacity-30"
-                  >
-                    <line
-                      x1="40"
-                      y1="200"
-                      x2="360"
-                      y2="200"
-                      stroke="currentColor"
-                      strokeWidth="1"
-                      opacity="0.2"
-                    />
-                    <rect
-                      x="60"
-                      y="120"
-                      width="40"
-                      height="80"
-                      rx="4"
-                      fill="currentColor"
-                      opacity="0.25"
-                    />
-                    <rect
-                      x="120"
-                      y="80"
-                      width="40"
-                      height="120"
-                      rx="4"
-                      fill="currentColor"
-                      opacity="0.3"
-                    />
-                    <rect
-                      x="180"
-                      y="140"
-                      width="40"
-                      height="60"
-                      rx="4"
-                      fill="currentColor"
-                      opacity="0.2"
-                    />
-                    <rect
-                      x="240"
-                      y="60"
-                      width="40"
-                      height="140"
-                      rx="4"
-                      fill="currentColor"
-                      opacity="0.35"
-                    />
-                    <rect
-                      x="300"
-                      y="100"
-                      width="40"
-                      height="100"
-                      rx="4"
-                      fill="currentColor"
-                      opacity="0.28"
-                    />
-                  </svg>
-                ),
-              },
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{
-                  duration: 0.5,
-                  delay: i * 0.1,
-                  ease: [0.25, 0.1, 0.25, 1] as const,
-                }}
-                className="relative rounded-2xl overflow-hidden border border-border aspect-video bg-surface group hover:border-accent/30 transition-all duration-300"
-              >
-                <div className="absolute inset-0 flex items-center justify-center text-text-muted p-8">
-                  {item.svg}
-                </div>
-                <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-background/90 to-transparent">
-                  <p className="text-sm text-text-secondary font-cairo font-medium">
-                    {item.label}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </Container>
-      </section>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto">
+              {allImages.map((img, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: 0.5,
+                    delay: i * 0.1,
+                    ease: [0.25, 0.1, 0.25, 1] as const,
+                  }}
+                  className={`relative rounded-2xl overflow-hidden border border-border aspect-video bg-surface group hover:border-accent/30 transition-all duration-300 cursor-pointer ${
+                    i === 0 && allImages.length > 2 ? "md:col-span-2" : ""
+                  }`}
+                  onClick={() => setLightboxIdx(i)}
+                >
+                  <Image
+                    src={img}
+                    alt={`${project.title} - ${i + 1}`}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    unoptimized
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </motion.div>
+              ))}
+            </div>
+          </Container>
+        </section>
+      )}
+
+      {/* Image Lightbox */}
+      {lightboxIdx !== null && (
+        <ImageLightbox
+          images={allImages}
+          startIdx={lightboxIdx}
+          onClose={() => setLightboxIdx(null)}
+        />
+      )}
 
 
       {/* ═══════════════ CTA ═══════════════ */}

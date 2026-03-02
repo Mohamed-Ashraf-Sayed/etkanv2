@@ -1,3 +1,5 @@
+import { prisma } from "@/lib/db";
+
 export interface Message {
   role: "user" | "assistant" | "admin";
   content: string;
@@ -14,15 +16,69 @@ export interface Conversation {
   lastActivity: number;
 }
 
-// In-memory stores
+// In-memory cache (for real-time telegram features)
 const conversations = new Map<string, Conversation>();
 const telegramToConversation = new Map<number, string>();
 const clientNumberToConversation = new Map<number, string>();
 let clientCounter = 0;
 let lastActiveConversationId: string | null = null;
+let dbLoaded = false;
 
-// Cleanup conversations older than 24 hours
-const EXPIRY_MS = 24 * 60 * 60 * 1000;
+// Load conversations from DB into memory on first access
+async function ensureLoaded() {
+  if (dbLoaded) return;
+  dbLoaded = true;
+  try {
+    const sessions = await (prisma as any).chatSession.findMany({
+      orderBy: { lastActivity: "desc" },
+    });
+    for (const s of sessions) {
+      const msgs: Message[] = JSON.parse(s.messages);
+      const conv: Conversation = {
+        id: s.sessionId,
+        clientNumber: s.clientNumber,
+        messages: msgs,
+        isAdminMode: s.isAdminMode,
+        pendingAdminMessages: [],
+        telegramMessageIds: new Set(),
+        lastActivity: s.lastActivity.getTime(),
+      };
+      conversations.set(s.sessionId, conv);
+      clientNumberToConversation.set(s.clientNumber, s.sessionId);
+      if (s.clientNumber > clientCounter) clientCounter = s.clientNumber;
+    }
+  } catch {
+    // DB not available — continue with empty memory
+  }
+}
+
+// Persist a conversation to DB (fire and forget)
+function persistConversation(conv: Conversation) {
+  try {
+    (prisma as any).chatSession
+      .upsert({
+        where: { sessionId: conv.id },
+        create: {
+          sessionId: conv.id,
+          clientNumber: conv.clientNumber,
+          isAdminMode: conv.isAdminMode,
+          messages: JSON.stringify(conv.messages),
+          lastActivity: new Date(conv.lastActivity),
+        },
+        update: {
+          isAdminMode: conv.isAdminMode,
+          messages: JSON.stringify(conv.messages),
+          lastActivity: new Date(conv.lastActivity),
+        },
+      })
+      .catch(() => {});
+  } catch {
+    // silent
+  }
+}
+
+// Cleanup conversations older than 7 days
+const EXPIRY_MS = 7 * 24 * 60 * 60 * 1000;
 
 function cleanup() {
   const now = Date.now();
@@ -33,6 +89,13 @@ function cleanup() {
       }
       clientNumberToConversation.delete(conv.clientNumber);
       conversations.delete(id);
+      try {
+        (prisma as any).chatSession
+          .delete({ where: { sessionId: id } })
+          .catch(() => {});
+      } catch {
+        // silent
+      }
     }
   }
 }
@@ -58,17 +121,20 @@ export function createConversation(id: string): Conversation {
   };
   conversations.set(id, conv);
   clientNumberToConversation.set(clientCounter, id);
+  persistConversation(conv);
   return conv;
 }
 
-export function getOrCreateConversation(id: string): Conversation {
+export async function getOrCreateConversation(id: string): Promise<Conversation> {
+  await ensureLoaded();
   return conversations.get(id) || createConversation(id);
 }
 
-export function addMessage(convId: string, message: Message) {
-  const conv = getOrCreateConversation(convId);
+export async function addMessage(convId: string, message: Message) {
+  const conv = await getOrCreateConversation(convId);
   conv.messages.push(message);
   conv.lastActivity = Date.now();
+  persistConversation(conv);
 }
 
 export function setLastActiveConversation(convId: string) {
@@ -88,14 +154,22 @@ export function findConversationByClientNumber(
   return undefined;
 }
 
-export function getActiveConversationsCount(): number {
+export async function getActiveConversationsCount(): Promise<number> {
+  await ensureLoaded();
   const now = Date.now();
-  const ACTIVE_MS = 30 * 60 * 1000; // 30 minutes
+  const ACTIVE_MS = 30 * 60 * 1000;
   let count = 0;
   for (const conv of conversations.values()) {
     if (now - conv.lastActivity < ACTIVE_MS) count++;
   }
   return count;
+}
+
+export async function getAllConversations(): Promise<Conversation[]> {
+  await ensureLoaded();
+  return Array.from(conversations.values()).sort(
+    (a, b) => b.lastActivity - a.lastActivity
+  );
 }
 
 export function addTelegramMessageId(convId: string, messageId: number) {
@@ -126,6 +200,7 @@ export function addAdminReply(convId: string, text: string) {
       timestamp: Date.now(),
     });
     conv.lastActivity = Date.now();
+    persistConversation(conv);
   }
 }
 
@@ -137,7 +212,6 @@ export function getPendingAdminMessages(convId: string): string[] {
   return pending;
 }
 
-// Fast lookup: find conversation by ANY telegram message ID
 export function findConversationByTelegramId(
   messageId: number
 ): Conversation | undefined {

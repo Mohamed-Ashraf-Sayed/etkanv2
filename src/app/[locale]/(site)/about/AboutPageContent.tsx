@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { motion } from "framer-motion";
 import {
   Lightbulb,
@@ -22,7 +22,7 @@ import Button from "@/components/ui/Button";
 import AnimatedCounter from "@/components/shared/AnimatedCounter";
 import AvatarPlaceholder from "@/components/shared/AvatarPlaceholder";
 import Breadcrumb from "@/components/shared/Breadcrumb";
-import { team, milestones, stats, values } from "@/data/team";
+import { getTeam, getMilestones, getStats, getValues } from "@/lib/data";
 
 /* ── Icons ── */
 const valueIcons = [Lightbulb, Target, Users, Shield];
@@ -45,6 +45,11 @@ const fadeUp = {
 
 export default function AboutPageContent() {
   const t = useTranslations("about");
+  const locale = useLocale();
+  const teamData = getTeam(locale);
+  const milestonesData = getMilestones(locale);
+  const statsData = getStats(locale);
+  const valuesData = getValues(locale);
 
   const whyUsReasons = [
     { title: t("whyUs1"), description: t("whyUs1Desc"), icon: whyUsIcons[0] },
@@ -211,7 +216,7 @@ export default function AboutPageContent() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
           >
-            {stats.map((stat) => (
+            {statsData.map((stat) => (
               <motion.div key={stat.label} variants={fadeUp}>
                 <AnimatedCounter
                   end={stat.value}
@@ -237,7 +242,7 @@ export default function AboutPageContent() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
           >
-            {values.map((value, index) => {
+            {valuesData.map((value, index) => {
               const Icon = valueIcons[index];
               return (
                 <motion.div
@@ -279,7 +284,7 @@ export default function AboutPageContent() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.15 }}
           >
-            {team.map((member) => (
+            {teamData.map((member) => (
               <motion.div
                 key={member.name}
                 variants={fadeUp}
@@ -333,7 +338,7 @@ export default function AboutPageContent() {
             <div className="absolute top-0 bottom-0 right-7 w-px bg-border md:hidden" />
 
             <div className="space-y-10">
-              {milestones.map((milestone, index) => {
+              {milestonesData.map((milestone, index) => {
                 const isLeft = index % 2 === 0;
 
                 return (

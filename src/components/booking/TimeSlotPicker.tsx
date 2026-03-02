@@ -1,8 +1,8 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Clock } from "lucide-react";
-import { timeSlots } from "@/data/booking";
+import { getTimeSlots } from "@/lib/data";
 
 interface TimeSlotPickerProps {
   selectedSlot: string | null;
@@ -16,6 +16,8 @@ export default function TimeSlotPicker({
   error,
 }: TimeSlotPickerProps) {
   const t = useTranslations("consultation");
+  const locale = useLocale();
+  const timeSlots = getTimeSlots(locale);
   const morningSlots = timeSlots.filter((s) => s.period === "morning");
   const afternoonSlots = timeSlots.filter((s) => s.period === "afternoon");
 

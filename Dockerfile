@@ -31,10 +31,11 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
-COPY --from=builder /app/node_modules/better-sqlite3 ./node_modules/better-sqlite3
+COPY --from=builder /app/node_modules/mariadb ./node_modules/mariadb
+COPY --from=builder /app/node_modules/dotenv ./node_modules/dotenv
 COPY docker-entrypoint.sh ./
 
-RUN mkdir -p /app/data && chown nextjs:nodejs /app/data
+RUN mkdir -p /app/data/uploads/projects && chown -R nextjs:nodejs /app/data
 RUN chmod +x docker-entrypoint.sh
 
 USER nextjs

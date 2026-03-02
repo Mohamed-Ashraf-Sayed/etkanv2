@@ -2,12 +2,14 @@
 
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
+import { useLocale } from "next-intl";
 import { Sun, Moon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export default function ThemeToggle({ className }: { className?: string }) {
   const { theme, setTheme } = useTheme();
+  const locale = useLocale();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
@@ -35,7 +37,7 @@ export default function ThemeToggle({ className }: { className?: string }) {
         "transition-all duration-200 cursor-pointer",
         className
       )}
-      aria-label={isDark ? "التبديل للوضع الفاتح" : "التبديل للوضع الداكن"}
+      aria-label={isDark ? (locale === "en" ? "Switch to light mode" : "التبديل للوضع الفاتح") : (locale === "en" ? "Switch to dark mode" : "التبديل للوضع الداكن")}
     >
       <AnimatePresence mode="wait">
         {isDark ? (

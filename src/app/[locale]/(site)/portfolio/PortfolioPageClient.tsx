@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import { TrendingUp } from "lucide-react";
@@ -12,11 +12,8 @@ import SectionTitle from "@/components/ui/SectionTitle";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import ProjectThumbnail from "@/components/shared/ProjectThumbnail";
 import { cn } from "@/lib/utils";
-import {
-  projectCategories,
-  getProjectsByCategory,
-  type Project,
-} from "@/data/projects";
+import type { Project } from "@/data/projects";
+import { getProjectCategories, getProjects } from "@/lib/data";
 
 function ProjectCard({ project }: { project: Project }) {
   const firstResult = project.results[0];
@@ -35,6 +32,7 @@ function ProjectCard({ project }: { project: Project }) {
           <ProjectThumbnail
             category={project.category}
             title={project.title}
+            thumbnail={project.thumbnail}
           />
 
           <div className="p-6 flex flex-col flex-1">
@@ -82,14 +80,22 @@ function ProjectCard({ project }: { project: Project }) {
 
             {/* Tags */}
             <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
-              {project.tags.slice(0, 4).map((tag) => (
-                <span
-                  key={tag}
-                  className="inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-medium bg-accent/5 text-accent border border-accent/20"
-                >
-                  {tag}
-                </span>
-              ))}
+              {project.tags.slice(0, 4).map((tag, idx) => {
+                const colors = [
+                  "bg-accent/10 text-accent border-accent/20",
+                  "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
+                  "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
+                  "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
+                ];
+                return (
+                  <span
+                    key={tag}
+                    className={`inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-medium border ${colors[idx % colors.length]}`}
+                  >
+                    {tag}
+                  </span>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -98,11 +104,25 @@ function ProjectCard({ project }: { project: Project }) {
   );
 }
 
-export default function PortfolioPageClient() {
+interface Props {
+  dbProjects?: Project[];
+}
+
+export default function PortfolioPageClient({ dbProjects = [] }: Props) {
   const t = useTranslations("portfolio");
+  const locale = useLocale();
+  const categories = getProjectCategories(locale);
   const [activeFilter, setActiveFilter] = useState("all");
 
-  const filteredProjects = getProjectsByCategory(activeFilter);
+  // Merge DB projects + static, DB takes priority (by slug)
+  const staticProjects = getProjects(locale);
+  const dbSlugs = new Set(dbProjects.map((p) => p.slug));
+  const mergedProjects = [...dbProjects, ...staticProjects.filter((p) => !dbSlugs.has(p.slug))];
+
+  const filteredProjects =
+    activeFilter === "all"
+      ? mergedProjects
+      : mergedProjects.filter((p) => p.category === activeFilter);
 
   return (
     <>
@@ -138,7 +158,7 @@ export default function PortfolioPageClient() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            {projectCategories.map((cat) => (
+            {categories.map((cat) => (
               <button
                 key={cat.value}
                 onClick={() => setActiveFilter(cat.value)}

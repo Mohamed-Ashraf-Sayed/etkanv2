@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { SYSTEM_PROMPT } from "@/data/chatbot";
+import { SYSTEM_PROMPT_EN } from "@/data/chatbot.en";
 import {
   getOrCreateConversation,
   addMessage,
@@ -20,19 +21,19 @@ const client = new Anthropic({
 
 export async function POST(req: Request) {
   try {
-    const { messages, conversationId } = await req.json();
+    const { messages, conversationId, locale } = await req.json();
 
     if (!messages || !Array.isArray(messages)) {
       return new Response("Invalid messages format", { status: 400 });
     }
 
     const convId = conversationId || "anonymous";
-    const conv = getOrCreateConversation(convId);
+    const conv = await getOrCreateConversation(convId);
     const latestUserMessage =
       messages[messages.length - 1]?.content || "";
 
     // Store user message & mark as last active
-    addMessage(convId, {
+    await addMessage(convId, {
       role: "user",
       content: latestUserMessage,
       timestamp: Date.now(),
@@ -68,8 +69,8 @@ export async function POST(req: Request) {
 
     const stream = await client.messages.stream({
       model: "claude-sonnet-4-20250514",
-      max_tokens: 1024,
-      system: SYSTEM_PROMPT,
+      max_tokens: 300,
+      system: locale === "en" ? SYSTEM_PROMPT_EN : SYSTEM_PROMPT,
       messages: apiMessages,
     });
 
@@ -91,7 +92,7 @@ export async function POST(req: Request) {
         controller.close();
 
         // Store AI response
-        addMessage(convId, {
+        await addMessage(convId, {
           role: "assistant",
           content: fullResponse,
           timestamp: Date.now(),
@@ -126,6 +127,6 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error("Chat API error:", error);
-    return new Response("حصل خطأ، حاول تاني", { status: 500 });
+    return new Response("An error occurred, please try again", { status: 500 });
   }
 }

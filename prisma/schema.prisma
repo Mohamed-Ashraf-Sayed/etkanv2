@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
 }
 
 model Booking {
@@ -16,13 +16,13 @@ model Booking {
   date        String?
   timeSlot    String?
   serviceType String?
-  notes       String?
-  services    String?
-  features    String?
+  notes       String?  @db.Text
+  services    String?  @db.Text
+  features    String?  @db.Text
   budget      String?
   timeline    String?
   company     String?
-  description String?
+  description String?  @db.Text
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -33,4 +33,51 @@ model AdminUser {
   password  String
   name      String
   createdAt DateTime @default(now())
+}
+
+model ChatSession {
+  id           String   @id @default(cuid())
+  sessionId    String   @unique
+  clientNumber Int
+  isAdminMode  Boolean  @default(false)
+  messages     String   @default("[]") @db.LongText
+  lastActivity DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  category    String   // website | mobile | systems | infrastructure
+  title       String
+  titleEn     String   @default("")
+  client      String
+  clientEn    String   @default("")
+  industry    String
+  industryEn  String   @default("")
+  summary     String   @db.Text
+  summaryEn   String   @default("") @db.Text
+  description String   @db.Text
+  descriptionEn String @default("") @db.Text
+  problem     String   @db.Text
+  problemEn   String   @default("") @db.Text
+  solution    String   @db.Text
+  solutionEn  String   @default("") @db.Text
+  results     String   @default("[]") @db.Text
+  resultsEn   String   @default("[]") @db.Text
+  tags        String   @default("[]") @db.Text
+  tagsEn      String   @default("[]") @db.Text
+  testimonial String   @default("{}") @db.Text
+  testimonialEn String @default("{}") @db.Text
+  techStack   String   @default("[]") @db.Text
+  thumbnail   String   @default("")
+  images      String   @default("[]") @db.Text
+  duration    String   @default("")
+  durationEn  String   @default("")
+  year        String   @default("")
+  displayOrder Int     @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

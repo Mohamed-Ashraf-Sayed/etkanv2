@@ -1,8 +1,10 @@
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface ProjectThumbnailProps {
   category: "website" | "mobile" | "systems" | "infrastructure";
   title: string;
+  thumbnail?: string;
   className?: string;
   size?: "sm" | "lg";
 }
@@ -124,6 +126,7 @@ const mockups: Record<string, React.FC> = {
 export default function ProjectThumbnail({
   category,
   title,
+  thumbnail,
   className,
   size = "sm",
 }: ProjectThumbnailProps) {
@@ -138,10 +141,22 @@ export default function ProjectThumbnail({
       )}
       aria-label={`صورة مشروع: ${title}`}
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-navy/80 via-navy/40 to-accent/5" />
-      <div className="absolute inset-0 flex items-center justify-center text-accent/70 p-2">
-        <Mockup />
-      </div>
+      {thumbnail ? (
+        <Image
+          src={thumbnail}
+          alt={title}
+          fill
+          className="object-cover"
+          unoptimized
+        />
+      ) : (
+        <>
+          <div className="absolute inset-0 bg-gradient-to-br from-navy/80 via-navy/40 to-accent/5" />
+          <div className="absolute inset-0 flex items-center justify-center text-accent/70 p-2">
+            <Mockup />
+          </div>
+        </>
+      )}
     </div>
   );
 }

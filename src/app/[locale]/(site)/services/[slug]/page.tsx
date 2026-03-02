@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { services, getServiceBySlug } from "@/data/services";
+import { getLocale } from "next-intl/server";
+import { services } from "@/data/services";
+import { servicesEn } from "@/data/services.en";
+import { findServiceBySlug } from "@/lib/data";
 import ServiceDetailClient from "./ServiceDetailClient";
 
 interface PageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: string }>;
 }
 
 export async function generateStaticParams() {
@@ -15,10 +18,11 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const service = getServiceBySlug(slug);
+  const locale = await getLocale();
+  const service = findServiceBySlug(slug, locale);
 
   if (!service) {
-    return { title: "الخدمة غير موجودة" };
+    return { title: locale === "en" ? "Service Not Found" : "الخدمة غير موجودة" };
   }
 
   return {
@@ -29,7 +33,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ServiceDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const service = getServiceBySlug(slug);
+  const locale = await getLocale();
+  const service = findServiceBySlug(slug, locale);
 
   if (!service) {
     notFound();

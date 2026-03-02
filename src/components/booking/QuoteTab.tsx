@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,11 +21,7 @@ import Textarea from "@/components/ui/Textarea";
 import Button from "@/components/ui/Button";
 import StepIndicator from "./StepIndicator";
 import BookingSuccessState from "./BookingSuccessState";
-import {
-  quoteServiceFeatures,
-  budgetRanges,
-  timelineOptions,
-} from "@/data/booking";
+import { getQuoteServiceFeatures, getBudgetRanges, getTimelineOptions } from "@/lib/data";
 
 const iconMap: Record<string, React.ElementType> = {
   Globe,
@@ -69,6 +65,10 @@ const slideVariants = {
 export default function QuoteTab() {
   const t = useTranslations("quote");
   const tc = useTranslations("common");
+  const locale = useLocale();
+  const quoteServiceFeatures = getQuoteServiceFeatures(locale);
+  const budgetRanges = getBudgetRanges(locale);
+  const timelineOptions = getTimelineOptions(locale);
 
   const schema = z.object({
     serviceCategories: z.array(z.string()).min(1, t("errorService")),

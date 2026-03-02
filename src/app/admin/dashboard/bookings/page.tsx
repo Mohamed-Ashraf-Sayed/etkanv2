@@ -67,12 +67,12 @@ export default function BookingsPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
         <h1 className="text-2xl font-bold font-cairo">
           الحجوزات ({total})
         </h1>
-        <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-white/40" />
+        <div className="flex flex-wrap items-center gap-2">
+          <Filter className="w-4 h-4 text-white/50" />
           {filters.map((f) => (
             <button
               key={f.value}
@@ -80,10 +80,10 @@ export default function BookingsPage() {
                 setStatusFilter(f.value);
                 setPage(1);
               }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-cairo transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-cairo font-medium transition-all border ${
                 statusFilter === f.value
-                  ? "bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]/30"
-                  : "bg-white/5 text-white/50 hover:text-white"
+                  ? "bg-[#D4AF37]/20 text-[#D4AF37] border-[#D4AF37]/30"
+                  : "bg-white/10 text-white/70 border-white/10 hover:text-white hover:bg-white/15"
               }`}
             >
               {f.label}
@@ -147,7 +147,8 @@ export default function BookingsPage() {
                       <select
                         value={b.status}
                         onChange={(e) => updateStatus(b.id, e.target.value)}
-                        className={`px-3 py-1 rounded-full text-xs font-cairo font-medium border-0 cursor-pointer ${status.color}`}
+                        className={`px-3 py-1.5 rounded-full text-xs font-cairo font-medium border border-white/10 cursor-pointer appearance-auto ${status.color}`}
+                        style={{ backgroundColor: "rgba(11, 31, 63, 0.8)" }}
                       >
                         <option value="pending">في الانتظار</option>
                         <option value="confirmed">مؤكد</option>

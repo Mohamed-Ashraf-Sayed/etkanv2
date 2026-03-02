@@ -1,7 +1,7 @@
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
-type ButtonVariant = "gold" | "navy" | "outline" | "ghost";
+type ButtonVariant = "gold" | "navy" | "outline" | "outline-light" | "ghost";
 type ButtonSize = "sm" | "md" | "lg";
 
 interface ButtonProps {
@@ -19,6 +19,7 @@ const variantStyles: Record<ButtonVariant, string> = {
   gold: "bg-accent text-navy font-bold hover:bg-accent-light hover:shadow-[0_4px_20px_rgba(212,175,55,0.3)]",
   navy: "bg-navy text-white hover:bg-navy-light border border-transparent hover:border-accent",
   outline: "bg-transparent text-text-primary border border-border hover:border-accent hover:text-accent",
+  "outline-light": "bg-transparent text-white border border-white/20 hover:border-accent hover:text-accent",
   ghost: "bg-transparent text-text-primary hover:bg-surface-light",
 };
 

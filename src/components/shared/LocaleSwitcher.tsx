@@ -17,7 +17,7 @@ export default function LocaleSwitcher() {
   return (
     <button
       onClick={switchLocale}
-      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-cairo font-semibold text-text-secondary hover:text-accent border border-border hover:border-accent/30 transition-all duration-200"
+      className="group relative flex items-center gap-2 px-3.5 py-2 rounded-full text-sm font-cairo font-bold bg-accent/10 hover:bg-accent text-accent hover:text-navy transition-all duration-300"
       aria-label={locale === "ar" ? "Switch to English" : "التحويل للعربية"}
     >
       <Globe className="w-4 h-4" />

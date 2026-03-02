@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { motion } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import { Calendar, Clock, User } from "lucide-react";
@@ -8,7 +8,7 @@ import Container from "@/components/ui/Container";
 import Badge from "@/components/ui/Badge";
 import Card from "@/components/ui/Card";
 import SectionTitle from "@/components/ui/SectionTitle";
-import { blogPosts } from "@/data/blog";
+import { getBlogPosts } from "@/lib/data";
 import { formatDate } from "@/lib/utils";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 
@@ -31,6 +31,8 @@ const itemVariants = {
 
 export default function BlogPageContent() {
   const t = useTranslations("blog");
+  const locale = useLocale();
+  const posts = getBlogPosts(locale);
 
   return (
     <>
@@ -65,7 +67,7 @@ export default function BlogPageContent() {
             initial="hidden"
             animate="visible"
           >
-            {blogPosts.map((post) => (
+            {posts.map((post) => (
               <motion.div key={post.slug} variants={itemVariants}>
                 <Link href={`/blog/${post.slug}`} className="block h-full">
                   <Card className="h-full flex flex-col" hover>

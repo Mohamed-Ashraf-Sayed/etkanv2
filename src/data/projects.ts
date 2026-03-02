@@ -17,6 +17,8 @@ export interface Project {
     role: string;
   };
   techStack: string[];
+  thumbnail?: string;
+  images?: string[];
   duration: string;
   year: string;
 }

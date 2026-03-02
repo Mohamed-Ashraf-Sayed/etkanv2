@@ -2,6 +2,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { comparePassword, signToken } from "@/lib/auth";
 
+export async function DELETE() {
+  const response = NextResponse.json({ success: true });
+  response.cookies.set("admin-token", "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 0,
+    path: "/",
+  });
+  return response;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json();

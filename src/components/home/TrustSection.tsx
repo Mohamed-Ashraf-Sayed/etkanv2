@@ -5,10 +5,10 @@ import Image from "next/image";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
 import AnimatedCounter from "@/components/shared/AnimatedCounter";
-import { stats } from "@/data/team";
-import { useTranslations } from "next-intl";
+import { getStats } from "@/lib/data";
+import { useTranslations, useLocale } from "next-intl";
 
-const companies = [
+const companiesAr = [
   { name: "تقنية المستقبل", logo: "/images/logos/logo-1.svg" },
   { name: "الخليج للتجارة", logo: "/images/logos/logo-2.svg" },
   { name: "المتحدة للصناعات", logo: "/images/logos/logo-3.svg" },
@@ -17,6 +17,17 @@ const companies = [
   { name: "سمارت سولوشنز", logo: "/images/logos/logo-6.svg" },
   { name: "البناء الحديث", logo: "/images/logos/logo-7.svg" },
   { name: "الرواد للأعمال", logo: "/images/logos/logo-8.svg" },
+];
+
+const companiesEn = [
+  { name: "Future Tech", logo: "/images/logos/logo-1.svg" },
+  { name: "Gulf Trading", logo: "/images/logos/logo-2.svg" },
+  { name: "United Industries", logo: "/images/logos/logo-3.svg" },
+  { name: "New Media", logo: "/images/logos/logo-4.svg" },
+  { name: "Al-Aman Finance", logo: "/images/logos/logo-5.svg" },
+  { name: "Smart Solutions", logo: "/images/logos/logo-6.svg" },
+  { name: "Modern Construction", logo: "/images/logos/logo-7.svg" },
+  { name: "Al-Rowad Business", logo: "/images/logos/logo-8.svg" },
 ];
 
 const staggerContainer = {
@@ -39,6 +50,9 @@ const fadeUp = {
 
 export default function TrustSection() {
   const t = useTranslations("trust");
+  const locale = useLocale();
+  const statsData = getStats(locale);
+  const companies = locale === "en" ? companiesEn : companiesAr;
 
   return (
     <section className="section-padding section-alt">
@@ -56,7 +70,7 @@ export default function TrustSection() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          {stats.map((stat) => (
+          {statsData.map((stat) => (
             <motion.div key={stat.label} variants={fadeUp}>
               <div className="card rounded-xl p-6 text-center border border-border hover:border-accent/30 transition-colors duration-300">
                 <AnimatedCounter

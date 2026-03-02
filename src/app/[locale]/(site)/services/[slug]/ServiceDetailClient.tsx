@@ -336,7 +336,7 @@ export default function ServiceDetailClient({
               <Button href="/contact" variant="gold" size="lg">
                 {t("contactUs")}
               </Button>
-              <Button href="/services" size="lg" variant="outline">
+              <Button href="/services" size="lg" variant="outline-light">
                 <ArrowLeft className="w-5 h-5 ml-2" />
                 {t("allServices")}
               </Button>

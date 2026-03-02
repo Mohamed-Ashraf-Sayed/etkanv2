@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import {
@@ -24,11 +24,8 @@ import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import { cn } from "@/lib/utils";
-import {
-  serviceCategories,
-  getServicesByCategory,
-  type Service,
-} from "@/data/services";
+import type { Service } from "@/data/services";
+import { getServiceCategories, findServicesByCategory } from "@/lib/data";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Globe, Smartphone, Users, Building2, Network, Server, Headphones, TrendingUp,
@@ -100,10 +97,12 @@ function ServiceCard({ service, detailsLabel }: { service: Service; detailsLabel
 
 export default function ServicesPageClient() {
   const t = useTranslations("services");
-  const [activeCategory, setActiveCategory] = useState(serviceCategories[0].slug);
+  const locale = useLocale();
+  const categories = getServiceCategories(locale);
+  const [activeCategory, setActiveCategory] = useState("web-and-apps");
 
-  const activeCategoryData = serviceCategories.find((c) => c.slug === activeCategory);
-  const categoryServices = getServicesByCategory(activeCategory);
+  const activeCategoryData = categories.find((c) => c.slug === activeCategory);
+  const categoryServices = findServicesByCategory(activeCategory, locale);
 
   return (
     <>
@@ -131,7 +130,7 @@ export default function ServicesPageClient() {
               </p>
 
               <div className="flex flex-wrap gap-5 mt-8 justify-center lg:justify-start">
-                {serviceCategories.map((cat) => {
+                {categories.map((cat) => {
                   const CatIcon = iconMap[cat.icon] || Globe;
                   return (
                     <div key={cat.slug} className="flex items-center gap-2 text-white/50">
@@ -151,7 +150,7 @@ export default function ServicesPageClient() {
             >
               {/* Icon grid for visual interest */}
               <div className="grid grid-cols-2 gap-4 max-w-xs">
-                {serviceCategories.map((cat) => {
+                {categories.map((cat) => {
                   const CatIcon = iconMap[cat.icon] || Globe;
                   return (
                     <div
@@ -182,7 +181,7 @@ export default function ServicesPageClient() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            {serviceCategories.map((cat) => {
+            {categories.map((cat) => {
               const IconComp = iconMap[cat.icon] || Globe;
               const isActive = activeCategory === cat.slug;
               return (
@@ -257,9 +256,9 @@ export default function ServicesPageClient() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
           >
-            {serviceCategories.map((cat) => {
+            {categories.map((cat) => {
               const CategoryIcon = iconMap[cat.icon] || Globe;
-              const catServices = getServicesByCategory(cat.slug);
+              const catServices = findServicesByCategory(cat.slug, locale);
               return (
                 <motion.div
                   key={cat.slug}

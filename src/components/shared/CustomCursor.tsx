@@ -18,6 +18,9 @@ export default function CustomCursor() {
       "ontouchstart" in window || navigator.maxTouchPoints > 0;
     if (isTouchDevice) return;
 
+    // Hide native cursor only when custom cursor is active
+    document.body.classList.add("custom-cursor-active");
+
     const handleMove = (e: MouseEvent) => {
       mouse.current = { x: e.clientX, y: e.clientY };
       if (!visible) setVisible(true);
@@ -59,6 +62,7 @@ export default function CustomCursor() {
     raf.current = requestAnimationFrame(animate);
 
     return () => {
+      document.body.classList.remove("custom-cursor-active");
       document.removeEventListener("mousemove", handleMove);
       document.removeEventListener("mouseover", handleOver);
       document.removeEventListener("mousedown", handleDown);

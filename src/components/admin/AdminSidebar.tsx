@@ -1,17 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   CalendarCheck,
   MessageCircle,
+  FolderKanban,
   LogOut,
 } from "lucide-react";
 
 const links = [
   { href: "/admin/dashboard", label: "لوحة التحكم", icon: LayoutDashboard },
   { href: "/admin/dashboard/bookings", label: "الحجوزات", icon: CalendarCheck },
+  { href: "/admin/dashboard/projects", label: "المشاريع", icon: FolderKanban },
   {
     href: "/admin/dashboard/conversations",
     label: "المحادثات",
@@ -21,12 +23,10 @@ const links = [
 
 export default function AdminSidebar() {
   const pathname = usePathname();
-  const router = useRouter();
 
   const handleLogout = async () => {
     await fetch("/api/admin/login", { method: "DELETE" });
-    document.cookie = "admin-token=; path=/; max-age=0";
-    router.push("/admin/login");
+    window.location.href = "/admin/login";
   };
 
   return (
@@ -40,7 +40,10 @@ export default function AdminSidebar() {
 
       <nav className="flex-1 p-4 space-y-1">
         {links.map((link) => {
-          const isActive = pathname === link.href;
+          const isActive =
+            link.href === "/admin/dashboard"
+              ? pathname === link.href
+              : pathname.startsWith(link.href);
           const Icon = link.icon;
           return (
             <Link

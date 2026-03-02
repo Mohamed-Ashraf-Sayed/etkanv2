@@ -1,5 +1,6 @@
 import { Cairo } from "next/font/google";
 import "../[locale]/globals.css";
+import "./admin.css";
 
 const cairo = Cairo({
   variable: "--font-cairo-var",
@@ -18,8 +19,8 @@ export default function AdminRootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ar" dir="rtl" className={cairo.variable}>
-      <body className="font-cairo antialiased bg-[#060E1A] text-white min-h-screen">
+    <html lang="ar" dir="rtl" className={`dark ${cairo.variable}`} suppressHydrationWarning>
+      <body className="font-cairo antialiased bg-[#060E1A] text-white min-h-screen" suppressHydrationWarning>
         {children}
       </body>
     </html>

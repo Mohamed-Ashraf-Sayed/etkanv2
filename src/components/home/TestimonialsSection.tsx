@@ -5,19 +5,8 @@ import { Quote, Star } from "lucide-react";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
 import AvatarPlaceholder from "@/components/shared/AvatarPlaceholder";
-import { projects } from "@/data/projects";
-import { useTranslations } from "next-intl";
-
-const testimonials = projects
-  .filter((p) => p.testimonial)
-  .slice(0, 3)
-  .map((p, i) => ({
-    text: p.testimonial!.text,
-    author: p.testimonial!.author,
-    role: p.testimonial!.role,
-    company: p.client,
-    gender: (["male", "female", "male"] as const)[i],
-  }));
+import { getProjects } from "@/lib/data";
+import { useTranslations, useLocale } from "next-intl";
 
 const containerVariants = {
   hidden: {},
@@ -39,6 +28,18 @@ const cardVariants = {
 
 export default function TestimonialsSection() {
   const t = useTranslations("testimonials");
+  const locale = useLocale();
+  const allProjects = getProjects(locale);
+  const testimonials = allProjects
+    .filter((p) => p.testimonial)
+    .slice(0, 3)
+    .map((p, i) => ({
+      text: p.testimonial!.text,
+      author: p.testimonial!.author,
+      role: p.testimonial!.role,
+      company: p.client,
+      gender: (["male", "female", "male"] as const)[i],
+    }));
 
   return (
     <section className="section-navy section-padding relative overflow-hidden">

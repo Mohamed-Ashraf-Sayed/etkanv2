@@ -154,15 +154,25 @@ body {
   background-color: var(--color-background);
   color: var(--color-text-primary);
   font-family: var(--font-tajawal);
-  direction: rtl;
   overflow-x: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Hide default cursor on desktop when custom cursor is active */
+/* LTR overrides for English */
+html[dir="ltr"] .gold-underline::after {
+  right: auto;
+  left: 0;
+}
+
+/* Hide default cursor only when custom cursor is active (class added by JS) */
 @media (pointer: fine) {
-  body { cursor: none; }
-  a, button, [role="button"], input, textarea, select { cursor: none; }
+  body.custom-cursor-active { cursor: none; }
+  body.custom-cursor-active a,
+  body.custom-cursor-active button,
+  body.custom-cursor-active [role="button"],
+  body.custom-cursor-active input,
+  body.custom-cursor-active textarea,
+  body.custom-cursor-active select { cursor: none; }
 }
 
 ::selection { background: rgba(212, 175, 55, 0.2); color: #0B1F3F; }

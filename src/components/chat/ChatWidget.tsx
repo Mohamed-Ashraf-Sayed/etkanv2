@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, Bot, Headset } from "lucide-react";
-import { WELCOME_MESSAGE, SUGGESTED_QUESTIONS } from "@/data/chatbot";
+import { getChatbotConfig } from "@/lib/data";
+import { useRouter } from "@/i18n/navigation";
 
 interface Message {
   role: "user" | "assistant" | "admin";
@@ -15,18 +16,116 @@ function generateId() {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
 }
 
+function renderTextSegment(text: string, keyPrefix: string) {
+  // Handle phone numbers — make them LTR and clickable
+  const phoneRegex = /(\+?\d[\d\s-]{7,}\d)/g;
+  const phoneParts = text.split(phoneRegex);
+  if (phoneParts.length > 1) {
+    return phoneParts.map((seg, k) => {
+      if (phoneRegex.test(seg)) {
+        phoneRegex.lastIndex = 0; // reset regex
+        const cleanNum = seg.replace(/[\s-]/g, "");
+        return (
+          <a
+            key={`${keyPrefix}-ph-${k}`}
+            href={`https://wa.me/${cleanNum.replace("+", "")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            dir="ltr"
+            className="inline-block text-accent hover:text-accent-light underline underline-offset-2 font-bold transition-colors"
+          >
+            {seg}
+          </a>
+        );
+      }
+      return <span key={`${keyPrefix}-ph-${k}`}>{seg}</span>;
+    });
+  }
+  return text;
+}
+
+function renderMessageContent(content: string, onNavigate: (path: string) => void) {
+  // Parse markdown links [text](/path) and render as clickable buttons
+  const parts = content.split(/(\[[^\]]+\]\([^)]+\))/g);
+  return parts.map((part, i) => {
+    const linkMatch = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    if (linkMatch) {
+      const [, text, href] = linkMatch;
+      return (
+        <button
+          key={i}
+          onClick={() => onNavigate(href)}
+          className="inline-flex items-center gap-1 text-accent hover:text-accent-light underline underline-offset-2 font-bold transition-colors"
+        >
+          {text}
+        </button>
+      );
+    }
+    // Bold text **text**
+    const boldParts = part.split(/(\*\*[^*]+\*\*)/g);
+    if (boldParts.length > 1) {
+      return boldParts.map((bp, j) => {
+        const boldMatch = bp.match(/^\*\*([^*]+)\*\*$/);
+        if (boldMatch) return <strong key={`${i}-${j}`}>{boldMatch[1]}</strong>;
+        return <span key={`${i}-${j}`}>{renderTextSegment(bp, `${i}-${j}`)}</span>;
+      });
+    }
+    return <span key={i}>{renderTextSegment(part, `${i}`)}</span>;
+  });
+}
+
 export default function ChatWidget() {
   const t = useTranslations("chat");
+  const locale = useLocale();
+  const router = useRouter();
+  const { welcomeMessage: WELCOME_MESSAGE, suggestedQuestions: SUGGESTED_QUESTIONS } = getChatbotConfig(locale);
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const saved = localStorage.getItem("etqan-chat-messages");
+      return saved ? JSON.parse(saved) : [];
+    } catch { return []; }
+  });
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
-  const [showSuggestions, setShowSuggestions] = useState(true);
-  const [conversationId] = useState(() => generateId());
-  const [isAdminMode, setIsAdminMode] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(() => {
+    if (typeof window === "undefined") return true;
+    try {
+      const saved = localStorage.getItem("etqan-chat-messages");
+      const msgs = saved ? JSON.parse(saved) : [];
+      return msgs.length === 0;
+    } catch { return true; }
+  });
+  const [conversationId] = useState(() => {
+    if (typeof window === "undefined") return generateId();
+    try {
+      const saved = localStorage.getItem("etqan-chat-convId");
+      if (saved) return saved;
+      const newId = generateId();
+      localStorage.setItem("etqan-chat-convId", newId);
+      return newId;
+    } catch { return generateId(); }
+  });
+  const [isAdminMode, setIsAdminMode] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem("etqan-chat-admin") === "true";
+  });
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const pollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Persist messages to localStorage
+  useEffect(() => {
+    if (messages.length > 0) {
+      localStorage.setItem("etqan-chat-messages", JSON.stringify(messages));
+    }
+  }, [messages]);
+
+  // Persist admin mode
+  useEffect(() => {
+    localStorage.setItem("etqan-chat-admin", String(isAdminMode));
+  }, [isAdminMode]);
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -94,6 +193,7 @@ export default function ChatWidget() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           conversationId,
+          locale,
           messages: newMessages
             .filter((m) => m.role !== "admin")
             .map((m) => ({
@@ -115,6 +215,7 @@ export default function ChatWidget() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           conversationId,
+          locale,
           messages: newMessages
             .filter((m) => m.role !== "admin")
             .map((m) => ({
@@ -307,43 +408,54 @@ export default function ChatWidget() {
               )}
 
               {/* Chat Messages */}
-              {messages.map((msg, i) => (
-                <div
-                  key={i}
-                  className={`flex gap-2.5 items-start ${
-                    msg.role === "user" ? "flex-row-reverse" : ""
-                  }`}
-                >
-                  {(msg.role === "assistant" || msg.role === "admin") &&
-                    renderMessageIcon(msg.role)}
-                  <motion.div
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className={`rounded-2xl px-4 py-3 max-w-[85%] ${
-                      msg.role === "user"
-                        ? "bg-accent/10 border border-accent/20 rounded-tl-sm"
-                        : msg.role === "admin"
-                          ? "bg-emerald-500/5 border border-emerald-500/20 rounded-tr-sm"
-                          : "bg-surface border border-border rounded-tr-sm"
+              {messages.map((msg, i) => {
+                // Skip empty assistant message while streaming — typing indicator handles it
+                if (msg.role === "assistant" && !msg.content && isStreaming && i === messages.length - 1) {
+                  return null;
+                }
+                return (
+                  <div
+                    key={i}
+                    className={`flex gap-2.5 items-start ${
+                      msg.role === "user" ? "flex-row-reverse" : ""
                     }`}
                   >
-                    {msg.role === "admin" && (
-                      <span className="text-[10px] font-cairo text-emerald-500 font-bold block mb-1">
-                        {t("adminBadge")}
-                      </span>
-                    )}
-                    <p className="text-sm font-cairo text-text-primary leading-relaxed whitespace-pre-wrap">
-                      {msg.content}
-                      {msg.role === "assistant" &&
-                        i === messages.length - 1 &&
-                        isStreaming && (
-                          <span className="inline-block w-1.5 h-4 bg-accent/60 rounded-full ml-1 animate-pulse align-middle" />
-                        )}
-                    </p>
-                  </motion.div>
-                </div>
-              ))}
+                    {(msg.role === "assistant" || msg.role === "admin") &&
+                      renderMessageIcon(msg.role)}
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className={`rounded-2xl px-4 py-3 max-w-[85%] ${
+                        msg.role === "user"
+                          ? "bg-accent/10 border border-accent/20 rounded-tl-sm"
+                          : msg.role === "admin"
+                            ? "bg-emerald-500/5 border border-emerald-500/20 rounded-tr-sm"
+                            : "bg-surface border border-border rounded-tr-sm"
+                      }`}
+                    >
+                      {msg.role === "admin" && (
+                        <span className="text-[10px] font-cairo text-emerald-500 font-bold block mb-1">
+                          {t("adminBadge")}
+                        </span>
+                      )}
+                      <p className="text-sm font-cairo text-text-primary leading-relaxed whitespace-pre-wrap">
+                        {msg.role === "user"
+                          ? msg.content
+                          : renderMessageContent(msg.content, (path) => {
+                              router.push(path);
+                              setIsOpen(false);
+                            })}
+                        {msg.role === "assistant" &&
+                          i === messages.length - 1 &&
+                          isStreaming && (
+                            <span className="inline-block w-1.5 h-4 bg-accent/60 rounded-full ml-1 animate-pulse align-middle" />
+                          )}
+                      </p>
+                    </motion.div>
+                  </div>
+                );
+              })}
 
               {/* Typing indicator */}
               {isStreaming &&
@@ -384,7 +496,7 @@ export default function ChatWidget() {
                   disabled={!input.trim() || isStreaming}
                   className="w-10 h-10 rounded-xl bg-accent text-navy flex items-center justify-center shrink-0 hover:bg-accent-light transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  <Send className="w-4 h-4 rotate-180" />
+                  <Send className={`w-4 h-4 ${locale === "ar" ? "rotate-180" : ""}`} />
                 </button>
               </div>
             </div>

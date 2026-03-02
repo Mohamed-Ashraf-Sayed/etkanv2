@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,7 +14,7 @@ import Button from "@/components/ui/Button";
 import CalendarPicker from "./CalendarPicker";
 import TimeSlotPicker from "./TimeSlotPicker";
 import BookingSuccessState from "./BookingSuccessState";
-import { consultationServices, timeSlots } from "@/data/booking";
+import { getConsultationServices, getTimeSlots } from "@/lib/data";
 
 type FormData = {
   date: Date;
@@ -26,16 +26,19 @@ type FormData = {
   notes?: string;
 };
 
-const dateFormatter = new Intl.DateTimeFormat("ar-EG", {
-  weekday: "long",
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
-
 export default function ConsultationTab() {
   const t = useTranslations("consultation");
   const tc = useTranslations("common");
+  const locale = useLocale();
+  const consultationServices = getConsultationServices(locale);
+  const timeSlots = getTimeSlots(locale);
+  const dateLocale = locale === "en" ? "en-US" : "ar-EG";
+  const dateFormatter = new Intl.DateTimeFormat(dateLocale, {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   const schema = z.object({
     date: z.date({ error: t("errorDate") }),

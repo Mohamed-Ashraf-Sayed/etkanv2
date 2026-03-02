@@ -1,0 +1,20 @@
+/* Override cursor:none from globals.css — admin doesn't use CustomCursor */
+body,
+a, button, [role="button"], input, textarea, select {
+  cursor: auto !important;
+}
+a, button, [role="button"] {
+  cursor: pointer !important;
+}
+input, textarea {
+  cursor: text !important;
+}
+select {
+  cursor: pointer !important;
+}
+
+/* Fix select dropdown styling for dark admin theme */
+select option {
+  background: #0B1F3F;
+  color: #F4F4F9;
+}

@@ -6,8 +6,8 @@ import { Link } from "@/i18n/navigation";
 import { ArrowLeft } from "lucide-react";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
-import { serviceCategories } from "@/data/services";
-import { useTranslations } from "next-intl";
+import { getServiceCategories } from "@/lib/data";
+import { useTranslations, useLocale } from "next-intl";
 
 const serviceImages: Record<string, string> = {
   "web-and-apps": "/images/service-web.jpg",
@@ -37,6 +37,8 @@ const fadeInReverse = {
 
 export default function ServicesSection() {
   const t = useTranslations("services");
+  const locale = useLocale();
+  const categories = getServiceCategories(locale);
 
   return (
     <section className="section-padding relative">
@@ -47,7 +49,7 @@ export default function ServicesSection() {
         />
 
         <div className="flex flex-col gap-20 lg:gap-28">
-          {serviceCategories.map((category, index) => {
+          {categories.map((category, index) => {
             const isEven = index % 2 === 0;
             const imageSrc = serviceImages[category.slug] || "/images/service-web.jpg";
 

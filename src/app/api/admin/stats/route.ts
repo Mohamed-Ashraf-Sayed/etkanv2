@@ -29,7 +29,7 @@ export async function GET() {
     totalBookings,
     pendingBookings,
     weekBookings,
-    activeChats: getActiveConversationsCount(),
+    activeChats: await getActiveConversationsCount(),
     recentBookings,
   });
 }

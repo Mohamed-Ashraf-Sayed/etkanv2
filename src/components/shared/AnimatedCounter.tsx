@@ -61,12 +61,12 @@ export default function AnimatedCounter({
           <IconComponent className="w-6 h-6 text-accent" />
         </div>
       )}
-      <div className="text-h1 font-bold font-cairo text-accent mb-2">
+      <div className="text-h1 font-bold font-cairo text-accent-dark dark:text-accent mb-2">
         {prefix}
         {displayValue}
         {suffix}
       </div>
-      <p className="text-text-secondary text-sm sm:text-base font-cairo">
+      <p className="text-inherit text-sm sm:text-base font-cairo font-medium">
         {label}
       </p>
     </div>

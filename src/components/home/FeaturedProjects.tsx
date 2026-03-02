@@ -7,8 +7,9 @@ import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
-import { projects } from "@/data/projects";
-import { useTranslations } from "next-intl";
+import type { Project } from "@/data/projects";
+import { getProjects } from "@/lib/data";
+import { useTranslations, useLocale } from "next-intl";
 
 const containerVariants = {
   hidden: {},
@@ -26,9 +27,17 @@ const cardVariants = {
   },
 };
 
-export default function FeaturedProjects() {
+interface Props {
+  dbProjects?: Project[];
+}
+
+export default function FeaturedProjects({ dbProjects = [] }: Props) {
   const t = useTranslations("featuredProjects");
-  const featuredProjects = projects.slice(0, 3);
+  const locale = useLocale();
+  const staticProjects = getProjects(locale);
+  const dbSlugs = new Set(dbProjects.map((p) => p.slug));
+  const allProjects = [...dbProjects, ...staticProjects.filter((p) => !dbSlugs.has(p.slug))];
+  const featuredProjects = allProjects.slice(0, 3);
 
   return (
     <section className="section-padding section-navy relative overflow-hidden">
