@@ -360,7 +360,9 @@
     "placeholder": "Type your message...",
     "error": "Sorry, an error occurred. Please try again or contact us directly.",
     "closeChat": "Close chat",
-    "openChat": "Open chat"
+    "openChat": "Open chat",
+    "endChat": "End conversation",
+    "endChatConfirm": "Are you sure you want to end this conversation?"
   },
   "common": {
     "loading": "Loading...",
