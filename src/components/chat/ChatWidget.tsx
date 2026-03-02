@@ -301,7 +301,7 @@ export default function ChatWidget() {
       {/* Floating Button */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-accent text-navy flex items-center justify-center shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-shadow duration-300"
+        className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-accent text-navy flex items-center justify-center shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-all duration-300 ${isOpen ? "sm:flex hidden" : ""}`}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         aria-label={isOpen ? t("closeChat") : t("openChat")}
@@ -347,10 +347,17 @@ export default function ChatWidget() {
               duration: 0.25,
               ease: [0.25, 0.1, 0.25, 1] as const,
             }}
-            className="fixed bottom-24 right-6 z-50 w-[calc(100vw-3rem)] sm:w-[380px] h-[520px] max-h-[80vh] rounded-2xl overflow-hidden shadow-2xl shadow-navy/20 border border-border flex flex-col bg-background"
+            className="fixed z-50 overflow-hidden shadow-2xl shadow-navy/20 border border-border flex flex-col bg-background bottom-0 right-0 w-full h-[100dvh] sm:bottom-24 sm:right-6 sm:w-[380px] sm:h-[520px] sm:max-h-[80vh] sm:rounded-2xl"
           >
             {/* Header */}
-            <div className="bg-navy px-5 py-4 flex items-center gap-3 shrink-0">
+            <div className="bg-navy px-4 sm:px-5 py-3 sm:py-4 flex items-center gap-3 shrink-0 safe-top">
+              {/* Mobile back button */}
+              <button
+                onClick={() => setIsOpen(false)}
+                className="sm:hidden w-8 h-8 rounded-lg flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
               <div className="w-9 h-9 rounded-full bg-accent/20 flex items-center justify-center">
                 {isAdminMode ? (
                   <Headset className="w-5 h-5 text-accent" />
@@ -372,7 +379,7 @@ export default function ChatWidget() {
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="w-8 h-8 rounded-lg flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors"
+                className="hidden sm:flex w-8 h-8 rounded-lg items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -479,7 +486,7 @@ export default function ChatWidget() {
             </div>
 
             {/* Input */}
-            <div className="border-t border-border p-3 shrink-0 bg-background">
+            <div className="border-t border-border p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shrink-0 bg-background">
               <div className="flex items-end gap-2">
                 <textarea
                   ref={textareaRef}
