@@ -49,7 +49,9 @@ export default function AIVoiceCall() {
   const isSpeakingRef = useRef(false);
 
   const isSupported =
-    typeof window !== "undefined" && !!navigator.mediaDevices?.getUserMedia;
+    typeof window !== "undefined" &&
+    !!navigator.mediaDevices?.getUserMedia &&
+    !!(window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext);
 
   // ------- Audio Playback Queue -------
   const playNextChunk = useCallback(() => {
@@ -63,6 +65,8 @@ export default function AIVoiceCall() {
 
     isPlayingRef.current = true;
     const chunk = audioQueueRef.current.shift()!;
+
+    // OpenAI sends 24kHz PCM — if context is at different rate, let WebAudio resample
     const buffer = ctx.createBuffer(1, chunk.length, 24000);
     buffer.getChannelData(0).set(chunk);
 
@@ -70,7 +74,12 @@ export default function AIVoiceCall() {
     source.buffer = buffer;
     source.connect(ctx.destination);
     source.onended = () => playNextChunk();
-    source.start();
+    try {
+      source.start();
+    } catch {
+      // iOS may throw if context is interrupted — skip this chunk
+      playNextChunk();
+    }
   }, []);
 
   const enqueueAudio = useCallback(
@@ -167,7 +176,6 @@ export default function AIVoiceCall() {
 
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
-          sampleRate: 24000,
           channelCount: 1,
           echoCancellation: true,
           noiseSuppression: true,
@@ -253,9 +261,22 @@ export default function AIVoiceCall() {
       const { token } = await tokenRes.json();
       if (!token) throw new Error("No token received");
 
-      // 2. Create AudioContext
-      const ctx = new AudioContext({ sampleRate: 24000 });
+      // 2. Create AudioContext (don't force sampleRate — mobile may not support it)
+      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const ctx = new AudioCtx();
       audioContextRef.current = ctx;
+
+      // Resume AudioContext (required on iOS Safari — must happen on user gesture)
+      if (ctx.state === "suspended") {
+        await ctx.resume();
+      }
+
+      // Play a tiny silent buffer to unlock audio playback on iOS
+      const silentBuffer = ctx.createBuffer(1, 1, ctx.sampleRate);
+      const silentSource = ctx.createBufferSource();
+      silentSource.buffer = silentBuffer;
+      silentSource.connect(ctx.destination);
+      silentSource.start();
 
       // 3. Connect WebSocket
       const ws = new WebSocket(
