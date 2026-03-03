@@ -364,6 +364,19 @@
     "endChat": "End conversation",
     "endChatConfirm": "Are you sure you want to end this conversation?"
   },
+  "voiceCall": {
+    "startCall": "AI Voice Call",
+    "endCall": "End Call",
+    "ringing": "Calling...",
+    "activeCall": "Voice Call",
+    "callEnded": "Call Ended",
+    "listening": "Listening...",
+    "thinking": "Thinking...",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "assistantName": "Etqan Assistant",
+    "companyName": "Etqan IT Solutions"
+  },
   "common": {
     "loading": "Loading...",
     "error": "An error occurred, please try again",

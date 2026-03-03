@@ -7,6 +7,7 @@ const ScrollProgress = dynamic(() => import("@/components/shared/ScrollProgress"
 const ScrollToTop = dynamic(() => import("@/components/shared/ScrollToTop"), { ssr: false });
 const WhatsAppButton = dynamic(() => import("@/components/shared/WhatsAppButton"), { ssr: false });
 const ChatWidget = dynamic(() => import("@/components/chat/ChatWidget"), { ssr: false });
+const AIVoiceCall = dynamic(() => import("@/components/chat/AIVoiceCall"), { ssr: false });
 
 export default function ClientShell() {
   return (
@@ -15,6 +16,7 @@ export default function ClientShell() {
       <ScrollProgress />
       <ScrollToTop />
       <WhatsAppButton />
+      <AIVoiceCall />
       <ChatWidget />
     </>
   );

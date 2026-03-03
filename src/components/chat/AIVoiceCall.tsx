@@ -1,0 +1,639 @@
+"use client";
+
+import { useState, useRef, useCallback, useEffect } from "react";
+import { useTranslations, useLocale } from "next-intl";
+import { motion, AnimatePresence } from "framer-motion";
+import { Phone, PhoneOff, Mic, MicOff, Bot } from "lucide-react";
+
+type CallState = "idle" | "ringing" | "active" | "ended";
+type VoiceState = "idle" | "listening" | "processing" | "speaking";
+
+// PCM16 audio playback helper
+function pcm16ToFloat32(pcm16: ArrayBuffer): Float32Array {
+  const int16 = new Int16Array(pcm16);
+  const float32 = new Float32Array(int16.length);
+  for (let i = 0; i < int16.length; i++) {
+    float32[i] = int16[i] / 32768;
+  }
+  return float32;
+}
+
+function base64ToArrayBuffer(base64: string): ArrayBuffer {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes.buffer;
+}
+
+export default function AIVoiceCall() {
+  const t = useTranslations("voiceCall");
+  const locale = useLocale();
+
+  const [callState, setCallState] = useState<CallState>("idle");
+  const [voiceState, setVoiceState] = useState<VoiceState>("idle");
+  const [duration, setDuration] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
+  const [currentText, setCurrentText] = useState("");
+
+  const wsRef = useRef<WebSocket | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const mediaStreamRef = useRef<MediaStream | null>(null);
+  const workletNodeRef = useRef<AudioWorkletNode | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const audioQueueRef = useRef<Float32Array[]>([]);
+  const isPlayingRef = useRef(false);
+  const messagesRef = useRef<{ role: string; content: string }[]>([]);
+  const isMutedRef = useRef(false);
+  const isSpeakingRef = useRef(false);
+
+  const isSupported =
+    typeof window !== "undefined" && !!navigator.mediaDevices?.getUserMedia;
+
+  // ------- Audio Playback Queue -------
+  const playNextChunk = useCallback(() => {
+    const ctx = audioContextRef.current;
+    if (!ctx || audioQueueRef.current.length === 0) {
+      isPlayingRef.current = false;
+      // Audio done playing — re-enable mic input
+      isSpeakingRef.current = false;
+      return;
+    }
+
+    isPlayingRef.current = true;
+    const chunk = audioQueueRef.current.shift()!;
+    const buffer = ctx.createBuffer(1, chunk.length, 24000);
+    buffer.getChannelData(0).set(chunk);
+
+    const source = ctx.createBufferSource();
+    source.buffer = buffer;
+    source.connect(ctx.destination);
+    source.onended = () => playNextChunk();
+    source.start();
+  }, []);
+
+  const enqueueAudio = useCallback(
+    (data: Float32Array) => {
+      audioQueueRef.current.push(data);
+      if (!isPlayingRef.current) {
+        playNextChunk();
+      }
+    },
+    [playNextChunk]
+  );
+
+  const clearAudioQueue = useCallback(() => {
+    audioQueueRef.current = [];
+    isPlayingRef.current = false;
+  }, []);
+
+  // ------- WebSocket Message Handler -------
+  const handleWSMessage = useCallback(
+    (event: MessageEvent) => {
+      const msg = JSON.parse(event.data);
+
+      switch (msg.type) {
+        case "response.audio.delta":
+          // Real-time audio from OpenAI — stop mic input to prevent feedback
+          if (!isSpeakingRef.current) {
+            isSpeakingRef.current = true;
+            // Clear any mic audio that might contain echo
+            if (wsRef.current?.readyState === WebSocket.OPEN) {
+              wsRef.current.send(JSON.stringify({ type: "input_audio_buffer.clear" }));
+            }
+          }
+          setVoiceState("speaking");
+          const pcmBuffer = base64ToArrayBuffer(msg.delta);
+          const floatData = pcm16ToFloat32(pcmBuffer);
+          enqueueAudio(floatData);
+          break;
+
+        case "response.audio_transcript.delta":
+          // AI response text (subtitle)
+          setCurrentText((prev) => prev + (msg.delta || ""));
+          break;
+
+        case "response.audio_transcript.done":
+          // Store full response
+          if (msg.transcript) {
+            messagesRef.current.push({
+              role: "assistant",
+              content: msg.transcript,
+            });
+          }
+          break;
+
+        case "input_audio_buffer.speech_started":
+          isSpeakingRef.current = false;
+          setVoiceState("listening");
+          setCurrentText("");
+          // Stop any playing audio when user starts speaking
+          clearAudioQueue();
+          break;
+
+        case "input_audio_buffer.speech_stopped":
+          setVoiceState("processing");
+          break;
+
+        case "conversation.item.input_audio_transcription.completed":
+          // User's speech transcription
+          if (msg.transcript) {
+            messagesRef.current.push({
+              role: "user",
+              content: msg.transcript,
+            });
+          }
+          break;
+
+        case "response.done":
+          isSpeakingRef.current = false;
+          setVoiceState("idle");
+          break;
+
+        case "error":
+          console.error("Realtime error:", msg.error);
+          break;
+      }
+    },
+    [enqueueAudio, clearAudioQueue]
+  );
+
+  // ------- Start Microphone Capture -------
+  const startMicrophone = useCallback(
+    async (ws: WebSocket) => {
+      const ctx = audioContextRef.current;
+      if (!ctx) return;
+
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          sampleRate: 24000,
+          channelCount: 1,
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+        },
+      });
+      mediaStreamRef.current = stream;
+
+      // Use ScriptProcessor as fallback (AudioWorklet needs HTTPS + module)
+      const source = ctx.createMediaStreamSource(stream);
+      const processor = ctx.createScriptProcessor(4096, 1, 1);
+
+      processor.onaudioprocess = (e) => {
+        // Use refs to avoid stale closure — skip when muted or AI is speaking
+        if (isMutedRef.current || isSpeakingRef.current || ws.readyState !== WebSocket.OPEN) return;
+
+        const inputData = e.inputBuffer.getChannelData(0);
+
+        // Resample to 24kHz if needed
+        const sampleRate = ctx.sampleRate;
+        let pcm16Data: Int16Array;
+
+        if (sampleRate !== 24000) {
+          const ratio = sampleRate / 24000;
+          const newLength = Math.floor(inputData.length / ratio);
+          pcm16Data = new Int16Array(newLength);
+          for (let i = 0; i < newLength; i++) {
+            const srcIdx = Math.floor(i * ratio);
+            pcm16Data[i] = Math.max(
+              -32768,
+              Math.min(32767, Math.floor(inputData[srcIdx] * 32768))
+            );
+          }
+        } else {
+          pcm16Data = new Int16Array(inputData.length);
+          for (let i = 0; i < inputData.length; i++) {
+            pcm16Data[i] = Math.max(
+              -32768,
+              Math.min(32767, Math.floor(inputData[i] * 32768))
+            );
+          }
+        }
+
+        // Convert to base64
+        const bytes = new Uint8Array(pcm16Data.buffer);
+        let binary = "";
+        for (let i = 0; i < bytes.length; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        const base64 = btoa(binary);
+
+        ws.send(
+          JSON.stringify({
+            type: "input_audio_buffer.append",
+            audio: base64,
+          })
+        );
+      };
+
+      source.connect(processor);
+      processor.connect(ctx.destination);
+      workletNodeRef.current = processor as unknown as AudioWorkletNode;
+    },
+    []
+  );
+
+  // ------- Call Controls -------
+  const startCall = async () => {
+    setCallState("ringing");
+    setDuration(0);
+    setCurrentText("");
+    messagesRef.current = [];
+
+    try {
+      // 1. Get ephemeral token
+      const tokenRes = await fetch("/api/realtime/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ locale }),
+      });
+
+      if (!tokenRes.ok) throw new Error("Failed to get token");
+      const { token } = await tokenRes.json();
+      if (!token) throw new Error("No token received");
+
+      // 2. Create AudioContext
+      const ctx = new AudioContext({ sampleRate: 24000 });
+      audioContextRef.current = ctx;
+
+      // 3. Connect WebSocket
+      const ws = new WebSocket(
+        `wss://api.openai.com/v1/realtime?model=gpt-realtime-1.5`,
+        ["realtime", `openai-insecure-api-key.${token}`, "openai-beta.realtime-v1"]
+      );
+
+      ws.onopen = async () => {
+        setCallState("active");
+        setVoiceState("listening");
+
+        // Send initial greeting prompt
+        const greetingsAr = [
+          "أهلاً، أنا سارة من إتقان. ممكن أعرف اسم حضرتك؟",
+          "أهلاً بيك، معاك سارة من إتقان. مع مين بتكلم لو سمحت؟",
+          "أهلاً وسهلاً، معاك سارة من إتقان. اسم حضرتك إيه؟",
+        ];
+        const greetingsEn = [
+          "Hi, I'm Sara from Etqan. Who am I speaking with?",
+          "Hello! Sara here from Etqan. May I have your name?",
+          "Hi! Sara from Etqan. What's your name?",
+        ];
+        const greetings = locale === "ar" ? greetingsAr : greetingsEn;
+        const greeting =
+          greetings[Math.floor(Math.random() * greetings.length)];
+
+        // Ask AI to say the greeting
+        ws.send(
+          JSON.stringify({
+            type: "response.create",
+            response: {
+              modalities: ["text", "audio"],
+              instructions: `Say exactly this and nothing else: "${greeting}"`,
+            },
+          })
+        );
+
+        // Start microphone
+        await startMicrophone(ws);
+      };
+
+      ws.onmessage = handleWSMessage;
+
+      ws.onerror = (err) => {
+        console.error("WebSocket error:", err);
+        endCall();
+      };
+
+      ws.onclose = () => {
+        if (callState !== "ended" && callState !== "idle") {
+          endCall();
+        }
+      };
+
+      wsRef.current = ws;
+    } catch (err) {
+      console.error("Failed to start call:", err);
+      setCallState("idle");
+    }
+  };
+
+  const endCall = useCallback(() => {
+    // Close WebSocket
+    if (wsRef.current) {
+      wsRef.current.close();
+      wsRef.current = null;
+    }
+
+    // Stop microphone
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach((t) => t.stop());
+      mediaStreamRef.current = null;
+    }
+
+    // Close AudioContext
+    if (audioContextRef.current) {
+      audioContextRef.current.close();
+      audioContextRef.current = null;
+    }
+
+    clearAudioQueue();
+    setVoiceState("idle");
+    setCallState("ended");
+    setCurrentText("");
+
+    // Send summary to Telegram
+    if (messagesRef.current.length >= 2) {
+      fetch("/api/voice-chat/summary", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: messagesRef.current,
+          duration,
+        }),
+      }).catch(() => {});
+    }
+
+    setTimeout(() => {
+      setCallState("idle");
+      setDuration(0);
+    }, 2000);
+  }, [clearAudioQueue, duration]);
+
+  const toggleMute = () => {
+    setIsMuted((prev) => {
+      isMutedRef.current = !prev;
+      return !prev;
+    });
+  };
+
+  // ------- Call Timer -------
+  useEffect(() => {
+    if (callState === "active") {
+      timerRef.current = setInterval(() => setDuration((d) => d + 1), 1000);
+    } else if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [callState]);
+
+  const formatDuration = (s: number) => {
+    const mins = Math.floor(s / 60);
+    const secs = s % 60;
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      wsRef.current?.close();
+      mediaStreamRef.current?.getTracks().forEach((t) => t.stop());
+      audioContextRef.current?.close();
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, []);
+
+  if (!isSupported) return null;
+
+  return (
+    <>
+      {/* Floating Call Button */}
+      <AnimatePresence>
+        {callState === "idle" && (
+          <motion.button
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            onClick={startCall}
+            className="fixed bottom-24 right-6 z-40 w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:bg-emerald-400 transition-all duration-300"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label={t("startCall")}
+            title={t("startCall")}
+          >
+            <Phone className="w-5 h-5" />
+            <span className="absolute inset-0 rounded-full bg-emerald-500/30 animate-ping" />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Call Screen */}
+      <AnimatePresence>
+        {callState !== "idle" && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="fixed inset-0 z-[60] bg-gradient-to-b from-navy via-navy to-[#0a0f1a] flex flex-col items-center justify-between py-safe"
+          >
+            {/* Top section */}
+            <div className="flex flex-col items-center pt-16 sm:pt-20">
+              <p className="text-white/40 text-sm font-cairo mb-6">
+                {callState === "ringing"
+                  ? t("ringing")
+                  : callState === "ended"
+                    ? t("callEnded")
+                    : t("activeCall")}
+              </p>
+
+              {/* Avatar */}
+              <div className="relative mb-6">
+                {(voiceState === "speaking" || callState === "ringing") && (
+                  <>
+                    <motion.span
+                      className="absolute inset-[-12px] rounded-full border-2 border-accent/20"
+                      animate={{
+                        scale: [1, 1.2, 1],
+                        opacity: [0.5, 0, 0.5],
+                      }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    />
+                    <motion.span
+                      className="absolute inset-[-6px] rounded-full border-2 border-accent/30"
+                      animate={{
+                        scale: [1, 1.15, 1],
+                        opacity: [0.7, 0.1, 0.7],
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        delay: 0.3,
+                      }}
+                    />
+                  </>
+                )}
+
+                {voiceState === "listening" && (
+                  <>
+                    <motion.span
+                      className="absolute inset-[-12px] rounded-full border-2 border-emerald-400/30"
+                      animate={{
+                        scale: [1, 1.3, 1],
+                        opacity: [0.6, 0, 0.6],
+                      }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    />
+                    <motion.span
+                      className="absolute inset-[-6px] rounded-full border-2 border-emerald-400/40"
+                      animate={{
+                        scale: [1, 1.2, 1],
+                        opacity: [0.8, 0.1, 0.8],
+                      }}
+                      transition={{
+                        duration: 1,
+                        repeat: Infinity,
+                        delay: 0.2,
+                      }}
+                    />
+                  </>
+                )}
+
+                <div
+                  className={`w-28 h-28 rounded-full flex items-center justify-center transition-colors duration-500 ${
+                    voiceState === "speaking"
+                      ? "bg-accent/20"
+                      : voiceState === "listening"
+                        ? "bg-emerald-500/20"
+                        : "bg-white/10"
+                  }`}
+                >
+                  <Bot
+                    className={`w-14 h-14 transition-colors duration-500 ${
+                      voiceState === "speaking"
+                        ? "text-accent"
+                        : voiceState === "listening"
+                          ? "text-emerald-400"
+                          : "text-white/60"
+                    }`}
+                  />
+                </div>
+              </div>
+
+              <h2 className="text-white text-xl font-cairo font-bold mb-1">
+                {t("assistantName")}
+              </h2>
+              <p className="text-white/40 text-sm font-cairo">
+                {t("companyName")}
+              </p>
+
+              {callState === "active" && (
+                <p className="text-accent text-lg font-mono mt-4">
+                  {formatDuration(duration)}
+                </p>
+              )}
+            </div>
+
+            {/* Voice state + subtitles */}
+            <div className="flex-1 flex flex-col items-center justify-center px-8 max-w-md w-full">
+              {voiceState === "speaking" && (
+                <div className="flex items-end gap-1 h-10 mb-4">
+                  {[3, 5, 2, 6, 4, 3, 5, 2, 4, 3].map((h, i) => (
+                    <motion.span
+                      key={i}
+                      className="w-1 bg-accent/70 rounded-full"
+                      animate={{
+                        height: [`${h * 4}px`, `${h * 8}px`, `${h * 4}px`],
+                      }}
+                      transition={{
+                        duration: 0.6,
+                        repeat: Infinity,
+                        delay: i * 0.08,
+                        ease: "easeInOut",
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {voiceState === "listening" && (
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="w-3 h-3 bg-emerald-400 rounded-full animate-pulse" />
+                  <span className="text-emerald-400/80 text-sm font-cairo">
+                    {t("listening")}
+                  </span>
+                </div>
+              )}
+
+              {voiceState === "processing" && (
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex gap-1">
+                    <span className="w-2 h-2 rounded-full bg-accent/50 animate-bounce [animation-delay:0ms]" />
+                    <span className="w-2 h-2 rounded-full bg-accent/50 animate-bounce [animation-delay:150ms]" />
+                    <span className="w-2 h-2 rounded-full bg-accent/50 animate-bounce [animation-delay:300ms]" />
+                  </div>
+                  <span className="text-accent/60 text-sm font-cairo">
+                    {t("thinking")}
+                  </span>
+                </div>
+              )}
+
+              {currentText && callState === "active" && (
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  key={currentText.substring(0, 30)}
+                  className="text-white/60 text-sm font-cairo text-center leading-relaxed max-h-24 overflow-y-auto"
+                >
+                  {currentText}
+                </motion.p>
+              )}
+            </div>
+
+            {/* Bottom controls */}
+            <div className="pb-12 sm:pb-16 flex items-center gap-6">
+              {callState === "active" && (
+                <>
+                  <motion.button
+                    whileTap={{ scale: 0.9 }}
+                    onClick={toggleMute}
+                    className={`w-14 h-14 rounded-full flex items-center justify-center transition-colors ${
+                      isMuted
+                        ? "bg-white/20 text-red-400"
+                        : "bg-white/10 text-white/70 hover:bg-white/20"
+                    }`}
+                    aria-label={isMuted ? t("unmute") : t("mute")}
+                  >
+                    {isMuted ? (
+                      <MicOff className="w-6 h-6" />
+                    ) : (
+                      <Mic className="w-6 h-6" />
+                    )}
+                  </motion.button>
+
+                  <motion.button
+                    whileTap={{ scale: 0.9 }}
+                    onClick={endCall}
+                    className="w-16 h-16 rounded-full bg-red-500 text-white flex items-center justify-center shadow-lg shadow-red-500/30 hover:bg-red-400 transition-colors"
+                    aria-label={t("endCall")}
+                  >
+                    <PhoneOff className="w-7 h-7" />
+                  </motion.button>
+                </>
+              )}
+
+              {callState === "ringing" && (
+                <motion.button
+                  whileTap={{ scale: 0.9 }}
+                  onClick={endCall}
+                  className="w-16 h-16 rounded-full bg-red-500 text-white flex items-center justify-center shadow-lg shadow-red-500/30"
+                  aria-label={t("endCall")}
+                >
+                  <PhoneOff className="w-7 h-7" />
+                </motion.button>
+              )}
+
+              {callState === "ended" && (
+                <p className="text-white/30 text-sm font-cairo">
+                  {formatDuration(duration)}
+                </p>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}

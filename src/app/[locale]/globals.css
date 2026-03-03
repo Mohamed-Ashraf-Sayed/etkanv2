@@ -145,6 +145,11 @@
   100% { background-position: 200% center; }
 }
 
+@keyframes voiceBar {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.8); }
+}
+
 /* ================================================
    BASE STYLES
    ================================================ */

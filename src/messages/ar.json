@@ -364,6 +364,19 @@
     "endChat": "إنهاء المحادثة",
     "endChatConfirm": "هل أنت متأكد من إنهاء المحادثة؟"
   },
+  "voiceCall": {
+    "startCall": "مكالمة صوتية مع AI",
+    "endCall": "إنهاء المكالمة",
+    "ringing": "جاري الاتصال...",
+    "activeCall": "مكالمة صوتية",
+    "callEnded": "انتهت المكالمة",
+    "listening": "بسمعك...",
+    "thinking": "بفكر...",
+    "mute": "كتم المايك",
+    "unmute": "فتح المايك",
+    "assistantName": "مساعد إتقان",
+    "companyName": "إتقان للحلول البرمجية"
+  },
   "common": {
     "loading": "جاري التحميل...",
     "error": "حصل خطأ، حاول تاني",
