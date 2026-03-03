@@ -1,14 +1,13 @@
-"use client";
-
 import Image from "next/image";
-import { ArrowLeft, Shield, Zap, Globe, Server, ChevronDown } from "lucide-react";
+import { ArrowLeft, Shield, Zap, Globe, Server } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import MagneticButton from "@/components/shared/MagneticButton";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
+import HeroScrollButton from "./HeroScrollButton";
 
-export default function Hero() {
-  const t = useTranslations("hero");
+export default async function Hero() {
+  const t = await getTranslations("hero");
 
   const services = [
     { icon: Globe, key: "serviceWeb" },
@@ -49,7 +48,7 @@ export default function Hero() {
             </span>
           </div>
 
-          {/* Main heading */}
+          {/* Main heading - LCP element */}
           <h1 className="text-display font-black font-cairo text-white max-w-5xl mt-8 animate-[slideUp_0.9s_ease-out_0.2s_both]">
             {t("titleLine1")}
             <span className="text-accent"> {t("titleHighlight")} </span>
@@ -119,17 +118,8 @@ export default function Hero() {
         </div>
       </Container>
 
-      {/* Scroll down button */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
-        <button
-          onClick={() => window.scrollTo({ top: window.innerHeight, behavior: "smooth" })}
-          className="flex flex-col items-center gap-2 text-white/40 hover:text-accent transition-colors duration-300 cursor-pointer"
-          aria-label={t("scrollAria")}
-        >
-          <span className="text-xs font-cairo">{t("scrollDown")}</span>
-          <ChevronDown className="w-5 h-5 animate-bounce" />
-        </button>
-      </div>
+      {/* Scroll down button (client component) */}
+      <HeroScrollButton label={t("scrollDown")} ariaLabel={t("scrollAria")} />
     </section>
   );
 }
