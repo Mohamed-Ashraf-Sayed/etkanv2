@@ -1,18 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 function getClientIP(req: NextRequest): string {
-  // Check common proxy headers
-  const forwarded = req.headers.get("x-forwarded-for");
-  if (forwarded) return forwarded.split(",")[0].trim();
-
-  const realIp = req.headers.get("x-real-ip");
-  if (realIp) return realIp;
-
-  return "unknown";
+  return getClientIp(req.headers);
 }
 
 export async function POST(req: NextRequest) {
+  // Rate limit: 60 page views per IP per minute
+  const ip = getClientIp(req.headers);
+  const { allowed } = rateLimit(`track:${ip}`, 60, 60 * 1000);
+  if (!allowed) {
+    return NextResponse.json({ ok: true }); // Silent drop
+  }
+
   try {
     const { path, referrer, sessionId } = await req.json();
 

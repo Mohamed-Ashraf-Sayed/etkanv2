@@ -14,12 +14,23 @@ import {
   formatFollowUpMessage,
   formatFollowUpWithAi,
 } from "@/lib/telegram";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
 export async function POST(req: Request) {
+  // Rate limit: 30 messages per IP per 5 minutes
+  const ip = getClientIp(req.headers);
+  const { allowed, resetIn } = rateLimit(`chat:${ip}`, 30, 5 * 60 * 1000);
+  if (!allowed) {
+    return new Response(JSON.stringify({ error: "طلبات كتير، حاول تاني بعد شوية" }), {
+      status: 429,
+      headers: { "Content-Type": "application/json", "Retry-After": String(Math.ceil(resetIn / 1000)) },
+    });
+  }
+
   try {
     const { messages, conversationId, locale } = await req.json();
 

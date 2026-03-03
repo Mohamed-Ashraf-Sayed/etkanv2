@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { comparePassword, signToken } from "@/lib/auth";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 export async function DELETE() {
   const response = NextResponse.json({ success: true });
@@ -15,6 +16,16 @@ export async function DELETE() {
 }
 
 export async function POST(req: NextRequest) {
+  // Rate limit: 5 login attempts per IP per 15 minutes
+  const ip = getClientIp(req.headers);
+  const { allowed, resetIn } = rateLimit(`login:${ip}`, 5, 15 * 60 * 1000);
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "محاولات كتير، حاول تاني بعد شوية" },
+      { status: 429, headers: { "Retry-After": String(Math.ceil(resetIn / 1000)) } }
+    );
+  }
+
   try {
     const { email, password } = await req.json();
 
