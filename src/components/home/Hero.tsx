@@ -41,15 +41,15 @@ export default async function Hero() {
       <Container className="relative z-10">
         <div className="pt-52 pb-20 lg:pt-60 lg:pb-24">
           {/* Top tag */}
-          <div className="animate-[fadeIn_0.5s_ease-out_both]">
+          <div>
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.08] border border-white/[0.1] text-accent text-sm font-cairo font-semibold backdrop-blur-sm">
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
               {t("badge")}
             </span>
           </div>
 
-          {/* Main heading - LCP element */}
-          <h1 className="text-display font-black font-cairo text-white max-w-5xl mt-8 animate-[slideUp_0.9s_ease-out_0.2s_both]">
+          {/* Main heading - LCP element (no animation to ensure LCP detection) */}
+          <h1 className="text-display font-black font-cairo text-white max-w-5xl mt-8">
             {t("titleLine1")}
             <span className="text-accent"> {t("titleHighlight")} </span>
             {t("titleLine2")}
