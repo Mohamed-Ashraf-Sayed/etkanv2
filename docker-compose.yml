@@ -1,13 +1,37 @@
 services:
+  db:
+    image: mariadb:10.11
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: etqan_root_2024
+      MYSQL_DATABASE: etqan
+      MYSQL_USER: etqan
+      MYSQL_PASSWORD: etqan_db_2024
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - "127.0.0.1:3306:3306"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   web:
     build: .
     ports:
       - "3001:3000"
     env_file:
       - .env.local
+    environment:
+      DATABASE_URL: mysql://etqan:etqan_db_2024@db:3306/etqan
     volumes:
       - uploads-data:/app/data/uploads
+    depends_on:
+      db:
+        condition: service_healthy
     restart: unless-stopped
 
 volumes:
   uploads-data:
+  db-data:
