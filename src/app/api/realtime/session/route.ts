@@ -52,9 +52,6 @@ This is a phone call — talk naturally, use the client's name, every response s
         input_audio_transcription: {
           model: "gpt-4o-mini-transcribe",
           language: locale === "en" ? "en" : "ar",
-          prompt: locale === "en"
-            ? "Phone numbers like 01094807674. Digits: 0 1 2 3 4 5 6 7 8 9 10."
-            : "أرقام تليفون مصرية زي 01094807674. صفر واحد اتنين تلاتة أربعة خمسة ستة سبعة تمانية تسعة عشرة.",
         },
         input_audio_noise_reduction: {
           type: "far_field",

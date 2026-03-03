@@ -36,6 +36,7 @@ export default function AIVoiceCall() {
   const [duration, setDuration] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [currentText, setCurrentText] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const wsRef = useRef<WebSocket | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -247,6 +248,7 @@ export default function AIVoiceCall() {
     setCallState("ringing");
     setDuration(0);
     setCurrentText("");
+    setErrorMsg("");
     messagesRef.current = [];
 
     try {
@@ -334,7 +336,12 @@ export default function AIVoiceCall() {
       wsRef.current = ws;
     } catch (err) {
       console.error("Failed to start call:", err);
-      setCallState("idle");
+      setErrorMsg(err instanceof Error ? err.message : "Connection failed");
+      setCallState("ended");
+      setTimeout(() => {
+        setCallState("idle");
+        setErrorMsg("");
+      }, 3000);
     }
   };
 
@@ -647,9 +654,14 @@ export default function AIVoiceCall() {
               )}
 
               {callState === "ended" && (
-                <p className="text-white/30 text-sm font-cairo">
-                  {formatDuration(duration)}
-                </p>
+                <div className="flex flex-col items-center gap-2">
+                  {errorMsg && (
+                    <p className="text-red-400 text-sm font-cairo">{errorMsg}</p>
+                  )}
+                  <p className="text-white/30 text-sm font-cairo">
+                    {formatDuration(duration)}
+                  </p>
+                </div>
               )}
             </div>
           </motion.div>
