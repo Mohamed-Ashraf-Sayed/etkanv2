@@ -1,25 +1,13 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import ScrollToTop from "@/components/shared/ScrollToTop";
-import CustomCursor from "@/components/shared/CustomCursor";
-import ScrollProgress from "@/components/shared/ScrollProgress";
-import PageTransition from "@/components/shared/PageTransition";
-import ChatWidget from "@/components/chat/ChatWidget";
-import WhatsAppButton from "@/components/shared/WhatsAppButton";
+import ClientShell from "@/components/shared/ClientShell";
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <CustomCursor />
-      <ScrollProgress />
       <Navbar />
-      <PageTransition>
-        <main>{children}</main>
-      </PageTransition>
+      <ClientShell>{children}</ClientShell>
       <Footer />
-      <ScrollToTop />
-      <WhatsAppButton />
-      <ChatWidget />
     </>
   );
 }

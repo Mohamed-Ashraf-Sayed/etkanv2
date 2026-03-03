@@ -1,8 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { gsap } from "gsap";
 import { ArrowLeft, Shield, Zap, Globe, Server, ChevronDown } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
@@ -18,68 +16,9 @@ export default function Hero() {
     { icon: Server, key: "serviceInfra" },
     { icon: Shield, key: "serviceSecurity" },
   ];
-  const sectionRef = useRef<HTMLElement>(null);
-  const tagRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const subtitleRef = useRef<HTMLParagraphElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        defaults: { ease: "power3.out" },
-      });
-
-      tl.from(tagRef.current, {
-        opacity: 0,
-        y: 20,
-        duration: 0.5,
-      })
-        .from(
-          headingRef.current,
-          { opacity: 0, y: 50, duration: 0.9 },
-          "-=0.2"
-        )
-        .from(
-          subtitleRef.current,
-          { opacity: 0, y: 30, duration: 0.6 },
-          "-=0.5"
-        )
-        .from(
-          ctaRef.current,
-          { opacity: 0, y: 20, duration: 0.5 },
-          "-=0.3"
-        )
-        .from(
-          statsRef.current,
-          { opacity: 0, y: 20, duration: 0.5 },
-          "-=0.2"
-        );
-
-      if (cardsRef.current) {
-        tl.from(
-          cardsRef.current.children,
-          {
-            opacity: 0,
-            y: 40,
-            stagger: 0.1,
-            duration: 0.6,
-          },
-          "-=0.4"
-        );
-      }
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative overflow-hidden"
-    >
+    <section className="relative overflow-hidden">
       {/* Background Image */}
       <Image
         src="/images/hero-bg.jpg"
@@ -88,7 +27,7 @@ export default function Hero() {
         priority
         className="object-cover"
         sizes="100vw"
-        quality={85}
+        quality={75}
       />
 
       {/* Dark navy overlay */}
@@ -103,7 +42,7 @@ export default function Hero() {
       <Container className="relative z-10">
         <div className="pt-52 pb-20 lg:pt-60 lg:pb-24">
           {/* Top tag */}
-          <div ref={tagRef} className="mb-8">
+          <div className="animate-[fadeIn_0.5s_ease-out_both]">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.08] border border-white/[0.1] text-accent text-sm font-cairo font-semibold backdrop-blur-sm">
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
               {t("badge")}
@@ -111,25 +50,19 @@ export default function Hero() {
           </div>
 
           {/* Main heading */}
-          <h1
-            ref={headingRef}
-            className="text-display font-black font-cairo text-white max-w-5xl"
-          >
+          <h1 className="text-display font-black font-cairo text-white max-w-5xl mt-8 animate-[slideUp_0.9s_ease-out_0.2s_both]">
             {t("titleLine1")}
             <span className="text-accent"> {t("titleHighlight")} </span>
             {t("titleLine2")}
           </h1>
 
           {/* Subtitle */}
-          <p
-            ref={subtitleRef}
-            className="text-lg sm:text-xl text-white/50 max-w-2xl font-cairo mt-6 leading-relaxed"
-          >
+          <p className="text-lg sm:text-xl text-white/50 max-w-2xl font-cairo mt-6 leading-relaxed animate-[slideUp_0.6s_ease-out_0.4s_both]">
             {t("subtitle")}
           </p>
 
           {/* CTA Buttons */}
-          <div ref={ctaRef} className="flex flex-col sm:flex-row gap-4 mt-10">
+          <div className="flex flex-col sm:flex-row gap-4 mt-10 animate-[slideUp_0.5s_ease-out_0.6s_both]">
             <MagneticButton strength={0.25}>
               <Button variant="gold" size="lg" href="/contact">
                 <span>{t("ctaPrimary")}</span>
@@ -149,10 +82,7 @@ export default function Hero() {
           </div>
 
           {/* Stats row */}
-          <div
-            ref={statsRef}
-            className="flex flex-wrap items-center gap-x-10 gap-y-4 mt-14 pt-8 border-t border-white/[0.08]"
-          >
+          <div className="flex flex-wrap items-center gap-x-10 gap-y-4 mt-14 pt-8 border-t border-white/[0.08] animate-[slideUp_0.5s_ease-out_0.8s_both]">
             {[
               { value: "+50", label: t("clients") },
               { value: "+100", label: t("projects") },
@@ -171,10 +101,7 @@ export default function Hero() {
           </div>
 
           {/* Service cards */}
-          <div
-            ref={cardsRef}
-            className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-14"
-          >
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-14 animate-[slideUp_0.6s_ease-out_1s_both]">
             {services.map((service) => (
               <div
                 key={service.key}

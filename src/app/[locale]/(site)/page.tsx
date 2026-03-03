@@ -8,7 +8,7 @@ import TestimonialsSection from "@/components/home/TestimonialsSection";
 import CTABanner from "@/components/home/CTABanner";
 import { getDbProjects } from "@/lib/db-projects";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export default async function HomePage() {
   const locale = await getLocale();
