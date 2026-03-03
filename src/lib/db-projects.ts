@@ -6,6 +6,13 @@ const categoryLabelsMap: Record<string, Record<string, string>> = {
   en: { website: "Websites", mobile: "Mobile Apps", systems: "Systems", infrastructure: "Infrastructure" },
 };
 
+// In-memory cache to reduce DB connections (hosting limit: 500/hour)
+const cache = {
+  projects: null as { data: Project[]; locale: string; ts: number } | null,
+  bySlug: new Map<string, { data: Project | undefined; ts: number }>(),
+};
+const TTL = 5 * 60 * 1000; // 5 minutes
+
 function dbToProject(p: Record<string, unknown>, locale: string): Project {
   const isEn = locale === "en";
   const testimonialRaw = JSON.parse(
@@ -38,23 +45,41 @@ function dbToProject(p: Record<string, unknown>, locale: string): Project {
 }
 
 export async function getDbProjects(locale: string = "ar"): Promise<Project[]> {
+  if (cache.projects && cache.projects.locale === locale && Date.now() - cache.projects.ts < TTL) {
+    return cache.projects.data;
+  }
+
   try {
     const dbProjects = await prisma.project.findMany({
       where: { isActive: true },
       orderBy: { displayOrder: "asc" },
     });
-    return dbProjects.map((p) => dbToProject(p as unknown as Record<string, unknown>, locale));
+    const result = dbProjects.map((p) => dbToProject(p as unknown as Record<string, unknown>, locale));
+    cache.projects = { data: result, locale, ts: Date.now() };
+    return result;
   } catch {
+    if (cache.projects) return cache.projects.data;
     return [];
   }
 }
 
 export async function getDbProjectBySlug(slug: string, locale: string = "ar"): Promise<Project | undefined> {
+  const key = `${slug}-${locale}`;
+  const cached = cache.bySlug.get(key);
+  if (cached && Date.now() - cached.ts < TTL) {
+    return cached.data;
+  }
+
   try {
     const p = await prisma.project.findUnique({ where: { slug } });
-    if (!p || !p.isActive) return undefined;
-    return dbToProject(p as unknown as Record<string, unknown>, locale);
+    if (!p || !p.isActive) {
+      cache.bySlug.set(key, { data: undefined, ts: Date.now() });
+      return undefined;
+    }
+    const result = dbToProject(p as unknown as Record<string, unknown>, locale);
+    cache.bySlug.set(key, { data: result, ts: Date.now() });
+    return result;
   } catch {
-    return undefined;
+    return cache.bySlug.get(key)?.data;
   }
 }
