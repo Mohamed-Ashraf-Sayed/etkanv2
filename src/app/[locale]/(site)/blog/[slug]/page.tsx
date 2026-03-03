@@ -1,25 +1,18 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getLocale } from "next-intl/server";
-import { blogPosts } from "@/data/blog";
 import { findBlogPostBySlug, getBlogPosts } from "@/lib/data";
 import BlogPostContent from "./BlogPostContent";
+
+export const revalidate = 3600;
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string; locale: string }>;
 }
 
-export async function generateStaticParams() {
-  return blogPosts.map((post) => ({
-    slug: post.slug,
-  }));
-}
-
 export async function generateMetadata({
   params,
 }: BlogPostPageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const locale = await getLocale();
+  const { slug, locale } = await params;
   const post = findBlogPostBySlug(slug, locale);
 
   if (!post) {
@@ -41,8 +34,7 @@ export async function generateMetadata({
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const { slug } = await params;
-  const locale = await getLocale();
+  const { slug, locale } = await params;
   const post = findBlogPostBySlug(slug, locale);
 
   if (!post) {

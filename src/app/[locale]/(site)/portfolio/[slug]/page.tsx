@@ -1,17 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { projects } from "@/data/projects";
 import { findProjectBySlug } from "@/lib/data";
 import ProjectDetailClient from "./ProjectDetailClient";
 
+export const revalidate = 3600;
+
 interface PageProps {
   params: Promise<{ slug: string; locale: string }>;
-}
-
-export async function generateStaticParams() {
-  return projects.map((project) => ({
-    slug: project.slug,
-  }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
