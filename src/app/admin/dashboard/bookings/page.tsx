@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Eye, Filter } from "lucide-react";
+import { Eye, Filter, Download } from "lucide-react";
 
 interface Booking {
   id: string;
@@ -72,6 +72,13 @@ export default function BookingsPage() {
           الحجوزات ({total})
         </h1>
         <div className="flex flex-wrap items-center gap-2">
+          <a
+            href={`/api/admin/bookings/export${statusFilter ? `?status=${statusFilter}` : ""}`}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-cairo font-medium bg-green-500/10 text-green-400 border border-green-500/20 hover:bg-green-500/20 transition-colors"
+          >
+            <Download className="w-4 h-4" />
+            تصدير Excel
+          </a>
           <Filter className="w-4 h-4 text-white/50" />
           {filters.map((f) => (
             <button

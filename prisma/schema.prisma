@@ -46,6 +46,20 @@ model ChatSession {
   updatedAt    DateTime @updatedAt
 }
 
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  referrer  String?
+  userAgent String?  @db.Text
+  country   String?
+  sessionId String
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([path])
+  @@index([sessionId])
+}
+
 model Project {
   id          String   @id @default(cuid())
   slug        String   @unique

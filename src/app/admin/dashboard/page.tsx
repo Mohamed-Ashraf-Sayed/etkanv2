@@ -6,6 +6,9 @@ import {
   Clock,
   MessageCircle,
   TrendingUp,
+  Eye,
+  Users,
+  BarChart3,
 } from "lucide-react";
 
 interface Stats {
@@ -23,14 +26,27 @@ interface Stats {
   }>;
 }
 
+interface VisitorStats {
+  today: { views: number; unique: number };
+  week: { views: number; unique: number };
+  month: { views: number; unique: number };
+  topPages: Array<{ path: string; views: number }>;
+  dailyViews: Array<{ date: string; count: number }>;
+}
+
 export default function DashboardPage() {
   const [stats, setStats] = useState<Stats | null>(null);
+  const [visitors, setVisitors] = useState<VisitorStats | null>(null);
 
   useEffect(() => {
     fetch("/api/admin/stats")
       .then((r) => r.json())
       .then(setStats)
       .catch(console.error);
+    fetch("/api/admin/visitors")
+      .then((r) => r.json())
+      .then(setVisitors)
+      .catch(() => {});
   }, []);
 
   if (!stats) {
@@ -107,6 +123,109 @@ export default function DashboardPage() {
           );
         })}
       </div>
+
+      {/* Visitor Stats */}
+      {visitors && (
+        <div className="mb-8">
+          <h2 className="text-lg font-bold font-cairo mb-4 flex items-center gap-2">
+            <BarChart3 className="w-5 h-5 text-[#D4AF37]" />
+            إحصائيات الزوار
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+            <div className="bg-[#0B1F3F] border border-white/10 rounded-2xl p-5">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2.5 rounded-xl bg-purple-400/10">
+                  <Eye className="w-4 h-4 text-purple-400" />
+                </div>
+                <span className="text-xs text-white/40 font-cairo">اليوم</span>
+              </div>
+              <p className="text-2xl font-bold text-white font-cairo">{visitors.today.views}</p>
+              <p className="text-xs text-white/40 font-cairo mt-1">
+                <Users className="w-3 h-3 inline ml-1" />
+                {visitors.today.unique} زائر فريد
+              </p>
+            </div>
+            <div className="bg-[#0B1F3F] border border-white/10 rounded-2xl p-5">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2.5 rounded-xl bg-cyan-400/10">
+                  <Eye className="w-4 h-4 text-cyan-400" />
+                </div>
+                <span className="text-xs text-white/40 font-cairo">هذا الأسبوع</span>
+              </div>
+              <p className="text-2xl font-bold text-white font-cairo">{visitors.week.views}</p>
+              <p className="text-xs text-white/40 font-cairo mt-1">
+                <Users className="w-3 h-3 inline ml-1" />
+                {visitors.week.unique} زائر فريد
+              </p>
+            </div>
+            <div className="bg-[#0B1F3F] border border-white/10 rounded-2xl p-5">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2.5 rounded-xl bg-emerald-400/10">
+                  <Eye className="w-4 h-4 text-emerald-400" />
+                </div>
+                <span className="text-xs text-white/40 font-cairo">هذا الشهر</span>
+              </div>
+              <p className="text-2xl font-bold text-white font-cairo">{visitors.month.views}</p>
+              <p className="text-xs text-white/40 font-cairo mt-1">
+                <Users className="w-3 h-3 inline ml-1" />
+                {visitors.month.unique} زائر فريد
+              </p>
+            </div>
+          </div>
+
+          {/* Daily Chart (simple bar) */}
+          {visitors.dailyViews.length > 0 && (
+            <div className="bg-[#0B1F3F] border border-white/10 rounded-2xl p-5 mb-4">
+              <h3 className="text-sm font-bold font-cairo text-white/60 mb-4">الزيارات اليومية (آخر 7 أيام)</h3>
+              <div className="flex items-end gap-2 h-32">
+                {visitors.dailyViews.map((day) => {
+                  const max = Math.max(...visitors.dailyViews.map((d) => d.count), 1);
+                  const height = (day.count / max) * 100;
+                  return (
+                    <div key={day.date} className="flex-1 flex flex-col items-center gap-1">
+                      <span className="text-[10px] text-white/40 font-cairo">{day.count}</span>
+                      <div
+                        className="w-full bg-[#D4AF37]/30 rounded-t-lg min-h-[4px] transition-all"
+                        style={{ height: `${height}%` }}
+                      />
+                      <span className="text-[9px] text-white/30 font-cairo">
+                        {new Date(day.date).toLocaleDateString("ar-EG", { weekday: "short" })}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Top Pages */}
+          {visitors.topPages.length > 0 && (
+            <div className="bg-[#0B1F3F] border border-white/10 rounded-2xl p-5">
+              <h3 className="text-sm font-bold font-cairo text-white/60 mb-3">أكثر الصفحات زيارة</h3>
+              <div className="space-y-2">
+                {visitors.topPages.map((pg, i) => {
+                  const max = visitors.topPages[0].views;
+                  const width = (pg.views / max) * 100;
+                  return (
+                    <div key={pg.path} className="flex items-center gap-3">
+                      <span className="text-xs text-white/30 font-cairo w-5">{i + 1}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-xs text-white/70 font-cairo truncate" dir="ltr">{pg.path}</span>
+                          <span className="text-xs text-white/40 font-cairo mr-2">{pg.views}</span>
+                        </div>
+                        <div className="w-full bg-white/5 rounded-full h-1.5">
+                          <div className="bg-[#D4AF37]/50 h-1.5 rounded-full" style={{ width: `${width}%` }} />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Recent Bookings */}
       <div className="bg-[#0B1F3F] border border-white/10 rounded-2xl p-6">
