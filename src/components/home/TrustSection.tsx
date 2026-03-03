@@ -88,7 +88,7 @@ export default function TrustSection() {
         <div className="gold-line mx-auto mb-10" />
 
         {/* Company logos label */}
-        <p className="text-center text-sm text-text-muted font-cairo mb-8">
+        <p className="text-center text-sm text-text-secondary font-cairo mb-8">
           {t("clientsLabel")}
         </p>
 

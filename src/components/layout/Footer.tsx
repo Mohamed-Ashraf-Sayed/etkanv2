@@ -77,11 +77,12 @@ export default function Footer() {
                   type="email"
                   placeholder={t("emailPlaceholder")}
                   dir="ltr"
-                  className="flex-1 px-3 py-2 text-sm rounded-lg bg-white/10 border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:border-accent transition-colors font-cairo"
+                  className="flex-1 px-3 py-2 text-sm rounded-lg bg-white/10 border border-white/20 text-white placeholder:text-white/60 focus:outline-none focus:border-accent transition-colors font-cairo"
                 />
                 <button
                   type="submit"
                   className="px-3 py-2 rounded-lg bg-accent hover:bg-accent-light text-navy font-bold transition-colors duration-200"
+                  aria-label="Subscribe"
                 >
                   <Send size={14} />
                 </button>
@@ -205,7 +206,7 @@ export default function Footer() {
             {partnerships.map((partner) => (
               <span
                 key={partner}
-                className="text-xs text-white/30 font-cairo"
+                className="text-xs text-white/60 font-cairo"
                 dir="ltr"
               >
                 {partner}
@@ -219,20 +220,20 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <Container className="py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-white/40 font-cairo">
+            <p className="text-xs text-white/60 font-cairo">
               {t("copyright")}
             </p>
             <div className="flex items-center gap-4">
               <Link
                 href="#"
-                className="text-xs text-white/40 font-cairo hover:text-accent transition-colors"
+                className="text-xs text-white/60 font-cairo hover:text-accent transition-colors"
               >
                 {t("privacy")}
               </Link>
               <span className="text-white/20">|</span>
               <Link
                 href="#"
-                className="text-xs text-white/40 font-cairo hover:text-accent transition-colors"
+                className="text-xs text-white/60 font-cairo hover:text-accent transition-colors"
               >
                 {t("terms")}
               </Link>

@@ -105,6 +105,7 @@ export default function ServicesSection() {
                   <Link
                     href="/services"
                     className="inline-flex items-center gap-2.5 text-accent font-semibold font-cairo transition-all duration-300 hover:gap-4 group/link"
+                    aria-label={`${t("learnMore")} - ${category.title}`}
                   >
                     <span>{t("learnMore")}</span>
                     <ArrowLeft className="w-4 h-4 transition-transform duration-300 group-hover/link:-translate-x-1" />

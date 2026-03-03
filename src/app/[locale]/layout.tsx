@@ -26,8 +26,6 @@ const BASE_URL =
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
   viewportFit: "cover",
 };
 
@@ -65,8 +63,12 @@ export const metadata: Metadata = {
     description:
       "شريكك التقني الموثوق لتطوير المواقع والتطبيقات، الأنظمة الداخلية، تجهيز البنية التحتية، والدعم الفني.",
   },
+  metadataBase: new URL(BASE_URL),
   alternates: {
-    canonical: BASE_URL,
+    languages: {
+      ar: BASE_URL,
+      en: `${BASE_URL}/en`,
+    },
   },
   robots: {
     index: true,
