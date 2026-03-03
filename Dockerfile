@@ -33,6 +33,8 @@ COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
 COPY --from=builder /app/node_modules/mariadb ./node_modules/mariadb
 COPY --from=builder /app/node_modules/dotenv ./node_modules/dotenv
+COPY --from=builder /app/node_modules/valibot ./node_modules/valibot
+COPY --from=builder /app/node_modules/@prisma/dev ./node_modules/@prisma/dev
 COPY docker-entrypoint.sh ./
 
 RUN mkdir -p /app/data/uploads/projects && chown -R nextjs:nodejs /app/data
