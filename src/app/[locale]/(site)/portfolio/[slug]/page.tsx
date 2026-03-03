@@ -6,7 +6,7 @@ import { findProjectBySlug } from "@/lib/data";
 import { getDbProjectBySlug } from "@/lib/db-projects";
 import ProjectDetailClient from "./ProjectDetailClient";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 interface PageProps {
   params: Promise<{ slug: string; locale: string }>;
