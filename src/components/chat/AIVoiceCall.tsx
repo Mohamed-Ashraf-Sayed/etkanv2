@@ -171,19 +171,10 @@ export default function AIVoiceCall() {
 
   // ------- Start Microphone Capture -------
   const startMicrophone = useCallback(
-    async (ws: WebSocket) => {
+    (ws: WebSocket) => {
       const ctx = audioContextRef.current;
-      if (!ctx) return;
-
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          channelCount: 1,
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true,
-        },
-      });
-      mediaStreamRef.current = stream;
+      const stream = mediaStreamRef.current;
+      if (!ctx || !stream) return;
 
       // Use ScriptProcessor as fallback (AudioWorklet needs HTTPS + module)
       const source = ctx.createMediaStreamSource(stream);
@@ -280,13 +271,24 @@ export default function AIVoiceCall() {
       silentSource.connect(ctx.destination);
       silentSource.start();
 
-      // 3. Connect WebSocket
+      // 3. Get microphone NOW (must be in user gesture context for iOS)
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          channelCount: 1,
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+        },
+      });
+      mediaStreamRef.current = stream;
+
+      // 4. Connect WebSocket
       const ws = new WebSocket(
         `wss://api.openai.com/v1/realtime?model=gpt-realtime-1.5`,
         ["realtime", `openai-insecure-api-key.${token}`, "openai-beta.realtime-v1"]
       );
 
-      ws.onopen = async () => {
+      ws.onopen = () => {
         setCallState("active");
         setVoiceState("listening");
 
@@ -316,8 +318,8 @@ export default function AIVoiceCall() {
           })
         );
 
-        // Start microphone
-        await startMicrophone(ws);
+        // Start microphone capture (stream already acquired)
+        startMicrophone(ws);
       };
 
       ws.onmessage = handleWSMessage;
