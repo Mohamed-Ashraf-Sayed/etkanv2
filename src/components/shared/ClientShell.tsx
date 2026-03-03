@@ -8,12 +8,11 @@ const ScrollToTop = dynamic(() => import("@/components/shared/ScrollToTop"), { s
 const WhatsAppButton = dynamic(() => import("@/components/shared/WhatsAppButton"), { ssr: false });
 const ChatWidget = dynamic(() => import("@/components/chat/ChatWidget"), { ssr: false });
 
-export default function ClientShell({ children }: { children: React.ReactNode }) {
+export default function ClientShell() {
   return (
     <>
       <CustomCursor />
       <ScrollProgress />
-      <main>{children}</main>
       <ScrollToTop />
       <WhatsAppButton />
       <ChatWidget />

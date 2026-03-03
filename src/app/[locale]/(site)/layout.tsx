@@ -6,8 +6,9 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
   return (
     <>
       <Navbar />
-      <ClientShell>{children}</ClientShell>
+      <main>{children}</main>
       <Footer />
+      <ClientShell />
     </>
   );
 }
