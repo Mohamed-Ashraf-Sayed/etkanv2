@@ -51,13 +51,16 @@ model PageView {
   path      String
   referrer  String?
   userAgent String?  @db.Text
+  ip        String?
   country   String?
+  city      String?
   sessionId String
   createdAt DateTime @default(now())
 
   @@index([createdAt])
   @@index([path])
   @@index([sessionId])
+  @@index([ip])
 }
 
 model Project {

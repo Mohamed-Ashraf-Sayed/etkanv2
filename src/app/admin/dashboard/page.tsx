@@ -26,12 +26,23 @@ interface Stats {
   }>;
 }
 
+interface Visitor {
+  ip: string;
+  sessionId: string;
+  pages: number;
+  lastPath: string;
+  device: string;
+  firstSeen: string;
+  lastSeen: string;
+}
+
 interface VisitorStats {
   today: { views: number; unique: number };
   week: { views: number; unique: number };
   month: { views: number; unique: number };
   topPages: Array<{ path: string; views: number }>;
   dailyViews: Array<{ date: string; count: number }>;
+  recentVisitors: Visitor[];
 }
 
 export default function DashboardPage() {
@@ -198,29 +209,111 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {/* Top Pages */}
-          {visitors.topPages.length > 0 && (
-            <div className="bg-[#0B1F3F] border border-white/10 rounded-2xl p-5">
-              <h3 className="text-sm font-bold font-cairo text-white/60 mb-3">أكثر الصفحات زيارة</h3>
-              <div className="space-y-2">
-                {visitors.topPages.map((pg, i) => {
-                  const max = visitors.topPages[0].views;
-                  const width = (pg.views / max) * 100;
-                  return (
-                    <div key={pg.path} className="flex items-center gap-3">
-                      <span className="text-xs text-white/30 font-cairo w-5">{i + 1}</span>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs text-white/70 font-cairo truncate" dir="ltr">{pg.path}</span>
-                          <span className="text-xs text-white/40 font-cairo mr-2">{pg.views}</span>
-                        </div>
-                        <div className="w-full bg-white/5 rounded-full h-1.5">
-                          <div className="bg-[#D4AF37]/50 h-1.5 rounded-full" style={{ width: `${width}%` }} />
+          {/* Top Pages + Recent Visitors side by side */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+            {visitors.topPages.length > 0 && (
+              <div className="bg-[#0B1F3F] border border-white/10 rounded-2xl p-5">
+                <h3 className="text-sm font-bold font-cairo text-white/60 mb-3">أكثر الصفحات زيارة</h3>
+                <div className="space-y-2">
+                  {visitors.topPages.map((pg, i) => {
+                    const max = visitors.topPages[0].views;
+                    const width = (pg.views / max) * 100;
+                    return (
+                      <div key={pg.path} className="flex items-center gap-3">
+                        <span className="text-xs text-white/30 font-cairo w-5">{i + 1}</span>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-xs text-white/70 font-cairo truncate" dir="ltr">{pg.path}</span>
+                            <span className="text-xs text-white/40 font-cairo mr-2">{pg.views}</span>
+                          </div>
+                          <div className="w-full bg-white/5 rounded-full h-1.5">
+                            <div className="bg-[#D4AF37]/50 h-1.5 rounded-full" style={{ width: `${width}%` }} />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Device breakdown from visitors */}
+            {visitors.recentVisitors && visitors.recentVisitors.length > 0 && (
+              <div className="bg-[#0B1F3F] border border-white/10 rounded-2xl p-5">
+                <h3 className="text-sm font-bold font-cairo text-white/60 mb-3">الأجهزة المستخدمة</h3>
+                <div className="space-y-2">
+                  {Object.entries(
+                    visitors.recentVisitors.reduce((acc: Record<string, number>, v) => {
+                      acc[v.device] = (acc[v.device] || 0) + 1;
+                      return acc;
+                    }, {})
+                  )
+                    .sort((a, b) => b[1] - a[1])
+                    .map(([device, count]) => {
+                      const total = visitors.recentVisitors.length;
+                      const pct = Math.round((count / total) * 100);
+                      return (
+                        <div key={device} className="flex items-center gap-3">
+                          <span className="text-xs text-white/70 font-cairo w-28">{device}</span>
+                          <div className="flex-1">
+                            <div className="w-full bg-white/5 rounded-full h-2">
+                              <div className="bg-purple-400/60 h-2 rounded-full" style={{ width: `${pct}%` }} />
+                            </div>
+                          </div>
+                          <span className="text-xs text-white/40 font-cairo w-12 text-left" dir="ltr">{pct}%</span>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Recent Visitors Table */}
+          {visitors.recentVisitors && visitors.recentVisitors.length > 0 && (
+            <div className="bg-[#0B1F3F] border border-white/10 rounded-2xl overflow-hidden">
+              <div className="p-5 border-b border-white/10">
+                <h3 className="text-sm font-bold font-cairo text-white/60">آخر الزوار (هذا الأسبوع)</h3>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-white/10">
+                      <th className="px-4 py-3 text-right text-[11px] font-cairo font-medium text-white/40">IP</th>
+                      <th className="px-4 py-3 text-right text-[11px] font-cairo font-medium text-white/40">الجهاز</th>
+                      <th className="px-4 py-3 text-right text-[11px] font-cairo font-medium text-white/40">الصفحات</th>
+                      <th className="px-4 py-3 text-right text-[11px] font-cairo font-medium text-white/40">آخر صفحة</th>
+                      <th className="px-4 py-3 text-right text-[11px] font-cairo font-medium text-white/40">أول زيارة</th>
+                      <th className="px-4 py-3 text-right text-[11px] font-cairo font-medium text-white/40">آخر نشاط</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {visitors.recentVisitors.map((v, i) => {
+                      const isOnline = Date.now() - new Date(v.lastSeen).getTime() < 5 * 60 * 1000;
+                      return (
+                        <tr key={`${v.sessionId}-${i}`} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-2">
+                              {isOnline && <span className="w-2 h-2 rounded-full bg-green-500 shrink-0" />}
+                              <span className="text-xs text-white/70 font-mono" dir="ltr">{v.ip}</span>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3 text-xs text-white/50 font-cairo">{v.device}</td>
+                          <td className="px-4 py-3">
+                            <span className="text-xs bg-white/10 text-white/60 px-2 py-0.5 rounded-full font-cairo">{v.pages}</span>
+                          </td>
+                          <td className="px-4 py-3 text-xs text-white/50 font-cairo truncate max-w-[150px]" dir="ltr">{v.lastPath}</td>
+                          <td className="px-4 py-3 text-xs text-white/40 font-cairo">
+                            {new Date(v.firstSeen).toLocaleString("ar-EG", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+                          </td>
+                          <td className="px-4 py-3 text-xs text-white/40 font-cairo">
+                            {new Date(v.lastSeen).toLocaleString("ar-EG", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             </div>
           )}

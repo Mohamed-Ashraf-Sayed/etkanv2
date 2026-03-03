@@ -24,6 +24,7 @@ export async function GET() {
     monthUnique,
     topPages,
     dailyViews,
+    recentVisitors,
   ] = await Promise.all([
     // Total views
     prisma.pageView.count({ where: { createdAt: { gte: today } } }),
@@ -58,6 +59,30 @@ export async function GET() {
       GROUP BY DATE(createdAt)
       ORDER BY date ASC
     `,
+    // Recent unique visitors with IP (last 50)
+    prisma.$queryRaw<Array<{
+      ip: string;
+      sessionId: string;
+      pages: bigint;
+      lastPath: string;
+      userAgent: string | null;
+      firstSeen: Date;
+      lastSeen: Date;
+    }>>`
+      SELECT
+        ip,
+        sessionId,
+        COUNT(*) as pages,
+        (SELECT path FROM PageView p2 WHERE p2.sessionId = PageView.sessionId ORDER BY createdAt DESC LIMIT 1) as lastPath,
+        (SELECT userAgent FROM PageView p3 WHERE p3.sessionId = PageView.sessionId ORDER BY createdAt DESC LIMIT 1) as userAgent,
+        MIN(createdAt) as firstSeen,
+        MAX(createdAt) as lastSeen
+      FROM PageView
+      WHERE createdAt >= ${weekAgo}
+      GROUP BY ip, sessionId
+      ORDER BY lastSeen DESC
+      LIMIT 50
+    `,
   ]);
 
   return NextResponse.json({
@@ -69,5 +94,30 @@ export async function GET() {
       date: d.date,
       count: Number(d.count),
     })),
+    recentVisitors: recentVisitors.map((v) => ({
+      ip: v.ip,
+      sessionId: v.sessionId,
+      pages: Number(v.pages),
+      lastPath: v.lastPath,
+      device: parseDevice(v.userAgent),
+      firstSeen: v.firstSeen,
+      lastSeen: v.lastSeen,
+    })),
   });
+}
+
+function parseDevice(ua: string | null): string {
+  if (!ua) return "غير معروف";
+  const lower = ua.toLowerCase();
+  if (lower.includes("iphone")) return "iPhone";
+  if (lower.includes("ipad")) return "iPad";
+  if (lower.includes("android")) {
+    if (lower.includes("mobile")) return "Android Phone";
+    return "Android Tablet";
+  }
+  if (lower.includes("macintosh")) return "Mac";
+  if (lower.includes("windows")) return "Windows";
+  if (lower.includes("linux")) return "Linux";
+  if (lower.includes("bot") || lower.includes("crawler") || lower.includes("spider")) return "Bot";
+  return "غير معروف";
 }
