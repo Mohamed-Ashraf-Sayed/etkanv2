@@ -370,10 +370,17 @@
     "backHome": "Back to Home",
     "bookAnother": "Book Another",
     "home": "Home",
-    "select": "Select..."
+    "select": "Select...",
+    "whatsapp": "WhatsApp"
   },
   "bookingSuccess": {
     "backHome": "Back to Home",
     "bookAnother": "Book Another"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "The page you're looking for doesn't exist or has been moved. You can go back to the homepage or browse our services.",
+    "backHome": "Back to Home",
+    "viewServices": "Browse Services"
   }
 }

@@ -5,6 +5,7 @@ import CustomCursor from "@/components/shared/CustomCursor";
 import ScrollProgress from "@/components/shared/ScrollProgress";
 import PageTransition from "@/components/shared/PageTransition";
 import ChatWidget from "@/components/chat/ChatWidget";
+import WhatsAppButton from "@/components/shared/WhatsAppButton";
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -17,6 +18,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       </PageTransition>
       <Footer />
       <ScrollToTop />
+      <WhatsAppButton />
       <ChatWidget />
     </>
   );
