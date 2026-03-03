@@ -33,7 +33,13 @@ COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
 COPY --from=builder /app/node_modules/mariadb ./node_modules/mariadb
 COPY --from=builder /app/node_modules/dotenv ./node_modules/dotenv
+# Copy full prisma + deps for db push at startup
 COPY --from=builder /app/node_modules/valibot ./node_modules/valibot
+COPY --from=builder /app/node_modules/pathe ./node_modules/pathe
+COPY --from=builder /app/node_modules/c12 ./node_modules/c12
+COPY --from=builder /app/node_modules/deepmerge-ts ./node_modules/deepmerge-ts
+COPY --from=builder /app/node_modules/empathic ./node_modules/empathic
+COPY --from=builder /app/node_modules/@prisma/config ./node_modules/@prisma/config
 COPY --from=builder /app/node_modules/@prisma/dev ./node_modules/@prisma/dev
 COPY docker-entrypoint.sh ./
 
