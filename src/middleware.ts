@@ -1,5 +1,5 @@
 import createMiddleware from "next-intl/middleware";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { routing } from "./i18n/routing";
 
 const ARABIC_COUNTRIES = new Set([
@@ -18,25 +18,21 @@ export default function middleware(request: NextRequest) {
     return intlMiddleware(request);
   }
 
-  // Detect country from headers (Cloudflare, Vercel, nginx GeoIP)
+  // Detect country from headers (nginx GeoIP, Cloudflare, Vercel)
   const country =
+    request.headers.get("x-country-code") ||
     request.headers.get("cf-ipcountry") ||
     request.headers.get("x-vercel-ip-country") ||
-    request.headers.get("x-country-code") ||
     "";
 
   if (country && !ARABIC_COUNTRIES.has(country.toUpperCase())) {
-    // Non-Arabic country → redirect to English
+    // Non-Arabic country → redirect to /en version
     const url = request.nextUrl.clone();
-    url.pathname = `/en${pathname}`;
-    return intlMiddleware(
-      new NextRequest(url, {
-        headers: request.headers,
-      })
-    );
+    url.pathname = `/en${pathname === "/" ? "" : pathname}`;
+    return NextResponse.redirect(url);
   }
 
-  // Arabic country or unknown → default Arabic
+  // Arabic country or unknown → default Arabic (handled by next-intl)
   return intlMiddleware(request);
 }
 
