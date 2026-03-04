@@ -178,14 +178,14 @@ export default function AIVoiceCall() {
 
         // Send initial greeting
         const greetingsAr = [
-          "أهلاً، أنا سارة من إتقان. ممكن أعرف اسم حضرتك؟",
-          "أهلاً بيك، معاك سارة من إتقان. مع مين بتكلم لو سمحت؟",
-          "أهلاً وسهلاً، معاك سارة من إتقان. اسم حضرتك إيه؟",
+          "أهلاً! أنا سارة من إتقان. نورتنا والله! ممكن أعرف اسم حضرتك؟",
+          "أهلاً بيك! معاك سارة من إتقان. تشرفنا إنك كلمتنا — ممكن أعرف اسم حضرتك؟",
+          "أهلاً وسهلاً! أنا سارة من إتقان، بنساعد الناس تحوّل أفكارها لمشاريع حقيقية. اسم حضرتك إيه؟",
         ];
         const greetingsEn = [
-          "Hi, I'm Sara from Etqan. Who am I speaking with?",
-          "Hello! Sara here from Etqan. May I have your name?",
-          "Hi! Sara from Etqan. What's your name?",
+          "Hey! I'm Sara from Etqan. So glad you reached out! What's your name?",
+          "Hi! Sara from Etqan here — we help businesses build amazing digital products. Who am I speaking with?",
+          "Hello! I'm Sara from Etqan. Thanks for calling — may I know your name?",
         ];
         const greetings = locale === "ar" ? greetingsAr : greetingsEn;
         const greeting = greetings[Math.floor(Math.random() * greetings.length)];
