@@ -346,7 +346,7 @@ export const projects: Project[] = [
       { metric: "معدل الرضا", value: "92%", description: "نسبة رضا الطلاب" },
     ],
     tags: ["WordPress", "LMS", "منصة تعليمية", "تعليم إلكتروني"],
-    thumbnail: "/images/projects/al-saleh-education.jpg",
+    thumbnail: "/images/projects/al-saleh-education.jpeg",
     techStack: ["WordPress", "LearnPress", "Elementor", "PHP"],
     duration: "6 أسابيع",
     year: "2024",
