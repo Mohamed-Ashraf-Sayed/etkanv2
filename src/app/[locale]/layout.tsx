@@ -81,6 +81,9 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  verification: {
+    google: "BkAHwm5poUwLr4vAH32Gbs4CrSDLEyJtSyk8S8irKbA",
+  },
 };
 
 export default async function LocaleLayout({
