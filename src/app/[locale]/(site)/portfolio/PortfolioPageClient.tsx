@@ -17,6 +17,7 @@ import { getProjectCategories, getProjects } from "@/lib/data";
 
 function ProjectCard({ project }: { project: Project }) {
   const firstResult = project.results[0];
+  const imageCount = 1 + (project.images?.length || 0);
 
   return (
     <motion.div
@@ -26,14 +27,25 @@ function ProjectCard({ project }: { project: Project }) {
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
     >
-      <Link href={`/portfolio/${project.slug}`} className="block h-full">
-        <div className="card rounded-xl overflow-hidden cursor-pointer h-full flex flex-col">
+      <Link href={`/portfolio/${project.slug}`} className="block h-full group">
+        <div className="card rounded-xl overflow-hidden cursor-pointer h-full flex flex-col transition-all duration-500 hover:shadow-xl hover:shadow-accent/5 hover:border-accent/20 hover:-translate-y-1">
           {/* Thumbnail */}
-          <ProjectThumbnail
-            category={project.category}
-            title={project.title}
-            thumbnail={project.thumbnail}
-          />
+          <div className="relative">
+            <ProjectThumbnail
+              category={project.category}
+              title={project.title}
+              thumbnail={project.thumbnail}
+            />
+            {/* Image count badge */}
+            {imageCount > 1 && (
+              <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-sm text-white/90 px-2.5 py-1 rounded-lg text-[11px] font-cairo flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                {imageCount}
+              </div>
+            )}
+          </div>
 
           <div className="p-6 flex flex-col flex-1">
             {/* Category Badge */}
@@ -47,7 +59,7 @@ function ProjectCard({ project }: { project: Project }) {
             </div>
 
             {/* Title */}
-            <h3 className="text-xl font-bold font-cairo text-text-primary mb-2">
+            <h3 className="text-xl font-bold font-cairo text-text-primary mb-2 group-hover:text-accent transition-colors duration-300">
               {project.title}
             </h3>
 

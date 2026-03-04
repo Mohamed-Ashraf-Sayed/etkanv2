@@ -135,20 +135,25 @@ export default function ProjectThumbnail({
   return (
     <div
       className={cn(
-        "relative rounded-xl overflow-hidden border border-accent/20 bg-navy/50",
+        "relative overflow-hidden border border-accent/20 bg-navy/50 group/thumb",
         size === "sm" ? "aspect-video" : "aspect-[16/10]",
         className
       )}
       aria-label={`صورة مشروع: ${title}`}
     >
       {thumbnail ? (
-        <Image
-          src={thumbnail}
-          alt={title}
-          fill
-          className="object-cover"
-          unoptimized
-        />
+        <>
+          <Image
+            src={thumbnail}
+            alt={title}
+            fill
+            className="object-cover transition-transform duration-700 ease-out group-hover/thumb:scale-[1.05]"
+            unoptimized
+            loading="lazy"
+          />
+          {/* Hover gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-navy/70 via-transparent to-transparent opacity-0 group-hover/thumb:opacity-100 transition-opacity duration-500" />
+        </>
       ) : (
         <>
           <div className="absolute inset-0 bg-gradient-to-br from-navy/80 via-navy/40 to-accent/5" />

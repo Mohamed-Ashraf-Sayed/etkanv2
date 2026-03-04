@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { motion, useInView, animate } from "framer-motion";
+import { motion, useInView, animate, AnimatePresence } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import {
   ChevronLeft,
@@ -98,16 +98,31 @@ function ResultCard({
 }
 
 /* ── Lightbox ── */
-function ImageLightbox({ images, startIdx, onClose }: { images: string[]; startIdx: number; onClose: () => void }) {
+function ImageLightbox({
+  images,
+  startIdx,
+  onClose,
+}: {
+  images: string[];
+  startIdx: number;
+  onClose: () => void;
+}) {
   const [idx, setIdx] = useState(startIdx);
+  const prev = () => setIdx((i) => (i - 1 + images.length) % images.length);
+  const next = () => setIdx((i) => (i + 1) % images.length);
+
   useEffect(() => {
+    document.body.style.overflow = "hidden";
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
-      if (e.key === "ArrowLeft") setIdx((i) => (i + 1) % images.length);
-      if (e.key === "ArrowRight") setIdx((i) => (i - 1 + images.length) % images.length);
+      if (e.key === "ArrowLeft") next();
+      if (e.key === "ArrowRight") prev();
     };
     window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handler);
+    };
   }, [images.length, onClose]);
 
   return (
@@ -115,32 +130,74 @@ function ImageLightbox({ images, startIdx, onClose }: { images: string[]; startI
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center"
       onClick={onClose}
     >
+      {/* Close */}
       <button
         onClick={onClose}
-        className="absolute top-4 left-4 p-2 text-white/70 hover:text-white transition-colors z-10"
+        className="absolute top-5 left-5 p-2.5 rounded-full bg-white/10 text-white/70 hover:bg-white/20 hover:text-white transition-all z-10"
       >
-        <X className="w-6 h-6" />
+        <X className="w-5 h-5" />
       </button>
-      <div className="relative w-full max-w-5xl aspect-video" onClick={(e) => e.stopPropagation()}>
+
+      {/* Counter */}
+      <div className="absolute top-6 right-6 text-white/50 text-sm font-cairo z-10">
+        {idx + 1} / {images.length}
+      </div>
+
+      {/* Nav arrows */}
+      {images.length > 1 && (
+        <>
+          <button
+            onClick={(e) => { e.stopPropagation(); next(); }}
+            className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 text-white/70 hover:bg-accent/20 hover:text-accent transition-all z-10"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); prev(); }}
+            className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 text-white/70 hover:bg-accent/20 hover:text-accent transition-all z-10 rotate-180"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+        </>
+      )}
+
+      {/* Image */}
+      <motion.div
+        key={idx}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.25 }}
+        className="relative w-[90vw] max-w-6xl aspect-video"
+        onClick={(e) => e.stopPropagation()}
+      >
         <Image
           src={images[idx]}
           alt={`Image ${idx + 1}`}
           fill
-          className="object-contain"
+          className="object-contain rounded-lg"
           unoptimized
         />
-      </div>
+      </motion.div>
+
+      {/* Thumbnail strip */}
       {images.length > 1 && (
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-          {images.map((_, i) => (
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 p-2 rounded-xl bg-black/50 backdrop-blur-sm">
+          {images.map((img, i) => (
             <button
               key={i}
               onClick={(e) => { e.stopPropagation(); setIdx(i); }}
-              className={`w-2.5 h-2.5 rounded-full transition-colors ${i === idx ? "bg-[#D4AF37]" : "bg-white/30"}`}
-            />
+              className={`relative w-14 h-9 rounded-lg overflow-hidden transition-all duration-200 border-2 ${
+                i === idx
+                  ? "border-accent scale-110 shadow-lg shadow-accent/20"
+                  : "border-transparent opacity-50 hover:opacity-80"
+              }`}
+            >
+              <Image src={img} alt="" fill className="object-cover" unoptimized />
+            </button>
           ))}
         </div>
       )}
@@ -411,55 +468,129 @@ export default function ProjectDetailClient({
 
       {/* ═══════════════ GALLERY ═══════════════ */}
       {allImages.length > 0 && (
-        <section className="section-padding section-alt">
+        <section className="section-padding section-alt overflow-hidden">
           <Container>
-            <motion.div {...fadeIn} className="text-center mb-12">
+            <motion.div {...fadeIn} className="text-center mb-14">
               <div className="w-12 h-0.5 bg-accent mx-auto mb-4" />
               <h2 className="text-h2 font-bold font-cairo text-text-primary">
                 {t("gallery")}
               </h2>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto">
-              {allImages.map((img, i) => (
+            {/* Premium Bento Grid */}
+            <div className="max-w-6xl mx-auto">
+              {allImages.length === 1 ? (
+                /* Single image — hero style */
                 <motion.div
-                  key={i}
                   initial={{ opacity: 0, y: 15 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{
-                    duration: 0.5,
-                    delay: i * 0.1,
-                    ease: [0.25, 0.1, 0.25, 1] as const,
-                  }}
-                  className={`relative rounded-2xl overflow-hidden border border-border aspect-video bg-surface group hover:border-accent/30 transition-all duration-300 cursor-pointer ${
-                    i === 0 && allImages.length > 2 ? "md:col-span-2" : ""
-                  }`}
-                  onClick={() => setLightboxIdx(i)}
+                  transition={{ duration: 0.5 }}
+                  className="relative rounded-2xl overflow-hidden border border-border aspect-video bg-surface group hover:border-accent/30 transition-all duration-500 cursor-pointer shadow-lg hover:shadow-xl hover:shadow-accent/5"
+                  onClick={() => setLightboxIdx(0)}
                 >
                   <Image
-                    src={img}
-                    alt={`${project.title} - ${i + 1}`}
+                    src={allImages[0]}
+                    alt={`${project.title} - 1`}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
                     unoptimized
+                    loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+                  <div className="absolute bottom-4 right-4 bg-black/50 backdrop-blur-sm text-white/80 px-3 py-1.5 rounded-lg text-xs font-cairo opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    {t("gallery")}
+                  </div>
                 </motion.div>
-              ))}
+              ) : allImages.length === 2 ? (
+                /* Two images — side by side */
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {allImages.map((img, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: i * 0.1 }}
+                      className="relative rounded-2xl overflow-hidden border border-border aspect-video bg-surface group hover:border-accent/30 transition-all duration-500 cursor-pointer shadow-lg hover:shadow-xl hover:shadow-accent/5"
+                      onClick={() => setLightboxIdx(i)}
+                    >
+                      <Image
+                        src={img}
+                        alt={`${project.title} - ${i + 1}`}
+                        fill
+                        className="object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+                        unoptimized
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+                    </motion.div>
+                  ))}
+                </div>
+              ) : (
+                /* 3+ images — Bento grid */
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[200px] lg:auto-rows-[220px]">
+                  {allImages.map((img, i) => {
+                    // Bento pattern: first image is large (2x2), rest fill in
+                    const spanClass =
+                      i === 0
+                        ? "col-span-2 row-span-2"
+                        : allImages.length <= 3 && i === allImages.length - 1
+                        ? "col-span-2"
+                        : "";
+
+                    return (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, y: 15 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{
+                          duration: 0.5,
+                          delay: i * 0.08,
+                          ease: [0.25, 0.1, 0.25, 1],
+                        }}
+                        className={`relative rounded-2xl overflow-hidden border border-border bg-surface group hover:border-accent/30 transition-all duration-500 cursor-pointer shadow-lg hover:shadow-xl hover:shadow-accent/5 ${spanClass}`}
+                        onClick={() => setLightboxIdx(i)}
+                      >
+                        <Image
+                          src={img}
+                          alt={`${project.title} - ${i + 1}`}
+                          fill
+                          className="object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+                          unoptimized
+                          loading="lazy"
+                        />
+                        {/* Hover overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+                        {/* Expand icon on hover */}
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                            <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                            </svg>
+                          </div>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </Container>
         </section>
       )}
 
       {/* Image Lightbox */}
-      {lightboxIdx !== null && (
-        <ImageLightbox
-          images={allImages}
-          startIdx={lightboxIdx}
-          onClose={() => setLightboxIdx(null)}
-        />
-      )}
+      <AnimatePresence>
+        {lightboxIdx !== null && (
+          <ImageLightbox
+            images={allImages}
+            startIdx={lightboxIdx}
+            onClose={() => setLightboxIdx(null)}
+          />
+        )}
+      </AnimatePresence>
 
 
       {/* ═══════════════ CTA ═══════════════ */}
