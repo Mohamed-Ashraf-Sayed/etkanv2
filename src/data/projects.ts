@@ -225,6 +225,8 @@ export const projects: Project[] = [
     images: [
       "/images/projects/masar-infrastructure-2.jpg",
       "/images/projects/masar-infrastructure-3.jpg",
+      "/images/projects/masar-infrastructure-4.jpg",
+      "/images/projects/masar-infrastructure-5.jpg",
     ],
     techStack: ["Next.js", "React", "Tailwind CSS", "Framer Motion"],
     duration: "8 أسابيع",
@@ -254,6 +256,8 @@ export const projects: Project[] = [
     images: [
       "/images/projects/masarat-education-platform-2.jpg",
       "/images/projects/masarat-education-platform-3.jpg",
+      "/images/projects/masarat-education-platform-4.jpg",
+      "/images/projects/masarat-education-platform-5.jpg",
     ],
     techStack: ["Next.js", "React", "Node.js", "PostgreSQL", "Stripe"],
     duration: "12 أسبوع",
@@ -283,6 +287,8 @@ export const projects: Project[] = [
     images: [
       "/images/projects/genesis-mining-2.jpg",
       "/images/projects/genesis-mining-3.jpg",
+      "/images/projects/genesis-mining-4.jpg",
+      "/images/projects/genesis-mining-5.jpg",
     ],
     techStack: ["Next.js", "React", "Tailwind CSS", "i18n"],
     duration: "10 أسابيع",
@@ -312,6 +318,8 @@ export const projects: Project[] = [
     images: [
       "/images/projects/art-vision-agency-2.jpg",
       "/images/projects/art-vision-agency-3.jpg",
+      "/images/projects/art-vision-agency-4.jpg",
+      "/images/projects/art-vision-agency-5.jpg",
     ],
     techStack: ["Next.js", "React", "Framer Motion", "Tailwind CSS"],
     duration: "8 أسابيع",
@@ -341,6 +349,8 @@ export const projects: Project[] = [
     images: [
       "/images/projects/al-qayrawana-contracting-2.jpg",
       "/images/projects/al-qayrawana-contracting-3.jpg",
+      "/images/projects/al-qayrawana-contracting-4.jpg",
+      "/images/projects/al-qayrawana-contracting-5.jpg",
     ],
     techStack: ["Next.js", "React", "Tailwind CSS"],
     duration: "6 أسابيع",
@@ -370,6 +380,8 @@ export const projects: Project[] = [
     images: [
       "/images/projects/al-saleh-education-2.jpg",
       "/images/projects/al-saleh-education-3.jpg",
+      "/images/projects/al-saleh-education-4.jpg",
+      "/images/projects/al-saleh-education-5.jpg",
     ],
     techStack: ["WordPress", "LearnPress", "Elementor", "PHP"],
     duration: "6 أسابيع",
@@ -399,6 +411,8 @@ export const projects: Project[] = [
     images: [
       "/images/projects/fawasil-aljouf-recruitment-2.jpg",
       "/images/projects/fawasil-aljouf-recruitment-3.jpg",
+      "/images/projects/fawasil-aljouf-recruitment-4.jpg",
+      "/images/projects/fawasil-aljouf-recruitment-5.jpg",
     ],
     techStack: ["Next.js", "React", "Tailwind CSS"],
     duration: "5 أسابيع",
@@ -428,6 +442,8 @@ export const projects: Project[] = [
     images: [
       "/images/projects/mida-construction-2.jpg",
       "/images/projects/mida-construction-3.jpg",
+      "/images/projects/mida-construction-4.jpg",
+      "/images/projects/mida-construction-5.jpg",
     ],
     techStack: ["Next.js", "React", "Tailwind CSS", "Framer Motion"],
     duration: "7 أسابيع",
@@ -457,6 +473,8 @@ export const projects: Project[] = [
     images: [
       "/images/projects/klinicon-healthcare-2.jpg",
       "/images/projects/klinicon-healthcare-3.jpg",
+      "/images/projects/klinicon-healthcare-4.jpg",
+      "/images/projects/klinicon-healthcare-5.jpg",
     ],
     techStack: ["Next.js", "React", "Node.js", "PostgreSQL", "Tailwind CSS"],
     duration: "14 أسبوع",
