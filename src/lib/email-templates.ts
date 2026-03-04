@@ -74,7 +74,7 @@ export function buildAdminEmailHtml(data: BookingData): string {
   return `
     <div style="${baseStyle}">
       <div style="${headerStyle}">
-        <h1 style="color: #D4AF37; margin: 0; font-size: 22px;">إتقان للحلول البرمجية</h1>
+        <h1 style="color: #D4AF37; margin: 0; font-size: 22px;">إتقان للحلول المتكاملة</h1>
         <p style="color: #aaa; margin: 8px 0 0; font-size: 14px;">${title}</p>
       </div>
       <div style="${bodyStyle}">
@@ -99,7 +99,7 @@ export function buildClientEmailHtml(data: BookingData): string {
   return `
     <div style="${baseStyle}">
       <div style="${headerStyle}">
-        <h1 style="color: #D4AF37; margin: 0; font-size: 22px;">إتقان للحلول البرمجية</h1>
+        <h1 style="color: #D4AF37; margin: 0; font-size: 22px;">إتقان للحلول المتكاملة</h1>
       </div>
       <div style="${bodyStyle}">
         <h2 style="color: #fff; margin: 0 0 8px; font-size: 20px;">${title}</h2>

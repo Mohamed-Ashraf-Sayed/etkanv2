@@ -31,8 +31,8 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "إتقان للحلول البرمجية | Etqan IT Solutions",
-    template: "%s | إتقان للحلول البرمجية",
+    default: "إتقان للحلول المتكاملة | Etqan IT Solutions",
+    template: "%s | إتقان للحلول المتكاملة",
   },
   description:
     "شريكك التقني الموثوق لتطوير المواقع والتطبيقات، الأنظمة الداخلية، تجهيز البنية التحتية، والدعم الفني. أكثر من 50 شركة وثقت بنا في مصر والسعودية.",
@@ -52,14 +52,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ar_EG",
     url: BASE_URL,
-    siteName: "إتقان للحلول البرمجية",
-    title: "إتقان للحلول البرمجية | Etqan IT Solutions",
+    siteName: "إتقان للحلول المتكاملة",
+    title: "إتقان للحلول المتكاملة | Etqan IT Solutions",
     description:
       "شريكك التقني الموثوق لتطوير المواقع والتطبيقات، الأنظمة الداخلية، تجهيز البنية التحتية، والدعم الفني.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "إتقان للحلول البرمجية | Etqan IT Solutions",
+    title: "إتقان للحلول المتكاملة | Etqan IT Solutions",
     description:
       "شريكك التقني الموثوق لتطوير المواقع والتطبيقات، الأنظمة الداخلية، تجهيز البنية التحتية، والدعم الفني.",
   },

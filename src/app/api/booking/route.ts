@@ -53,8 +53,8 @@ export async function POST(req: NextRequest) {
           to: data.email,
           subject:
             data.type === "consultation"
-              ? "تأكيد حجز موعدك - إتقان للحلول البرمجية"
-              : "استلمنا طلبك - إتقان للحلول البرمجية",
+              ? "تأكيد حجز موعدك - إتقان للحلول المتكاملة"
+              : "استلمنا طلبك - إتقان للحلول المتكاملة",
           html: buildClientEmailHtml(data),
         });
       }
