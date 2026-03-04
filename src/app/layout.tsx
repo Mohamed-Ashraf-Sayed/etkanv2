@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://etkan2.phi-rose.com";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://etqanly.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),

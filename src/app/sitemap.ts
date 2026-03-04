@@ -4,7 +4,7 @@ import { blogPosts } from "@/data/blog";
 import { projects } from "@/data/projects";
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://etkan2.phi-rose.com";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://etqanly.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [

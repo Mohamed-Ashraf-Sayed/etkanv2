@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://etkan2.phi-rose.com";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://etqanly.com";
 
 export default function robots(): MetadataRoute.Robots {
   return {
