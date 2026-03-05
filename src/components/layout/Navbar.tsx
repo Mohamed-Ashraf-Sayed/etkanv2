@@ -23,6 +23,7 @@ export default function Navbar() {
     { href: "/services" as const, label: t("services") },
     { href: "/portfolio" as const, label: t("portfolio") },
     { href: "/blog" as const, label: t("blog") },
+    { href: "/tech-radar" as const, label: t("techRadar") },
     { href: "/booking" as const, label: t("booking") },
     { href: "/contact" as const, label: t("contact") },
   ];

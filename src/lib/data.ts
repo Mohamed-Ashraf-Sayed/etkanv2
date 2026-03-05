@@ -10,6 +10,8 @@ import { timeSlots, consultationServices, quoteServiceFeatures, budgetRanges, ti
 import { timeSlotsEn, consultationServicesEn, quoteServiceFeaturesEn, budgetRangesEn, timelineOptionsEn } from "@/data/booking.en";
 import { SYSTEM_PROMPT, WELCOME_MESSAGE, SUGGESTED_QUESTIONS } from "@/data/chatbot";
 import { SYSTEM_PROMPT_EN, WELCOME_MESSAGE_EN, SUGGESTED_QUESTIONS_EN } from "@/data/chatbot.en";
+import { quadrants, rings, techRadarItems } from "@/data/tech-radar";
+import { quadrantsEn, ringsEn, techRadarItemsEn } from "@/data/tech-radar.en";
 
 export function getServices(locale: string) {
   return locale === "en" ? servicesEn : services;
@@ -85,6 +87,12 @@ export function getBudgetRanges(locale: string) {
 
 export function getTimelineOptions(locale: string) {
   return locale === "en" ? timelineOptionsEn : timelineOptions;
+}
+
+export function getTechRadarData(locale: string) {
+  return locale === "en"
+    ? { quadrants: quadrantsEn, rings: ringsEn, items: techRadarItemsEn }
+    : { quadrants, rings, items: techRadarItems };
 }
 
 export function getChatbotConfig(locale: string) {

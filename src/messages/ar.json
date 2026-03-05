@@ -5,6 +5,7 @@
     "services": "خدماتنا",
     "portfolio": "أعمالنا",
     "blog": "المدونة",
+    "techRadar": "تقنياتنا",
     "booking": "احجز موعد",
     "contact": "تواصل معنا",
     "cta": "اطلب استشارة",
@@ -395,5 +396,27 @@
   "bookingSuccess": {
     "backHome": "العودة للرئيسية",
     "bookAnother": "حجز آخر"
+  },
+  "techRadar": {
+    "title": "خريطة التقنيات",
+    "badge": "التقنيات والأدوات",
+    "subtitle": "نختار تقنياتنا بعناية. اكتشف الأدوات والتقنيات اللي بنعتمد عليها في بناء مشاريعنا",
+    "filterAll": "الكل",
+    "new": "جديد",
+    "techCount": "تقنية",
+    "adoptCount": "أساسية",
+    "newCount": "جديدة",
+    "detailQuadrant": "القسم",
+    "detailRing": "المستوى",
+    "clickToExplore": "اضغط على أي تقنية لمعرفة المزيد",
+    "statsTitle": "أرقام سريعة",
+    "statsTechnologies": "تقنية نتابعها",
+    "statsAdopted": "تقنية أساسية",
+    "statsNew": "تقنية جديدة",
+    "statsQuadrants": "أقسام تقنية",
+    "ctaTitle": "مش متأكد من التقنية المناسبة لمشروعك؟",
+    "ctaSub": "فريقنا هيساعدك تختار أفضل التقنيات اللي تناسب احتياجاتك وميزانيتك",
+    "ctaButton": "احجز استشارة مجانية",
+    "ctaSecondary": "تواصل معنا"
   }
 }

@@ -5,6 +5,7 @@
     "services": "Services",
     "portfolio": "Portfolio",
     "blog": "Blog",
+    "techRadar": "Tech Radar",
     "booking": "Book Now",
     "contact": "Contact",
     "cta": "Get a Quote",
@@ -395,5 +396,27 @@
     "description": "The page you're looking for doesn't exist or has been moved. You can go back to the homepage or browse our services.",
     "backHome": "Back to Home",
     "viewServices": "Browse Services"
+  },
+  "techRadar": {
+    "title": "Tech Radar",
+    "badge": "Technologies & Tools",
+    "subtitle": "We carefully select our technologies. Explore the tools and technologies we rely on to build our projects",
+    "filterAll": "All",
+    "new": "New",
+    "techCount": "Technologies",
+    "adoptCount": "Core",
+    "newCount": "New",
+    "detailQuadrant": "Quadrant",
+    "detailRing": "Ring",
+    "clickToExplore": "Click any technology to learn more",
+    "statsTitle": "Quick Stats",
+    "statsTechnologies": "Technologies tracked",
+    "statsAdopted": "Core technologies",
+    "statsNew": "New additions",
+    "statsQuadrants": "Tech quadrants",
+    "ctaTitle": "Not sure which technology fits your project?",
+    "ctaSub": "Our team will help you choose the best technologies that fit your needs and budget",
+    "ctaButton": "Book Free Consultation",
+    "ctaSecondary": "Contact Us"
   }
 }
