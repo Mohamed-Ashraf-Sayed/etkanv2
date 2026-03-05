@@ -28,6 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/portfolio", changeFrequency: "monthly" as const, priority: 0.8 },
     { path: "/blog", changeFrequency: "weekly" as const, priority: 0.7 },
     { path: "/tech-radar", changeFrequency: "monthly" as const, priority: 0.6 },
+    { path: "/scope", changeFrequency: "monthly" as const, priority: 0.6 },
     { path: "/booking", changeFrequency: "monthly" as const, priority: 0.7 },
     { path: "/contact", changeFrequency: "monthly" as const, priority: 0.7 },
   ];
