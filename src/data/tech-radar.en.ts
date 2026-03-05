@@ -1,10 +1,10 @@
 import { TechRadarItem, TechRadarQuadrant, TechRadarRing } from "./tech-radar";
 
 export const quadrantsEn: TechRadarQuadrant[] = [
-  { id: "languages", name: "Languages & Frameworks", color: "#3B82F6" },
-  { id: "cms", name: "CMS & Platforms", color: "#10B981" },
-  { id: "infrastructure", name: "Infrastructure & Cloud", color: "#8B5CF6" },
-  { id: "tools", name: "Tools & Techniques", color: "#F59E0B" },
+  { id: "languages", name: "Development", color: "#3B82F6" },
+  { id: "cms", name: "Content & E-Commerce", color: "#10B981" },
+  { id: "infrastructure", name: "Servers & Hosting", color: "#8B5CF6" },
+  { id: "tools", name: "Design & Workflow", color: "#F59E0B" },
 ];
 
 export const ringsEn: TechRadarRing[] = [

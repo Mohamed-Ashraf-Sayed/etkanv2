@@ -20,10 +20,10 @@ export interface TechRadarRing {
 }
 
 export const quadrants: TechRadarQuadrant[] = [
-  { id: "languages", name: "اللغات والأطر", color: "#3B82F6" },
-  { id: "cms", name: "المنصات وأنظمة المحتوى", color: "#10B981" },
-  { id: "infrastructure", name: "البنية التحتية والسحابة", color: "#8B5CF6" },
-  { id: "tools", name: "الأدوات والممارسات", color: "#F59E0B" },
+  { id: "languages", name: "البرمجة والتطوير", color: "#3B82F6" },
+  { id: "cms", name: "إدارة المحتوى والمتاجر", color: "#10B981" },
+  { id: "infrastructure", name: "السيرفرات والاستضافة", color: "#8B5CF6" },
+  { id: "tools", name: "أدوات التصميم والعمل", color: "#F59E0B" },
 ];
 
 export const rings: TechRadarRing[] = [
