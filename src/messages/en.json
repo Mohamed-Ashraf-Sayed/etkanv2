@@ -428,8 +428,14 @@
     "analyze": "Analyze My Project",
     "analyzing": "Analyzing your project...",
     "analyzingDesc": "AI is studying your project and preparing the plan",
+    "inputTitle": "Describe Your Project",
+    "inputSub": "Tell us about your project and we'll handle the rest",
+    "heroFeature1": "Smart Analysis",
+    "heroFeature2": "Right Technologies",
+    "heroFeature3": "Instant Estimate",
     "resultTitle": "Your Project Plan",
     "phases": "Implementation Phases",
+    "phasesCount": "phases",
     "techStack": "Recommended Technologies",
     "features": "Core Features",
     "timeline": "Estimated Timeline",
@@ -451,6 +457,16 @@
     "example1": "E-commerce store for accessories with online payment",
     "example2": "Real estate company website with property listings and booking",
     "example3": "Food delivery mobile app",
-    "example4": "Employee management system for a 50-person company"
+    "example4": "Employee management system for a 50-person company",
+    "wpCompareTitle": "Two Ways to Build It",
+    "wpCompareDesc": "This project can be built with custom code or WordPress. Each option has its advantages",
+    "wpCustomTitle": "Custom Development",
+    "wpCustomSub": "Built from scratch with code",
+    "wpWordPressTitle": "WordPress",
+    "wpWordPressSub": "Using WordPress and plugins",
+    "wpRecommended": "Best Fit",
+    "wpCustomPro1": "Full control over every detail",
+    "wpCustomPro2": "Faster performance and better UX",
+    "wpCustomPro3": "Unlimited scalability and growth"
   }
 }
