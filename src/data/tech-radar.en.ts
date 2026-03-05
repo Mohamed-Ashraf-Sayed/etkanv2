@@ -8,10 +8,10 @@ export const quadrantsEn: TechRadarQuadrant[] = [
 ];
 
 export const ringsEn: TechRadarRing[] = [
-  { id: "adopt", name: "Adopt", description: "Core technologies we use confidently in all our projects" },
-  { id: "trial", name: "Trial", description: "Promising technologies we're testing in selected projects" },
-  { id: "assess", name: "Assess", description: "Technologies we're studying and monitoring for potential adoption" },
-  { id: "hold", name: "Hold", description: "Technologies we're monitoring but not using in new projects" },
+  { id: "adopt", name: "We Use Daily", description: "Our go-to technologies that power every project we build" },
+  { id: "trial", name: "Testing Now", description: "New technologies we're trying out in selected projects" },
+  { id: "assess", name: "Exploring", description: "Technologies we're researching to see if they're a good fit" },
+  { id: "hold", name: "Moved On", description: "Older technologies we've replaced with better alternatives" },
 ];
 
 export const techRadarItemsEn: TechRadarItem[] = [

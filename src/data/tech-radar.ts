@@ -27,10 +27,10 @@ export const quadrants: TechRadarQuadrant[] = [
 ];
 
 export const rings: TechRadarRing[] = [
-  { id: "adopt", name: "نعتمد عليها", description: "تقنيات أساسية نستخدمها في كل مشاريعنا بثقة كاملة" },
-  { id: "trial", name: "نجرّبها", description: "تقنيات واعدة بنجربها في مشاريع محددة وبنقيّم أداءها" },
-  { id: "assess", name: "نقيّمها", description: "تقنيات بندرسها وبنتابع تطورها عشان نحدد لو هنعتمدها" },
-  { id: "hold", name: "نراقبها", description: "تقنيات بنتابعها بس مش بنستخدمها في مشاريع جديدة" },
+  { id: "adopt", name: "بنستخدمها دايماً", description: "دي التقنيات الأساسية اللي بنشتغل بيها في كل مشاريعنا" },
+  { id: "trial", name: "بنجربها حالياً", description: "تقنيات جديدة بنختبرها في مشاريع معينة وشايفين فيها مستقبل" },
+  { id: "assess", name: "بندرسها", description: "تقنيات لسه بنتعرف عليها وبنشوف لو هتفيدنا ولا لأ" },
+  { id: "hold", name: "توقفنا عنها", description: "تقنيات قديمة أو لقينا بدائل أحسن منها" },
 ];
 
 export const techRadarItems: TechRadarItem[] = [
