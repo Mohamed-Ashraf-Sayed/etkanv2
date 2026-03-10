@@ -94,6 +94,11 @@ export default function AIVoiceCall() {
   const handleDCMessage = useCallback((event: MessageEvent) => {
     const msg = JSON.parse(event.data);
 
+    // Debug: log all function-related events
+    if (msg.type?.includes("function") || msg.type?.includes("output_item")) {
+      console.log("[Voice DC]", msg.type, msg);
+    }
+
     switch (msg.type) {
       case "response.created":
         // Model is about to speak — mute mic on mobile to prevent echo
@@ -131,6 +136,20 @@ export default function AIVoiceCall() {
         break;
 
       // ---- Function calling events ----
+      case "response.output_item.added": {
+        // Capture function call name + call_id when the item is first added
+        const item = msg.item;
+        if (item?.type === "function_call" && item.call_id) {
+          console.log("[Voice] Function call started:", item.name, item.call_id);
+          pendingFnCallsRef.current.set(item.call_id, {
+            name: item.name || "",
+            arguments: "",
+          });
+          setVoiceState("processing");
+        }
+        break;
+      }
+
       case "response.function_call_arguments.delta": {
         // Accumulate function call arguments
         const callId = msg.call_id;
@@ -138,21 +157,20 @@ export default function AIVoiceCall() {
           const existing = pendingFnCallsRef.current.get(callId);
           if (existing) {
             existing.arguments += msg.delta || "";
-          } else {
-            pendingFnCallsRef.current.set(callId, {
-              name: msg.name || "",
-              arguments: msg.delta || "",
-            });
           }
         }
         break;
       }
 
       case "response.function_call_arguments.done": {
-        // Function call is complete — execute it and send result back
+        // Function call complete — execute and send result back
         const callId = msg.call_id;
-        const fnName = msg.name;
-        const fnArgs = msg.arguments;
+        const pending = pendingFnCallsRef.current.get(callId);
+        // Fallback: use msg.name if we missed the output_item.added event
+        const fnName = pending?.name || msg.name || "";
+        const fnArgs = msg.arguments || pending?.arguments || "{}";
+
+        console.log("[Voice] Function call done:", fnName, callId, fnArgs);
 
         if (callId && fnName && dcRef.current?.readyState === "open") {
           setVoiceState("processing");
@@ -165,6 +183,7 @@ export default function AIVoiceCall() {
           }
 
           handleFunctionCall(fnName, parsedArgs).then((result) => {
+            console.log("[Voice] Function result:", result);
             if (dcRef.current?.readyState === "open") {
               // Send function output back to the model
               dcRef.current.send(
@@ -187,7 +206,7 @@ export default function AIVoiceCall() {
             }
           });
 
-          // Clean up pending call
+          // Clean up
           pendingFnCallsRef.current.delete(callId);
         }
         break;
@@ -195,7 +214,10 @@ export default function AIVoiceCall() {
 
       case "response.done":
         isSpeakingRef.current = false;
-        setVoiceState("idle");
+        // Don't reset to idle if we're processing a function call
+        if (pendingFnCallsRef.current.size === 0) {
+          setVoiceState("idle");
+        }
         // Re-enable mic after echo dissipates (only if user hasn't manually muted)
         setTimeout(() => {
           if (audioTrackRef.current && !isSpeakingRef.current && !isMutedRef.current) {
