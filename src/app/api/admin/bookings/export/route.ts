@@ -3,6 +3,11 @@ import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
 import { verifyToken } from "@/lib/auth";
 
+const slotLabels: Record<string, string> = {
+  m1: "٩:٠٠ ص", m2: "٩:٤٥ ص", m3: "١٠:٣٠ ص", m4: "١١:١٥ ص",
+  a1: "١:٠٠ م", a2: "١:٤٥ م", a3: "٢:٣٠ م", a4: "٣:١٥ م",
+};
+
 export async function GET(req: NextRequest) {
   const cookieStore = await cookies();
   const token = cookieStore.get("admin-token")?.value;
@@ -69,7 +74,7 @@ export async function GET(req: NextRequest) {
       escapeCSV(b.budget),
       escapeCSV(b.timeline),
       escapeCSV(b.date),
-      escapeCSV(b.timeSlot),
+      escapeCSV(b.timeSlot ? (slotLabels[b.timeSlot] || b.timeSlot) : null),
       escapeCSV(b.notes),
       escapeCSV(b.description),
       escapeCSV(new Date(b.createdAt).toLocaleDateString("ar-EG")),

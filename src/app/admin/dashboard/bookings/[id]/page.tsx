@@ -24,6 +24,23 @@ interface Booking {
   createdAt: string;
 }
 
+// Map slot IDs to readable time labels (for bookings made via AI voice call)
+const slotLabels: Record<string, string> = {
+  m1: "٩:٠٠ ص",
+  m2: "٩:٤٥ ص",
+  m3: "١٠:٣٠ ص",
+  m4: "١١:١٥ ص",
+  a1: "١:٠٠ م",
+  a2: "١:٤٥ م",
+  a3: "٢:٣٠ م",
+  a4: "٣:١٥ م",
+};
+
+function formatTimeSlot(slot?: string) {
+  if (!slot) return null;
+  return slotLabels[slot] || slot;
+}
+
 const statusOptions = [
   { value: "pending", label: "في الانتظار", color: "bg-orange-400/20 text-orange-400" },
   { value: "confirmed", label: "مؤكد", color: "bg-green-400/20 text-green-400" },
@@ -69,7 +86,7 @@ export default function BookingDetailPage() {
     ...(booking.type === "consultation"
       ? [
           { label: "التاريخ", value: booking.date },
-          { label: "الوقت", value: booking.timeSlot },
+          { label: "الوقت", value: formatTimeSlot(booking.timeSlot) },
           { label: "نوع الخدمة", value: booking.serviceType },
           { label: "ملاحظات", value: booking.notes },
         ]
