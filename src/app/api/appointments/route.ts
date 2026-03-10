@@ -65,13 +65,14 @@ export async function GET(req: NextRequest) {
     const bookedSlots = await prisma.booking.findMany({
       where: {
         date,
-        timeSlot: { not: null },
-        status: { not: "cancelled" },
+        NOT: { status: "cancelled" },
       },
       select: { timeSlot: true },
     });
 
-    const bookedSlotIds = new Set(bookedSlots.map((b) => b.timeSlot));
+    const bookedSlotIds = new Set(
+      bookedSlots.map((b) => b.timeSlot).filter(Boolean)
+    );
 
     // Also exclude currently locked slots (being booked right now)
     const availableSlots = AVAILABLE_SLOTS.filter(
@@ -91,8 +92,9 @@ export async function GET(req: NextRequest) {
       bookedCount: bookedSlotIds.size,
     });
   } catch (error) {
-    console.error("Appointments check error:", error);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    const errMsg = error instanceof Error ? error.message : String(error);
+    console.error("Appointments check error:", errMsg, error);
+    return NextResponse.json({ error: "Server error", details: errMsg }, { status: 500 });
   }
 }
 
@@ -162,7 +164,7 @@ export async function POST(req: NextRequest) {
         where: {
           date,
           timeSlot,
-          status: { not: "cancelled" },
+          NOT: { status: "cancelled" },
         },
       });
 
