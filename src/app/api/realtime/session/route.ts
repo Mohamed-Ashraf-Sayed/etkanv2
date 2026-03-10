@@ -238,8 +238,6 @@ ABOUT ETQAN (weave in naturally):
           threshold: 0.65,
           prefix_padding_ms: 200,
           silence_duration_ms: 400,
-          create_response: true,
-          eagerness: "high",
         },
         max_response_output_tokens: 250,
       }),
