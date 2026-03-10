@@ -190,7 +190,6 @@ ABOUT ETQAN (weave in naturally):
         model: "gpt-realtime-1.5",
         voice: "marin",
         instructions,
-        tools: BOOKING_TOOLS,
         input_audio_format: "pcm16",
         output_audio_format: "pcm16",
         input_audio_transcription: {
@@ -220,6 +219,7 @@ ABOUT ETQAN (weave in naturally):
     return Response.json({
       token: data.client_secret?.value,
       expiresAt: data.client_secret?.expires_at,
+      tools: BOOKING_TOOLS,
     });
   } catch (error) {
     console.error("Realtime session error:", error);

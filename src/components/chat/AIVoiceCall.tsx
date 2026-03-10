@@ -245,7 +245,7 @@ export default function AIVoiceCall() {
         body: JSON.stringify({ locale }),
       });
       if (!tokenRes.ok) throw new Error("Failed to get token");
-      const { token } = await tokenRes.json();
+      const { token, tools } = await tokenRes.json();
       if (!token) throw new Error("No token received");
 
       // 2. Get microphone (must be in user gesture context for iOS)
@@ -284,6 +284,18 @@ export default function AIVoiceCall() {
       dc.addEventListener("open", () => {
         setCallState("active");
         setVoiceState("listening");
+
+        // Register booking tools via session.update
+        if (tools && tools.length > 0) {
+          dc.send(
+            JSON.stringify({
+              type: "session.update",
+              session: {
+                tools,
+              },
+            })
+          );
+        }
 
         // Send initial greeting
         const greetingsAr = [
