@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useLocale } from "next-intl";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 
 interface CalendarPickerProps {
@@ -8,12 +9,6 @@ interface CalendarPickerProps {
   onSelectDate: (date: Date) => void;
   error?: string;
 }
-
-const dayFormatter = new Intl.DateTimeFormat("ar-EG", { weekday: "short" });
-const monthFormatter = new Intl.DateTimeFormat("ar-EG", {
-  month: "long",
-  year: "numeric",
-});
 
 function getDaysInMonth(year: number, month: number) {
   return new Date(year, month + 1, 0).getDate();
@@ -37,6 +32,18 @@ export default function CalendarPicker({
   onSelectDate,
   error,
 }: CalendarPickerProps) {
+  const locale = useLocale();
+  const dateLocale = locale === "en" ? "en-US" : "ar-EG";
+
+  const dayFormatter = useMemo(
+    () => new Intl.DateTimeFormat(dateLocale, { weekday: "short" }),
+    [dateLocale]
+  );
+  const monthFormatter = useMemo(
+    () => new Intl.DateTimeFormat(dateLocale, { month: "long", year: "numeric" }),
+    [dateLocale]
+  );
+
   const today = useMemo(() => {
     const d = new Date();
     d.setHours(0, 0, 0, 0);
@@ -54,13 +61,11 @@ export default function CalendarPicker({
   const dayNames = useMemo(() => {
     const names: string[] = [];
     for (let i = 0; i < 7; i++) {
-      // Jan 2024 started on Monday, but we need Sun-Sat
-      // Use a known Sunday: Jan 7, 2024
       const d = new Date(2024, 0, 7 + i);
       names.push(dayFormatter.format(d));
     }
     return names;
-  }, []);
+  }, [dayFormatter]);
 
   const daysInMonth = getDaysInMonth(year, month);
   const firstDay = getFirstDayOfMonth(year, month);
