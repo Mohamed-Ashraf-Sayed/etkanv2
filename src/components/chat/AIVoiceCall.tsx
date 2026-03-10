@@ -8,6 +8,46 @@ import { Phone, PhoneOff, Mic, MicOff, Bot } from "lucide-react";
 type CallState = "idle" | "ringing" | "active" | "ended";
 type VoiceState = "idle" | "listening" | "processing" | "speaking";
 
+// Handle function calls from OpenAI Realtime API
+async function handleFunctionCall(
+  name: string,
+  args: Record<string, string>
+): Promise<string> {
+  try {
+    switch (name) {
+      case "check_available_slots": {
+        const res = await fetch(
+          `/api/appointments?date=${encodeURIComponent(args.date)}`
+        );
+        const data = await res.json();
+        if (!res.ok) return JSON.stringify({ error: data.error });
+        return JSON.stringify(data);
+      }
+      case "book_appointment": {
+        const res = await fetch("/api/appointments", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            date: args.date,
+            timeSlot: args.time_slot_id,
+            name: args.name,
+            phone: args.phone,
+            service: args.service,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) return JSON.stringify({ error: data.error });
+        return JSON.stringify(data);
+      }
+      default:
+        return JSON.stringify({ error: "Unknown function" });
+    }
+  } catch (err) {
+    console.error("Function call error:", err);
+    return JSON.stringify({ error: "Failed to process request" });
+  }
+}
+
 export default function AIVoiceCall() {
   const t = useTranslations("voiceCall");
   const locale = useLocale();
@@ -31,6 +71,11 @@ export default function AIVoiceCall() {
   const isFirstResponseRef = useRef(true);
   const isMobileRef = useRef(false);
   const durationRef = useRef(0);
+
+  // Track pending function calls by call_id
+  const pendingFnCallsRef = useRef<
+    Map<string, { name: string; arguments: string }>
+  >(new Map());
 
   useEffect(() => {
     isMobileRef.current = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -85,6 +130,69 @@ export default function AIVoiceCall() {
         }
         break;
 
+      // ---- Function calling events ----
+      case "response.function_call_arguments.delta": {
+        // Accumulate function call arguments
+        const callId = msg.call_id;
+        if (callId) {
+          const existing = pendingFnCallsRef.current.get(callId);
+          if (existing) {
+            existing.arguments += msg.delta || "";
+          } else {
+            pendingFnCallsRef.current.set(callId, {
+              name: msg.name || "",
+              arguments: msg.delta || "",
+            });
+          }
+        }
+        break;
+      }
+
+      case "response.function_call_arguments.done": {
+        // Function call is complete — execute it and send result back
+        const callId = msg.call_id;
+        const fnName = msg.name;
+        const fnArgs = msg.arguments;
+
+        if (callId && fnName && dcRef.current?.readyState === "open") {
+          setVoiceState("processing");
+
+          let parsedArgs: Record<string, string> = {};
+          try {
+            parsedArgs = JSON.parse(fnArgs);
+          } catch {
+            parsedArgs = {};
+          }
+
+          handleFunctionCall(fnName, parsedArgs).then((result) => {
+            if (dcRef.current?.readyState === "open") {
+              // Send function output back to the model
+              dcRef.current.send(
+                JSON.stringify({
+                  type: "conversation.item.create",
+                  item: {
+                    type: "function_call_output",
+                    call_id: callId,
+                    output: result,
+                  },
+                })
+              );
+
+              // Ask model to continue responding with the function result
+              dcRef.current.send(
+                JSON.stringify({
+                  type: "response.create",
+                })
+              );
+            }
+          });
+
+          // Clean up pending call
+          pendingFnCallsRef.current.delete(callId);
+        }
+        break;
+      }
+
       case "response.done":
         isSpeakingRef.current = false;
         setVoiceState("idle");
@@ -126,6 +234,7 @@ export default function AIVoiceCall() {
     setCurrentText("");
     setErrorMsg("");
     messagesRef.current = [];
+    pendingFnCallsRef.current.clear();
     isFirstResponseRef.current = true;
 
     try {
@@ -272,6 +381,9 @@ export default function AIVoiceCall() {
       remoteAudioRef.current.srcObject = null;
       remoteAudioRef.current = null;
     }
+
+    // Clear pending function calls
+    pendingFnCallsRef.current.clear();
 
     setVoiceState("idle");
     setCallState("ended");
