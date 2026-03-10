@@ -68,18 +68,12 @@ export default function AIVoiceCall() {
   const messagesRef = useRef<{ role: string; content: string }[]>([]);
   const isSpeakingRef = useRef(false);
   const isMutedRef = useRef(false);
-  const isFirstResponseRef = useRef(true);
-  const isMobileRef = useRef(false);
   const durationRef = useRef(0);
 
   // Track pending function calls by call_id
   const pendingFnCallsRef = useRef<
     Map<string, { name: string; arguments: string }>
   >(new Map());
-
-  useEffect(() => {
-    isMobileRef.current = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  }, []);
 
   useEffect(() => {
     durationRef.current = duration;
@@ -101,11 +95,7 @@ export default function AIVoiceCall() {
 
     switch (msg.type) {
       case "response.created":
-        // Model is about to speak — mute mic on mobile to prevent echo
         isSpeakingRef.current = true;
-        if (audioTrackRef.current && isMobileRef.current && !isMutedRef.current) {
-          audioTrackRef.current.enabled = false;
-        }
         break;
 
       case "response.audio_transcript.delta":
@@ -218,29 +208,6 @@ export default function AIVoiceCall() {
         if (pendingFnCallsRef.current.size === 0) {
           setVoiceState("idle");
         }
-        // Re-enable mic after echo dissipates (only if user hasn't manually muted)
-        setTimeout(() => {
-          if (audioTrackRef.current && !isSpeakingRef.current && !isMutedRef.current) {
-            audioTrackRef.current.enabled = true;
-          }
-        }, 400);
-        // After first response, relax VAD for natural conversation
-        if (isFirstResponseRef.current && dcRef.current?.readyState === "open") {
-          isFirstResponseRef.current = false;
-          dcRef.current.send(
-            JSON.stringify({
-              type: "session.update",
-              session: {
-                turn_detection: {
-                  type: "server_vad",
-                  threshold: 0.6,
-                  prefix_padding_ms: 300,
-                  silence_duration_ms: 500,
-                },
-              },
-            })
-          );
-        }
         break;
 
       case "error":
@@ -257,7 +224,6 @@ export default function AIVoiceCall() {
     setErrorMsg("");
     messagesRef.current = [];
     pendingFnCallsRef.current.clear();
-    isFirstResponseRef.current = true;
 
     try {
       // 1. Get ephemeral token

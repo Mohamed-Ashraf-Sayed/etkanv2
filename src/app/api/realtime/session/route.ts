@@ -227,7 +227,7 @@ ABOUT ETQAN (weave in naturally):
         input_audio_format: "pcm16",
         output_audio_format: "pcm16",
         input_audio_transcription: {
-          model: "gpt-4o-transcribe",
+          model: "gpt-4o-mini-transcribe",
           language: locale === "en" ? "en" : "ar",
         },
         input_audio_noise_reduction: {
@@ -235,11 +235,13 @@ ABOUT ETQAN (weave in naturally):
         },
         turn_detection: {
           type: "server_vad",
-          threshold: 0.7,
-          prefix_padding_ms: 400,
-          silence_duration_ms: 700,
+          threshold: 0.65,
+          prefix_padding_ms: 200,
+          silence_duration_ms: 400,
+          create_response: true,
+          eagerness: "high",
         },
-        max_response_output_tokens: 300,
+        max_response_output_tokens: 250,
       }),
     });
 
