@@ -120,6 +120,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Validate Egyptian phone number (11 digits starting with 01)
+    const cleanPhone = phone.replace(/[\s\-\(\)]/g, "");
+    const egyptPhoneRegex = /^01[0125]\d{8}$/;
+    if (!egyptPhoneRegex.test(cleanPhone)) {
+      return NextResponse.json(
+        { error: "Invalid phone number. Must be a valid Egyptian number (11 digits starting with 01)." },
+        { status: 400 }
+      );
+    }
+
     // Validate date
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
       return NextResponse.json({ error: "Invalid date format" }, { status: 400 });
@@ -182,7 +192,7 @@ export async function POST(req: NextRequest) {
           status: "pending",
           name,
           email: "",
-          phone,
+          phone: cleanPhone,
           date,
           timeSlot,
           serviceType: service || null,
