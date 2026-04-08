@@ -67,7 +67,7 @@ export default function FeaturedProjects({ dbProjects = [] }: Props) {
                 href={"/portfolio/" + project.slug}
                 className="block group h-full"
               >
-                <div className="rounded-2xl overflow-hidden h-full flex flex-col bg-white/[0.05] border border-white/10 hover:border-accent/40 transition-all duration-500 hover:bg-white/[0.08]">
+                <div className="rounded-2xl overflow-hidden h-full flex flex-col bg-white/[0.05] border border-white/10 hover:border-accent/50 hover:-translate-y-1 hover:shadow-xl hover:shadow-accent/10 transition-all duration-500 hover:bg-white/[0.08]">
                   {/* Header band */}
                   <div className="px-6 pt-6 pb-4 border-b border-white/10">
                     <div className="flex items-center justify-between mb-3">
@@ -103,11 +103,11 @@ export default function FeaturedProjects({ dbProjects = [] }: Props) {
                     )}
 
                     {/* Tags */}
-                    <div className="flex flex-wrap gap-1.5 mb-4">
+                    <div className="flex flex-wrap gap-2 mb-5">
                       {project.tags.slice(0, 3).map((tag) => (
                         <span
                           key={tag}
-                          className="bg-white/5 text-white/50 text-[11px] px-2.5 py-1 rounded-md border border-white/10 font-cairo"
+                          className="bg-accent/10 text-accent/85 text-[11px] px-3 py-1.5 rounded-md border border-accent/20 font-cairo font-medium"
                         >
                           {tag}
                         </span>

@@ -56,12 +56,12 @@ export default async function Hero() {
           </h1>
 
           {/* Subtitle */}
-          <p className="text-lg sm:text-xl text-white/50 max-w-2xl font-cairo mt-6 leading-relaxed animate-[slideUp_0.6s_ease-out_0.4s_both]">
+          <p className="text-lg sm:text-xl text-white/50 max-w-2xl font-cairo mt-6 leading-relaxed animate-[slideUp_0.5s_ease-out_0.15s_both]">
             {t("subtitle")}
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 mt-10 animate-[slideUp_0.5s_ease-out_0.6s_both]">
+          <div className="flex flex-col sm:flex-row gap-4 mt-10 animate-[slideUp_0.5s_ease-out_0.25s_both]">
             <MagneticButton strength={0.25}>
               <Button variant="gold" size="lg" href="/contact">
                 <span>{t("ctaPrimary")}</span>
@@ -81,7 +81,7 @@ export default async function Hero() {
           </div>
 
           {/* Stats row */}
-          <div className="flex flex-wrap items-center gap-x-10 gap-y-4 mt-14 pt-8 border-t border-white/[0.08] animate-[slideUp_0.5s_ease-out_0.8s_both]">
+          <div className="flex flex-wrap items-center gap-x-10 gap-y-4 mt-14 pt-8 border-t border-white/[0.08] animate-[slideUp_0.5s_ease-out_0.35s_both]">
             {[
               { value: "+50", label: t("clients") },
               { value: "+100", label: t("projects") },
@@ -100,13 +100,13 @@ export default async function Hero() {
           </div>
 
           {/* Service cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-14 animate-[slideUp_0.6s_ease-out_1s_both]">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-14 animate-[slideUp_0.5s_ease-out_0.45s_both]">
             {services.map((service) => (
               <div
                 key={service.key}
-                className="group flex items-center gap-3 p-4 rounded-xl bg-white/[0.05] border border-white/[0.08] hover:border-accent/30 hover:bg-white/[0.08] backdrop-blur-sm transition-all duration-300 cursor-default"
+                className="group flex items-center gap-3 p-5 rounded-xl bg-white/[0.05] border border-white/[0.08] hover:border-accent/40 hover:bg-white/[0.08] hover:-translate-y-0.5 backdrop-blur-sm transition-all duration-300 cursor-default"
               >
-                <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0 group-hover:bg-accent/20 transition-colors duration-300">
+                <div className="w-11 h-11 rounded-lg bg-accent/10 flex items-center justify-center shrink-0 group-hover:bg-accent/20 transition-colors duration-300">
                   <service.icon className="w-5 h-5 text-accent" />
                 </div>
                 <span className="text-sm font-cairo font-semibold text-white/70 group-hover:text-white transition-colors duration-300">

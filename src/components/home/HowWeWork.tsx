@@ -64,7 +64,7 @@ export default function HowWeWork() {
                 <div className="px-6 py-8">
                   {/* Large editorial step number */}
                   <div className="mb-6">
-                    <span className="text-7xl font-black font-cairo text-accent/20 group-hover:text-accent/40 transition-colors duration-500 select-none leading-none block">
+                    <span className="text-7xl font-black font-cairo text-accent/40 group-hover:text-accent/70 transition-colors duration-500 select-none leading-none block drop-shadow-[0_0_20px_rgba(212,175,55,0.15)]">
                       {step.num}
                     </span>
                   </div>
@@ -110,14 +110,14 @@ export default function HowWeWork() {
                 <div className="w-3 h-3 rounded-full bg-accent shadow-[0_0_10px_rgba(212,175,55,0.4)] mt-2" />
                 {/* Vertical line */}
                 {index < steps.length - 1 && (
-                  <div className="w-[1px] flex-1 bg-white/10 mt-2" />
+                  <div className="w-[1px] flex-1 bg-gradient-to-b from-accent/40 via-accent/20 to-transparent mt-2" />
                 )}
               </div>
 
               {/* Content */}
               <div className="pb-10">
                 {/* Step number */}
-                <span className="text-5xl font-black font-cairo text-accent/20 select-none leading-none block mb-3">
+                <span className="text-5xl font-black font-cairo text-accent/40 select-none leading-none block mb-3">
                   {step.num}
                 </span>
 

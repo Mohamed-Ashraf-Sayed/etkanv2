@@ -72,7 +72,7 @@ export default function TrustSection() {
         >
           {statsData.map((stat) => (
             <motion.div key={stat.label} variants={fadeUp}>
-              <div className="card rounded-xl p-6 text-center border border-border hover:border-accent/30 transition-colors duration-300">
+              <div className="card rounded-xl p-6 text-center border border-border hover:border-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300">
                 <AnimatedCounter
                   end={stat.value}
                   suffix={stat.suffix}
@@ -88,7 +88,7 @@ export default function TrustSection() {
         <div className="gold-line mx-auto mb-10" />
 
         {/* Company logos label */}
-        <p className="text-center text-sm text-text-secondary font-cairo mb-8">
+        <p className="text-center text-base md:text-lg text-text-secondary font-cairo font-semibold mb-10 tracking-wide">
           {t("clientsLabel")}
         </p>
 
@@ -102,7 +102,7 @@ export default function TrustSection() {
         >
           {companies.map((company) => (
             <motion.div key={company.name} variants={fadeUp}>
-              <div className="flex items-center gap-3 px-5 py-4 rounded-xl border border-border bg-surface hover:border-accent/30 transition-all duration-300 group">
+              <div className="flex items-center gap-3 px-5 py-4 rounded-xl border border-border bg-surface hover:border-accent/40 hover:bg-accent/[0.03] hover:shadow-md hover:shadow-accent/10 hover:-translate-y-0.5 transition-all duration-300 group">
                 <Image
                   src={company.logo}
                   alt={company.name}

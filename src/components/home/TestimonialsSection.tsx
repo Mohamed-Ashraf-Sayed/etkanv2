@@ -73,7 +73,7 @@ export default function TestimonialsSection() {
             <motion.div
               key={index}
               variants={cardVariants}
-              className="relative rounded-2xl bg-white/[0.07] backdrop-blur-sm border border-white/[0.08] p-7 flex flex-col transition-colors duration-300 hover:bg-white/[0.1]"
+              className="relative rounded-2xl bg-white/[0.07] backdrop-blur-sm border border-white/[0.08] border-r-[3px] border-r-accent/60 p-7 flex flex-col transition-all duration-300 hover:bg-white/[0.1] hover:-translate-y-1 hover:border-r-accent hover:shadow-xl hover:shadow-accent/10"
             >
               {/* Gold quote icon */}
               <div className="mb-5">
@@ -86,11 +86,11 @@ export default function TestimonialsSection() {
               </p>
 
               {/* Gold star rating */}
-              <div className="flex items-center gap-0.5 mb-5">
+              <div className="flex items-center gap-1 mb-5">
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className="w-4 h-4 text-accent fill-accent"
+                    className="w-5 h-5 text-accent fill-accent drop-shadow-[0_0_6px_rgba(212,175,55,0.5)]"
                   />
                 ))}
               </div>

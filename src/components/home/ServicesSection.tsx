@@ -68,18 +68,21 @@ export default function ServicesSection() {
                   variants={isEven ? fadeIn : fadeInReverse}
                   className="w-full lg:w-5/12 flex-shrink-0"
                 >
-                  <div className="group relative overflow-hidden rounded-2xl aspect-[4/3]">
+                  <div className="group relative overflow-hidden rounded-2xl aspect-[4/3] shadow-xl shadow-navy/20">
                     <Image
                       src={imageSrc}
                       alt={category.title}
                       fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
                       sizes="(max-width: 1024px) 100vw, 40vw"
                     />
-                    <div className="absolute inset-0 bg-navy/30 group-hover:bg-navy/20 transition-colors duration-500" />
+                    {/* Base dark overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/40 to-navy/20 group-hover:from-navy/60 group-hover:via-navy/20 group-hover:to-transparent transition-all duration-500" />
+                    {/* Gold tint on hover */}
+                    <div className="absolute inset-0 bg-accent/0 group-hover:bg-accent/10 mix-blend-overlay transition-all duration-500" />
 
                     {/* Number badge */}
-                    <div className="absolute top-4 right-4 w-12 h-12 rounded-xl bg-accent/90 flex items-center justify-center">
+                    <div className="absolute top-4 right-4 w-12 h-12 rounded-xl bg-accent/95 flex items-center justify-center shadow-lg shadow-accent/30 group-hover:scale-110 transition-transform duration-300">
                       <span className="text-lg font-bold text-navy font-cairo">
                         {String(index + 1).padStart(2, "0")}
                       </span>
