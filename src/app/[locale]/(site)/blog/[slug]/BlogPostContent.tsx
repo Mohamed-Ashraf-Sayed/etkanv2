@@ -298,6 +298,21 @@ export default function BlogPostContent({
         </Container>
       </section>
 
+      {/* Hero Image */}
+      {post.heroImage && (
+        <section className="relative -mt-12 mb-8">
+          <Container>
+            <div className="rounded-2xl overflow-hidden border border-border shadow-2xl shadow-navy/20 bg-surface">
+              <img
+                src={post.heroImage}
+                alt={post.title}
+                className="w-full h-auto aspect-[16/9] object-cover"
+              />
+            </div>
+          </Container>
+        </section>
+      )}
+
       {/* Article Content */}
       <section className="py-12">
         <Container>

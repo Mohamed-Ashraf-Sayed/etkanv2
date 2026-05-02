@@ -35,6 +35,8 @@ function dbToBlog(p: {
     readingTime: p.readingTime,
     tags: JSON.parse(p.tags || "[]"),
     category: p.category,
+    heroImage: p.heroImage || undefined,
+    inlineImages: JSON.parse(p.inlineImages || "[]"),
   };
 }
 

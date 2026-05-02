@@ -8,6 +8,8 @@ export interface BlogPost {
   readingTime: number;
   tags: string[];
   category: string;
+  heroImage?: string;
+  inlineImages?: string[];
 }
 
 export const blogPosts: BlogPost[] = [

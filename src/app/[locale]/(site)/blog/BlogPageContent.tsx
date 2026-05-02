@@ -80,15 +80,28 @@ export default function BlogPageContent({
           >
             {posts.map((post) => (
               <motion.div key={post.slug} variants={itemVariants}>
-                <Link href={`/blog/${post.slug}`} className="block h-full">
-                  <Card className="h-full flex flex-col" hover>
+                <Link href={`/blog/${post.slug}`} className="block h-full group">
+                  <Card className="h-full flex flex-col overflow-hidden p-0" hover>
+                    {/* Hero Image */}
+                    {post.heroImage && (
+                      <div className="aspect-[16/10] overflow-hidden bg-surface-light">
+                        <img
+                          src={post.heroImage}
+                          alt={post.title}
+                          loading="lazy"
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                      </div>
+                    )}
+
+                    <div className="flex flex-col flex-1 p-6">
                     {/* Category */}
                     <div className="mb-4">
                       <Badge variant="gold">{post.category}</Badge>
                     </div>
 
                     {/* Title */}
-                    <h2 className="text-xl font-bold font-cairo text-text-primary mb-3 line-clamp-2 leading-relaxed">
+                    <h2 className="text-xl font-bold font-cairo text-text-primary mb-3 line-clamp-2 leading-relaxed group-hover:text-accent transition-colors">
                       {post.title}
                     </h2>
 
@@ -120,6 +133,7 @@ export default function BlogPageContent({
                           </span>
                         </div>
                       </div>
+                    </div>
                     </div>
                   </Card>
                 </Link>
