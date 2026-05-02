@@ -67,9 +67,9 @@ const ARTICLE_SYSTEM_PROMPT = `أنت كاتب محتوى تقني محترف ل
   "category": "تطوير الويب|تطبيقات الموبايل|أنظمة الإدارة|الأمن السيبراني|التحول الرقمي",
   "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
   "imagePrompts": [
-    "Hero image prompt - professional, no text, modern tech style, Arabic-friendly",
-    "Inline image 1 prompt - illustrating a key concept",
-    "Inline image 2 prompt - showing application or example"
+    "Hero image: detailed prompt describing a professional editorial cover image. Can include Arabic title text, infographic elements, charts, or scenes. Be specific about composition, subjects, and mood.",
+    "Inline image 1: detailed prompt for an explanatory illustration. Can show a diagram, process flow, before/after comparison with labels, or conceptual visualization.",
+    "Inline image 2: detailed prompt for a supporting image. Can be a screenshot mockup, infographic with stats, or scene illustrating practical application."
   ],
   "readingTime": 8
 }`;
@@ -119,12 +119,21 @@ async function generateArticle(topic: string): Promise<GeneratedArticle> {
 
 async function generateImage(prompt: string): Promise<string> {
   const response = await getOpenAI().images.generate({
-    model: "dall-e-3",
-    prompt: `${prompt}. Professional, modern, clean, no text, no words, suitable for a tech blog hero image. Style: minimalist, corporate, navy blue and gold accents.`,
+    model: "gpt-image-1",
+    prompt: `${prompt}
+
+STYLE REQUIREMENTS:
+- Highly professional, premium editorial quality
+- Modern tech/business illustration suitable for a corporate blog
+- Color palette: deep navy blue (#0B1F3F), gold (#D4AF37), white, with subtle accent colors
+- Clean, polished, magazine-quality composition
+- Sharp details, professional lighting, depth and dimension
+- Can include relevant Arabic/English text labels, icons, or annotations to enhance the message
+- 3D rendered or high-quality vector style preferred
+- No watermarks, no stock photo look`,
     n: 1,
-    size: "1792x1024",
-    quality: "standard",
-    response_format: "b64_json",
+    size: "1536x1024",
+    quality: "high",
   });
 
   const b64 = response.data?.[0]?.b64_json;

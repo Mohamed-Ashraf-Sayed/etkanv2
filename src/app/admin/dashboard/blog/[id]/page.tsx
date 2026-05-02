@@ -3,7 +3,14 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, Save, Loader2, Eye } from "lucide-react";
+import {
+  ArrowRight,
+  Save,
+  Loader2,
+  Eye,
+  RefreshCw,
+  ImageIcon,
+} from "lucide-react";
 
 interface BlogPost {
   id: string;
@@ -31,6 +38,48 @@ export default function BlogEditPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
+  const [regeneratingHero, setRegeneratingHero] = useState(false);
+  const [regeneratingInline, setRegeneratingInline] = useState<number | null>(
+    null
+  );
+  const [heroPrompt, setHeroPrompt] = useState("");
+  const [inlinePrompts, setInlinePrompts] = useState<Record<number, string>>(
+    {}
+  );
+
+  const regenerateImage = async (
+    target: "hero" | "inline",
+    index: number,
+    prompt: string
+  ) => {
+    if (prompt.trim().length < 5) {
+      alert("اكتب وصف للصورة على الأقل 5 أحرف");
+      return;
+    }
+    if (target === "hero") setRegeneratingHero(true);
+    else setRegeneratingInline(index);
+    try {
+      const res = await fetch(`/api/admin/blog/${id}/regenerate-image`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt, target, index }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "فشل التوليد");
+
+      // Reload post to get updated images
+      const r2 = await fetch(`/api/admin/blog/${id}`);
+      const d2 = await r2.json();
+      setPost(d2.post);
+      if (target === "hero") setHeroPrompt("");
+      else setInlinePrompts({ ...inlinePrompts, [index]: "" });
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "حصل خطأ");
+    } finally {
+      if (target === "hero") setRegeneratingHero(false);
+      else setRegeneratingInline(null);
+    }
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -155,15 +204,58 @@ export default function BlogEditPage() {
         {/* Main */}
         <div className="lg:col-span-2 space-y-5">
           {/* Hero image */}
-          {post.heroImage && (
-            <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
-              <img
-                src={post.heroImage}
-                alt={post.title}
-                className="w-full aspect-[16/9] object-cover"
-              />
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <ImageIcon className="w-4 h-4 text-gray-500" />
+              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                الصورة الرئيسية
+              </label>
             </div>
-          )}
+            {post.heroImage ? (
+              <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+                <img
+                  src={post.heroImage}
+                  alt={post.title}
+                  className="w-full aspect-[16/9] object-cover"
+                />
+              </div>
+            ) : (
+              <div className="rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700 aspect-[16/9] flex items-center justify-center text-gray-400">
+                <ImageIcon className="w-12 h-12" />
+              </div>
+            )}
+            <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-xl p-4 space-y-3">
+              <p className="text-xs text-purple-700 dark:text-purple-300 font-semibold">
+                إعادة توليد الصورة الرئيسية بالذكاء الاصطناعي
+              </p>
+              <textarea
+                value={heroPrompt}
+                onChange={(e) => setHeroPrompt(e.target.value)}
+                placeholder="اوصف الصورة اللي عايزها... مثلاً: 3D rendering of a modern web development workspace with code on multiple screens, including Arabic title 'تطوير المواقع 2026' on the wall, navy blue and gold color scheme"
+                disabled={regeneratingHero}
+                rows={3}
+                className="w-full px-3 py-2 rounded-lg border border-purple-200 dark:border-purple-700 bg-white dark:bg-gray-900 text-sm placeholder:text-gray-400 disabled:opacity-50"
+              />
+              <button
+                type="button"
+                onClick={() => regenerateImage("hero", 0, heroPrompt)}
+                disabled={regeneratingHero || heroPrompt.trim().length < 5}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {regeneratingHero ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    جاري التوليد...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="w-4 h-4" />
+                    توليد صورة جديدة
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
 
           {/* Title AR */}
           <div>
@@ -218,24 +310,78 @@ export default function BlogEditPage() {
             />
           </div>
 
-          {/* Inline images preview */}
-          {inlineImages.length > 0 && (
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                صور المقال
-              </label>
-              <div className="grid grid-cols-2 gap-3">
-                {inlineImages.map((img: string, i: number) => (
-                  <img
+          {/* Inline images */}
+          <div className="space-y-3">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+              صور المقال (Inline)
+            </label>
+            <div className="space-y-4">
+              {[0, 1].map((i) => {
+                const img = inlineImages[i];
+                return (
+                  <div
                     key={i}
-                    src={img}
-                    alt=""
-                    className="rounded-xl border border-gray-200 dark:border-gray-700 aspect-[16/9] object-cover"
-                  />
-                ))}
-              </div>
+                    className="rounded-xl border border-gray-200 dark:border-gray-700 p-4 space-y-3"
+                  >
+                    <p className="text-xs text-gray-500 font-semibold">
+                      صورة {i + 1}
+                    </p>
+                    {img ? (
+                      <img
+                        src={img}
+                        alt=""
+                        className="w-full rounded-lg aspect-[16/9] object-cover border border-gray-200 dark:border-gray-700"
+                      />
+                    ) : (
+                      <div className="rounded-lg border-2 border-dashed border-gray-200 dark:border-gray-700 aspect-[16/9] flex items-center justify-center text-gray-400">
+                        <ImageIcon className="w-10 h-10" />
+                      </div>
+                    )}
+                    <textarea
+                      value={inlinePrompts[i] || ""}
+                      onChange={(e) =>
+                        setInlinePrompts({
+                          ...inlinePrompts,
+                          [i]: e.target.value,
+                        })
+                      }
+                      placeholder="اوصف الصورة اللي عايزها..."
+                      disabled={regeneratingInline === i}
+                      rows={2}
+                      className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm disabled:opacity-50"
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        regenerateImage(
+                          "inline",
+                          i,
+                          inlinePrompts[i] || ""
+                        )
+                      }
+                      disabled={
+                        regeneratingInline === i ||
+                        (inlinePrompts[i] || "").trim().length < 5
+                      }
+                      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      {regeneratingInline === i ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          جاري التوليد...
+                        </>
+                      ) : (
+                        <>
+                          <RefreshCw className="w-3.5 h-3.5" />
+                          {img ? "إعادة توليد" : "توليد"}
+                        </>
+                      )}
+                    </button>
+                  </div>
+                );
+              })}
             </div>
-          )}
+          </div>
         </div>
 
         {/* Sidebar */}
