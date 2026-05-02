@@ -300,9 +300,9 @@ export default function BlogPostContent({
 
       {/* Hero Image */}
       {post.heroImage && (
-        <section className="relative -mt-12 mb-8">
+        <section className="py-12">
           <Container>
-            <div className="rounded-2xl overflow-hidden border border-border shadow-2xl shadow-navy/20 bg-surface">
+            <div className="rounded-2xl overflow-hidden border border-border shadow-xl shadow-navy/10 bg-surface">
               <img
                 src={post.heroImage}
                 alt={post.title}
