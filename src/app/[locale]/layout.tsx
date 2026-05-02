@@ -11,6 +11,7 @@ import {
   getLocalBusinessSchema,
 } from "@/lib/seo";
 import PageTracker from "@/components/analytics/PageTracker";
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import "./globals.css";
 
 const cairo = Cairo({
@@ -148,6 +149,7 @@ export default async function LocaleLayout({
         />
       </head>
       <body className="font-cairo antialiased bg-background text-text-primary min-h-screen" suppressHydrationWarning>
+        <GoogleAnalytics />
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>
             <PageTracker />

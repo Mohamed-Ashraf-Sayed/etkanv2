@@ -15,12 +15,22 @@ export function getOrganizationSchema() {
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer service",
+      telephone: "+201094807674",
+      email: "info@etqanly.com",
       availableLanguage: ["Arabic", "English"],
+      areaServed: ["EG", "SA", "AE", "QA", "KW"],
     },
     address: {
       "@type": "PostalAddress",
       addressCountry: "EG",
+      addressLocality: "Cairo",
     },
+    sameAs: [
+      "https://www.facebook.com/etqanly",
+      "https://www.linkedin.com/company/etqanly",
+      "https://twitter.com/etqanly",
+      "https://www.instagram.com/etqanly",
+    ],
     areaServed: [
       { "@type": "Country", name: "Egypt" },
       { "@type": "Country", name: "Saudi Arabia" },
@@ -58,14 +68,52 @@ export function getLocalBusinessSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
+    "@id": `${BASE_URL}/#organization`,
     name: "إتقان للحلول المتكاملة",
+    alternateName: "Etqan IT Solutions",
     url: BASE_URL,
     logo: `${BASE_URL}/icon.png`,
     image: `${BASE_URL}/opengraph-image`,
     priceRange: "$$",
+    telephone: "+201094807674",
+    email: "info@etqanly.com",
+    address: {
+      "@type": "PostalAddress",
+      addressCountry: "EG",
+      addressLocality: "Cairo",
+      addressRegion: "Cairo Governorate",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 30.0444,
+      longitude: 31.2357,
+    },
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+        ],
+        opens: "09:00",
+        closes: "18:00",
+      },
+    ],
+    sameAs: [
+      "https://www.facebook.com/etqanly",
+      "https://www.linkedin.com/company/etqanly",
+      "https://twitter.com/etqanly",
+      "https://www.instagram.com/etqanly",
+    ],
     areaServed: [
       { "@type": "Country", name: "Egypt" },
       { "@type": "Country", name: "Saudi Arabia" },
+      { "@type": "Country", name: "United Arab Emirates" },
+      { "@type": "Country", name: "Qatar" },
+      { "@type": "Country", name: "Kuwait" },
     ],
     knowsAbout: [
       "Web Development",
@@ -75,6 +123,13 @@ export function getLocalBusinessSchema() {
       "IT Infrastructure",
       "Technical Support",
     ],
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.9",
+      reviewCount: "75",
+      bestRating: "5",
+      worstRating: "1",
+    },
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: "خدمات إتقان",
@@ -110,6 +165,31 @@ export function getLocalBusinessSchema() {
       ],
     },
   };
+}
+
+export function getReviewSchema(
+  reviews: Array<{ author: string; text: string; rating?: number }>
+) {
+  return reviews.map((review) => ({
+    "@context": "https://schema.org",
+    "@type": "Review",
+    reviewBody: review.text,
+    author: {
+      "@type": "Person",
+      name: review.author,
+    },
+    reviewRating: {
+      "@type": "Rating",
+      ratingValue: review.rating ?? 5,
+      bestRating: 5,
+      worstRating: 1,
+    },
+    itemReviewed: {
+      "@type": "Organization",
+      name: "إتقان للحلول المتكاملة",
+      url: BASE_URL,
+    },
+  }));
 }
 
 export function getCanonical(path: string, locale: string = "ar") {
