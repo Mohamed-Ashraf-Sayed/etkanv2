@@ -63,6 +63,31 @@ model PageView {
   @@index([ip])
 }
 
+model BlogPost {
+  id           String    @id @default(cuid())
+  slug         String    @unique
+  title        String
+  titleEn      String    @default("")
+  excerpt      String    @db.Text
+  excerptEn    String    @default("") @db.Text
+  content      String    @db.LongText
+  contentEn    String    @default("") @db.LongText
+  author       String    @default("فريق إتقان")
+  category     String    @default("تقنية")
+  tags         String    @default("[]") @db.Text
+  heroImage    String    @default("")
+  inlineImages String    @default("[]") @db.Text
+  readingTime  Int       @default(5)
+  status       String    @default("draft") // draft | published
+  publishedAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([slug])
+  @@index([status])
+  @@index([publishedAt])
+}
+
 model Project {
   id          String   @id @default(cuid())
   slug        String   @unique

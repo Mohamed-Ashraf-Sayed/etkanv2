@@ -7,6 +7,7 @@ import {
   CalendarCheck,
   MessageCircle,
   FolderKanban,
+  FileText,
   LogOut,
 } from "lucide-react";
 
@@ -14,6 +15,7 @@ const links = [
   { href: "/admin/dashboard", label: "لوحة التحكم", icon: LayoutDashboard },
   { href: "/admin/dashboard/bookings", label: "الحجوزات", icon: CalendarCheck },
   { href: "/admin/dashboard/projects", label: "المشاريع", icon: FolderKanban },
+  { href: "/admin/dashboard/blog", label: "المدونة", icon: FileText },
   {
     href: "/admin/dashboard/conversations",
     label: "المحادثات",

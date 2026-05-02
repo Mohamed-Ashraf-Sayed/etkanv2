@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { services } from "@/data/services";
 import { blogPosts } from "@/data/blog";
 import { projects } from "@/data/projects";
+import { getPublishedBlogPosts } from "@/lib/db-blog";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://etqanly.com";
@@ -20,7 +21,7 @@ function withAlternates(path: string) {
   return { languages };
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPaths = [
     { path: "", changeFrequency: "weekly" as const, priority: 1 },
     { path: "/about", changeFrequency: "monthly" as const, priority: 0.8 },
@@ -53,12 +54,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }))
   );
 
-  const blogRoutes: MetadataRoute.Sitemap = blogPosts.flatMap((p) =>
+  // Merge static + DB posts (DB takes priority)
+  const dbPosts = await getPublishedBlogPosts("ar");
+  const dbSlugs = new Set(dbPosts.map((p) => p.slug));
+  const allBlogPosts = [
+    ...dbPosts,
+    ...blogPosts.filter((p) => !dbSlugs.has(p.slug)),
+  ];
+
+  const blogRoutes: MetadataRoute.Sitemap = allBlogPosts.flatMap((p) =>
     locales.map((locale) => ({
       url: localizedUrl(`/blog/${p.slug}`, locale),
       lastModified: new Date(p.date),
-      changeFrequency: "yearly" as const,
-      priority: locale === "ar" ? 0.6 : 0.5,
+      changeFrequency: "monthly" as const,
+      priority: locale === "ar" ? 0.7 : 0.6,
       alternates: withAlternates(`/blog/${p.slug}`),
     }))
   );

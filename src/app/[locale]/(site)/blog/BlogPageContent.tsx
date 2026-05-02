@@ -11,6 +11,7 @@ import SectionTitle from "@/components/ui/SectionTitle";
 import { getBlogPosts } from "@/lib/data";
 import { formatDate } from "@/lib/utils";
 import Breadcrumb from "@/components/shared/Breadcrumb";
+import type { BlogPost } from "@/data/blog";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -29,10 +30,20 @@ const itemVariants = {
   },
 } as const;
 
-export default function BlogPageContent() {
+export default function BlogPageContent({
+  dbPosts = [],
+}: {
+  dbPosts?: BlogPost[];
+}) {
   const t = useTranslations("blog");
   const locale = useLocale();
-  const posts = getBlogPosts(locale);
+  const staticPosts = getBlogPosts(locale);
+  const dbSlugs = new Set(dbPosts.map((p) => p.slug));
+  // DB posts come first (newest), then static posts not in DB
+  const posts = [
+    ...dbPosts,
+    ...staticPosts.filter((p) => !dbSlugs.has(p.slug)),
+  ];
 
   return (
     <>

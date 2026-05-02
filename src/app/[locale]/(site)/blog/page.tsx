@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import BlogPageContent from "./BlogPageContent";
 import { getAlternates, getBreadcrumbSchema } from "@/lib/seo";
+import { getPublishedBlogPosts } from "@/lib/db-blog";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://etqanly.com";
+
+export const revalidate = 300; // 5 minutes
 
 export const metadata: Metadata = {
   title: "المدونة | مقالات تقنية عن البرمجة والتحول الرقمي",
@@ -24,14 +27,21 @@ const blogSchema = getBreadcrumbSchema([
   { name: "المدونة", url: `${BASE_URL}/blog` },
 ]);
 
-export default function BlogPage() {
+export default async function BlogPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const dbPosts = await getPublishedBlogPosts(locale);
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
       />
-      <BlogPageContent />
+      <BlogPageContent dbPosts={dbPosts} />
     </>
   );
 }

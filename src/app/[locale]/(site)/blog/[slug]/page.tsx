@@ -6,9 +6,13 @@ import {
   getArticleSchema,
   getBreadcrumbSchema,
 } from "@/lib/seo";
+import {
+  getBlogPostBySlugFromDB,
+  getPublishedBlogPosts,
+} from "@/lib/db-blog";
 import BlogPostContent from "./BlogPostContent";
 
-export const revalidate = 3600;
+export const revalidate = 300;
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://etqanly.com";
@@ -17,11 +21,19 @@ interface BlogPostPageProps {
   params: Promise<{ slug: string; locale: string }>;
 }
 
+async function getPost(slug: string, locale: string) {
+  // Try DB first (newer dynamic posts)
+  const dbPost = await getBlogPostBySlugFromDB(slug, locale);
+  if (dbPost) return dbPost;
+  // Fall back to static posts
+  return findBlogPostBySlug(slug, locale);
+}
+
 export async function generateMetadata({
   params,
 }: BlogPostPageProps): Promise<Metadata> {
   const { slug, locale } = await params;
-  const post = findBlogPostBySlug(slug, locale);
+  const post = await getPost(slug, locale);
 
   if (!post) {
     return {
@@ -48,13 +60,19 @@ export async function generateMetadata({
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug, locale } = await params;
-  const post = findBlogPostBySlug(slug, locale);
+  const post = await getPost(slug, locale);
 
   if (!post) {
     notFound();
   }
 
-  const allPosts = getBlogPosts(locale);
+  const dbPosts = await getPublishedBlogPosts(locale);
+  const staticPosts = getBlogPosts(locale);
+  const dbSlugs = new Set(dbPosts.map((p) => p.slug));
+  const allPosts = [
+    ...dbPosts,
+    ...staticPosts.filter((p) => !dbSlugs.has(p.slug)),
+  ];
   const relatedPosts = allPosts
     .filter((p) => p.slug !== post.slug)
     .sort((a, b) => {
