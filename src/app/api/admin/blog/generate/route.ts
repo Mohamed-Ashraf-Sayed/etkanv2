@@ -6,8 +6,26 @@ import { clearBlogCache } from "@/lib/db-blog";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+export const maxDuration = 300;
+
+let _anthropic: Anthropic | null = null;
+let _openai: OpenAI | null = null;
+
+function getAnthropic(): Anthropic {
+  if (!_anthropic) {
+    _anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  }
+  return _anthropic;
+}
+
+function getOpenAI(): OpenAI {
+  if (!_openai) {
+    _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  }
+  return _openai;
+}
 
 interface GeneratedArticle {
   slug: string;
@@ -57,7 +75,7 @@ const ARTICLE_SYSTEM_PROMPT = `أنت كاتب محتوى تقني محترف ل
 }`;
 
 async function generateArticle(topic: string): Promise<GeneratedArticle> {
-  const message = await anthropic.messages.create({
+  const message = await getAnthropic().messages.create({
     model: "claude-sonnet-4-20250514",
     max_tokens: 8000,
     system: ARTICLE_SYSTEM_PROMPT,
@@ -85,7 +103,7 @@ async function generateArticle(topic: string): Promise<GeneratedArticle> {
 }
 
 async function generateImage(prompt: string): Promise<string> {
-  const response = await openai.images.generate({
+  const response = await getOpenAI().images.generate({
     model: "dall-e-3",
     prompt: `${prompt}. Professional, modern, clean, no text, no words, suitable for a tech blog hero image. Style: minimalist, corporate, navy blue and gold accents.`,
     n: 1,
