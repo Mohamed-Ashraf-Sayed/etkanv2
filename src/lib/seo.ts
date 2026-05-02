@@ -112,6 +112,55 @@ export function getLocalBusinessSchema() {
   };
 }
 
+export function getCanonical(path: string, locale: string = "ar") {
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  return locale === "ar" ? `${BASE_URL}${cleanPath}` : `${BASE_URL}/en${cleanPath}`;
+}
+
+export function getAlternates(path: string) {
+  const cleanPath = path === "/" ? "" : path;
+  return {
+    canonical: `${BASE_URL}${cleanPath}`,
+    languages: {
+      "ar-EG": `${BASE_URL}${cleanPath}`,
+      "en-US": `${BASE_URL}/en${cleanPath}`,
+      "x-default": `${BASE_URL}${cleanPath}`,
+    },
+  };
+}
+
+export function getBreadcrumbSchema(
+  items: Array<{ name: string; url: string }>
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+}
+
+export function getFAQSchema(
+  faqs: Array<{ question: string; answer: string }>
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+}
+
 export function getServiceSchema(service: {
   title: string;
   description: string;

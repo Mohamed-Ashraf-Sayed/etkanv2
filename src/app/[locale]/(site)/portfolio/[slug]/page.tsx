@@ -1,25 +1,43 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { findProjectBySlug } from "@/lib/data";
+import { getAlternates, getBreadcrumbSchema } from "@/lib/seo";
 import ProjectDetailClient from "./ProjectDetailClient";
 
 export const revalidate = 3600;
+
+const BASE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://etqanly.com";
 
 interface PageProps {
   params: Promise<{ slug: string; locale: string }>;
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { slug, locale } = await params;
   const project = findProjectBySlug(slug, locale);
 
   if (!project) {
-    return { title: locale === "en" ? "Project Not Found" : "المشروع غير موجود" };
+    return {
+      title: locale === "en" ? "Project Not Found" : "المشروع غير موجود",
+    };
   }
 
   return {
     title: project.title,
     description: project.summary,
+    alternates: getAlternates(`/portfolio/${slug}`),
+    openGraph: {
+      title: project.title,
+      description: project.summary,
+      type: "article",
+      url: `${BASE_URL}${locale === "en" ? "/en" : ""}/portfolio/${slug}`,
+      images: project.thumbnail
+        ? [{ url: `${BASE_URL}${project.thumbnail}` }]
+        : undefined,
+    },
   };
 }
 
@@ -31,5 +49,43 @@ export default async function ProjectDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  return <ProjectDetailClient project={project} />;
+  const isArabic = locale === "ar";
+  const baseUrl = `${BASE_URL}${isArabic ? "" : "/en"}`;
+
+  const schemas = [
+    {
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      name: project.title,
+      description: project.summary,
+      url: `${baseUrl}/portfolio/${slug}`,
+      image: project.thumbnail
+        ? `${BASE_URL}${project.thumbnail}`
+        : undefined,
+      creator: {
+        "@type": "Organization",
+        name: "إتقان للحلول المتكاملة",
+        url: BASE_URL,
+      },
+      about: project.industry,
+    },
+    getBreadcrumbSchema([
+      { name: isArabic ? "الرئيسية" : "Home", url: `${baseUrl}/` },
+      {
+        name: isArabic ? "أعمالنا" : "Portfolio",
+        url: `${baseUrl}/portfolio`,
+      },
+      { name: project.title, url: `${baseUrl}/portfolio/${slug}` },
+    ]),
+  ];
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemas) }}
+      />
+      <ProjectDetailClient project={project} />
+    </>
+  );
 }

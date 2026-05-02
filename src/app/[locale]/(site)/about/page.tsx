@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import AboutPageContent from "./AboutPageContent";
+import { getAlternates, getBreadcrumbSchema } from "@/lib/seo";
+
+const BASE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://etqanly.com";
 
 export const metadata: Metadata = {
   title: "من نحن | شركة إتقان للحلول المتكاملة",
@@ -11,8 +15,22 @@ export const metadata: Metadata = {
     "فريق تطوير برمجيات",
     "شركة IT مصر",
   ],
+  alternates: getAlternates("/about"),
 };
 
+const aboutSchema = getBreadcrumbSchema([
+  { name: "الرئيسية", url: `${BASE_URL}/` },
+  { name: "من نحن", url: `${BASE_URL}/about` },
+]);
+
 export default function AboutPage() {
-  return <AboutPageContent />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }}
+      />
+      <AboutPageContent />
+    </>
+  );
 }

@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import BlogPageContent from "./BlogPageContent";
+import { getAlternates, getBreadcrumbSchema } from "@/lib/seo";
+
+const BASE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://etqanly.com";
 
 export const metadata: Metadata = {
   title: "المدونة | مقالات تقنية عن البرمجة والتحول الرقمي",
@@ -12,8 +16,22 @@ export const metadata: Metadata = {
     "التحول الرقمي",
     "أمن سيبراني",
   ],
+  alternates: getAlternates("/blog"),
 };
 
+const blogSchema = getBreadcrumbSchema([
+  { name: "الرئيسية", url: `${BASE_URL}/` },
+  { name: "المدونة", url: `${BASE_URL}/blog` },
+]);
+
 export default function BlogPage() {
-  return <BlogPageContent />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
+      />
+      <BlogPageContent />
+    </>
+  );
 }

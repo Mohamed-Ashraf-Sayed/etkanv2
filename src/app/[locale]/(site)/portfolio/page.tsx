@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import PortfolioPageClient from "./PortfolioPageClient";
+import { getAlternates, getBreadcrumbSchema } from "@/lib/seo";
+
+const BASE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://etqanly.com";
 
 export const metadata: Metadata = {
   title: "أعمالنا | مشاريع تصميم مواقع وتطبيقات ناجحة",
@@ -11,8 +15,22 @@ export const metadata: Metadata = {
     "مشاريع تطبيقات ناجحة",
     "بورتفوليو شركة برمجة",
   ],
+  alternates: getAlternates("/portfolio"),
 };
 
+const portfolioSchema = getBreadcrumbSchema([
+  { name: "الرئيسية", url: `${BASE_URL}/` },
+  { name: "أعمالنا", url: `${BASE_URL}/portfolio` },
+]);
+
 export default function PortfolioPage() {
-  return <PortfolioPageClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(portfolioSchema) }}
+      />
+      <PortfolioPageClient />
+    </>
+  );
 }

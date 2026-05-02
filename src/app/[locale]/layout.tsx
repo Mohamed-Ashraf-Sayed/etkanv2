@@ -18,6 +18,8 @@ const cairo = Cairo({
   subsets: ["arabic", "latin"],
   weight: ["400", "600", "700", "900"],
   display: "swap",
+  preload: true,
+  fallback: ["system-ui", "arial", "sans-serif"],
 });
 
 const BASE_URL =
@@ -82,10 +84,22 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL(BASE_URL),
   alternates: {
+    canonical: BASE_URL,
     languages: {
-      ar: BASE_URL,
-      en: `${BASE_URL}/en`,
+      "ar-EG": BASE_URL,
+      "en-US": `${BASE_URL}/en`,
+      "x-default": BASE_URL,
     },
+  },
+  authors: [{ name: "إتقان للحلول المتكاملة", url: BASE_URL }],
+  creator: "إتقان للحلول المتكاملة",
+  publisher: "إتقان للحلول المتكاملة",
+  category: "Technology",
+  applicationName: "Etqan IT Solutions",
+  formatDetection: {
+    telephone: true,
+    email: true,
+    address: true,
   },
   robots: {
     index: true,
