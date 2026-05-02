@@ -119,7 +119,7 @@ async function generateArticle(topic: string): Promise<GeneratedArticle> {
 
 async function generateImage(prompt: string): Promise<string> {
   const response = await getOpenAI().images.generate({
-    model: "gpt-image-1",
+    model: "gpt-image-2",
     prompt: `${prompt}
 
 STYLE REQUIREMENTS:
