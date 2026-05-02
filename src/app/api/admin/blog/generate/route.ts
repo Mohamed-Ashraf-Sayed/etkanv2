@@ -77,7 +77,7 @@ const ARTICLE_SYSTEM_PROMPT = `أنت كاتب محتوى تقني محترف ل
 async function generateArticle(topic: string): Promise<GeneratedArticle> {
   const message = await getAnthropic().messages.create({
     model: "claude-sonnet-4-20250514",
-    max_tokens: 8000,
+    max_tokens: 16000,
     system: ARTICLE_SYSTEM_PROMPT,
     messages: [
       {
@@ -92,14 +92,29 @@ async function generateArticle(topic: string): Promise<GeneratedArticle> {
     .map((b) => (b as { text: string }).text)
     .join("");
 
-  // Strip code fences if present
-  const cleaned = text
+  // Strip code fences and extract JSON object
+  let cleaned = text
     .replace(/^```json\s*/i, "")
     .replace(/^```\s*/i, "")
     .replace(/```\s*$/i, "")
     .trim();
 
-  return JSON.parse(cleaned) as GeneratedArticle;
+  // Find first { and last } to extract just the JSON
+  const firstBrace = cleaned.indexOf("{");
+  const lastBrace = cleaned.lastIndexOf("}");
+  if (firstBrace !== -1 && lastBrace > firstBrace) {
+    cleaned = cleaned.slice(firstBrace, lastBrace + 1);
+  }
+
+  try {
+    return JSON.parse(cleaned) as GeneratedArticle;
+  } catch (e) {
+    console.error("JSON parse failed. Length:", cleaned.length);
+    console.error("Last 500 chars:", cleaned.slice(-500));
+    throw new Error(
+      `Failed to parse article JSON: ${e instanceof Error ? e.message : "unknown"}`
+    );
+  }
 }
 
 async function generateImage(prompt: string): Promise<string> {
@@ -119,11 +134,11 @@ async function generateImage(prompt: string): Promise<string> {
 
 async function saveImage(b64: string, slug: string, idx: number): Promise<string> {
   const buffer = Buffer.from(b64, "base64");
-  const dir = path.join(process.cwd(), "public", "images", "blog", slug);
+  const dir = path.join(process.cwd(), "data", "uploads", "blog", slug);
   await mkdir(dir, { recursive: true });
   const filename = `${idx === 0 ? "hero" : `inline-${idx}`}.jpg`;
   await writeFile(path.join(dir, filename), buffer);
-  return `/images/blog/${slug}/${filename}`;
+  return `/api/uploads/blog/${slug}/${filename}`;
 }
 
 export async function POST(req: Request) {
