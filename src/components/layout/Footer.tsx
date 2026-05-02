@@ -13,6 +13,7 @@ import {
   Send,
 } from "lucide-react";
 import Container from "@/components/ui/Container";
+import { TextHoverEffect, FooterBackgroundGradient } from "@/components/ui/hover-footer";
 
 const socialLinks = [
   { href: "#", icon: Twitter, label: "Twitter" },
@@ -47,11 +48,12 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-navy text-white">
+    <footer className="bg-navy text-white relative overflow-hidden">
       {/* Gold top line */}
-      <div className="h-1 bg-accent" />
+      <div className="h-1 bg-accent relative z-10" />
+      <FooterBackgroundGradient />
 
-      <Container className="py-16 lg:py-20">
+      <Container className="py-16 lg:py-20 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
           {/* Column 1: Brand + Newsletter */}
           <div className="lg:col-span-4">
@@ -156,11 +158,11 @@ export default function Footer() {
                   className="text-accent mt-0.5 shrink-0"
                 />
                 <a
-                  href="mailto:info@devixtech.com"
+                  href="mailto:info@etqanly.com"
                   className="text-sm text-white/60 font-cairo hover:text-accent transition-colors duration-200"
                   dir="ltr"
                 >
-                  info@devixtech.com
+                  info@etqanly.com
                 </a>
               </li>
               <li className="flex items-start gap-3">
@@ -169,11 +171,11 @@ export default function Footer() {
                   className="text-accent mt-0.5 shrink-0"
                 />
                 <a
-                  href="tel:+201234567890"
+                  href="tel:+201094807674"
                   className="text-sm text-white/60 font-cairo hover:text-accent transition-colors duration-200"
                   dir="ltr"
                 >
-                  +20 123 456 7890
+                  +20 109 480 7674
                 </a>
               </li>
               <li className="flex items-start gap-3">
@@ -199,8 +201,13 @@ export default function Footer() {
         </div>
       </Container>
 
+      {/* Text Hover Effect */}
+      <div className="lg:flex hidden h-[20rem] -mt-28 -mb-20 relative z-10">
+        <TextHoverEffect text="ETQAN" className="z-50" />
+      </div>
+
       {/* Partnerships Bar */}
-      <div className="border-t border-white/10">
+      <div className="border-t border-white/10 relative z-10">
         <Container className="py-4">
           <div className="flex items-center justify-center gap-6 flex-wrap">
             {partnerships.map((partner) => (
@@ -217,7 +224,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-white/10">
+      <div className="border-t border-white/10 relative z-10">
         <Container className="py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-xs text-white/60 font-cairo">

@@ -39,9 +39,9 @@ Sunday to Thursday: 9 AM to 5 PM
 Friday and Saturday: Off
 
 ## Contact
-- WhatsApp: +20 123 456 7890
-- Phone: +20 123 456 7890
-- Email: info@etqan.com
+- WhatsApp: +20 109 480 7674
+- Phone: +20 109 480 7674
+- Email: info@etqanly.com
 
 ## Important Instructions
 - Always guide clients to book a free consultation — this is your primary goal

@@ -421,7 +421,7 @@ export default function QuoteTab() {
                     type="tel"
                     {...register("phone")}
                     error={errors.phone?.message}
-                    placeholder="+20 123 456 7890"
+                    placeholder="+20 109 480 7674"
                     dir="ltr"
                   />
                   <Input

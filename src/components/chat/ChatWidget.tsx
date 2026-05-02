@@ -226,7 +226,11 @@ export default function ChatWidget() {
         }),
       });
 
-      if (!res.ok) throw new Error("API error");
+      if (!res.ok) {
+        const errorText = await res.text().catch(() => "");
+        console.error("Chat API error:", res.status, errorText);
+        throw new Error(`API error: ${res.status}`);
+      }
 
       const reader = res.body?.getReader();
       const decoder = new TextDecoder();
@@ -254,7 +258,8 @@ export default function ChatWidget() {
       if (!accumulated.trim()) {
         setMessages((prev) => prev.filter((_, i) => i !== prev.length - 1));
       }
-    } catch {
+    } catch (err) {
+      console.error("Chat error:", err);
       setMessages((prev) => {
         const updated = [...prev];
         updated[updated.length - 1] = {

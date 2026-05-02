@@ -1,11 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
-import Image from "next/image";
-import { Link } from "@/i18n/navigation";
-import { ArrowLeft } from "lucide-react";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
+import { VerticalTabs } from "@/components/ui/vertical-tabs";
+import type { VerticalTabItem } from "@/components/ui/vertical-tabs";
 import { getServiceCategories } from "@/lib/data";
 import { useTranslations, useLocale } from "next-intl";
 
@@ -17,107 +15,23 @@ const serviceImages: Record<string, string> = {
   consulting: "/images/service-consulting.jpg",
 };
 
-const fadeIn = {
-  hidden: { opacity: 0, x: 20 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] as const },
-  },
-};
-
-const fadeInReverse = {
-  hidden: { opacity: 0, x: -20 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] as const },
-  },
-};
-
 export default function ServicesSection() {
   const t = useTranslations("services");
   const locale = useLocale();
   const categories = getServiceCategories(locale);
 
+  const tabItems: VerticalTabItem[] = categories.map((category, index) => ({
+    id: String(index + 1).padStart(2, "0"),
+    title: category.title,
+    description: category.description,
+    image: serviceImages[category.slug] || "/images/service-web.jpg",
+  }));
+
   return (
-    <section className="section-padding relative">
+    <section className="section-padding relative bg-white dark:bg-background">
       <Container>
-        <SectionTitle
-          title={t("title")}
-          subtitle={t("subtitle")}
-        />
-
-        <div className="flex flex-col gap-20 lg:gap-28">
-          {categories.map((category, index) => {
-            const isEven = index % 2 === 0;
-            const imageSrc = serviceImages[category.slug] || "/images/service-web.jpg";
-
-            return (
-              <motion.div
-                key={category.slug}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.3 }}
-                className={`flex flex-col lg:flex-row items-center gap-10 lg:gap-16 ${
-                  isEven ? "" : "lg:flex-row-reverse"
-                }`}
-              >
-                {/* Image */}
-                <motion.div
-                  variants={isEven ? fadeIn : fadeInReverse}
-                  className="w-full lg:w-5/12 flex-shrink-0"
-                >
-                  <div className="group relative overflow-hidden rounded-2xl aspect-[4/3] shadow-xl shadow-navy/20">
-                    <Image
-                      src={imageSrc}
-                      alt={category.title}
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      sizes="(max-width: 1024px) 100vw, 40vw"
-                    />
-                    {/* Base dark overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/40 to-navy/20 group-hover:from-navy/60 group-hover:via-navy/20 group-hover:to-transparent transition-all duration-500" />
-                    {/* Gold tint on hover */}
-                    <div className="absolute inset-0 bg-accent/0 group-hover:bg-accent/10 mix-blend-overlay transition-all duration-500" />
-
-                    {/* Number badge */}
-                    <div className="absolute top-4 right-4 w-12 h-12 rounded-xl bg-accent/95 flex items-center justify-center shadow-lg shadow-accent/30 group-hover:scale-110 transition-transform duration-300">
-                      <span className="text-lg font-bold text-navy font-cairo">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                    </div>
-                  </div>
-                </motion.div>
-
-                {/* Text */}
-                <motion.div
-                  variants={isEven ? fadeInReverse : fadeIn}
-                  className="w-full lg:w-7/12"
-                >
-                  <div className="gold-line mb-4" />
-
-                  <h3 className="text-h3 font-bold font-cairo text-text-primary mb-4 lg:mb-5">
-                    {category.title}
-                  </h3>
-
-                  <p className="text-text-secondary text-body-lg font-cairo leading-relaxed mb-6 max-w-xl">
-                    {category.description}
-                  </p>
-
-                  <Link
-                    href="/services"
-                    className="inline-flex items-center gap-2.5 text-accent font-semibold font-cairo transition-all duration-300 hover:gap-4 group/link"
-                    aria-label={`${t("learnMore")} - ${category.title}`}
-                  >
-                    <span>{t("learnMore")}</span>
-                    <ArrowLeft className="w-4 h-4 transition-transform duration-300 group-hover/link:-translate-x-1" />
-                  </Link>
-                </motion.div>
-              </motion.div>
-            );
-          })}
-        </div>
+        <SectionTitle title={t("title")} subtitle={t("subtitle")} />
+        <VerticalTabs items={tabItems} />
       </Container>
     </section>
   );

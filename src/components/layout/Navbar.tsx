@@ -8,6 +8,7 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ThemeToggle from "@/components/shared/ThemeToggle";
 import LocaleSwitcher from "@/components/shared/LocaleSwitcher";
+import { MenuVertical } from "@/components/ui/menu-vertical";
 
 export default function Navbar() {
   const t = useTranslations("nav");
@@ -23,7 +24,6 @@ export default function Navbar() {
     { href: "/services" as const, label: t("services") },
     { href: "/portfolio" as const, label: t("portfolio") },
     { href: "/blog" as const, label: t("blog") },
-    { href: "/tech-radar" as const, label: t("techRadar") },
     { href: "/scope" as const, label: t("scope") },
     { href: "/booking" as const, label: t("booking") },
     { href: "/contact" as const, label: t("contact") },
@@ -157,40 +157,26 @@ export default function Navbar() {
             />
 
             <div className="relative flex flex-col h-full pt-[78px]">
-              <div className="flex-1 overflow-y-auto px-5 py-6">
-                <div className="rounded-2xl border border-white/[0.06] bg-white/[0.03] p-2 space-y-0.5">
-                  {navLinks.map((link, index) => {
-                    const isActive =
-                      link.href === "/"
-                        ? pathname === "/"
-                        : pathname.startsWith(link.href);
-
-                    return (
-                      <motion.div
-                        key={link.href}
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{
-                          delay: index * 0.04,
-                          duration: 0.3,
-                          ease: [0.22, 1, 0.36, 1],
-                        }}
-                      >
-                        <Link
-                          href={link.href}
-                          className={cn(
-                            "flex items-center px-4 py-3 rounded-xl text-[15px] font-cairo font-semibold transition-all duration-200",
-                            isActive
-                              ? "text-white bg-navy shadow-sm border border-white/[0.06]"
-                              : "text-white/50 hover:text-white hover:bg-white/[0.04]"
-                          )}
-                        >
-                          {link.label}
-                        </Link>
-                      </motion.div>
-                    );
-                  })}
-                </div>
+              <div className="flex-1 overflow-y-auto py-8 flex items-start">
+                <motion.div
+                  initial={{ opacity: 0, x: 30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <MenuVertical
+                    menuItems={navLinks.map((link) => ({
+                      label: link.label,
+                      href: link.href,
+                      isActive:
+                        link.href === "/"
+                          ? pathname === "/"
+                          : pathname.startsWith(link.href),
+                    }))}
+                    color="#D4AF37"
+                    skew={-3}
+                    onItemClick={() => setIsOpen(false)}
+                  />
+                </motion.div>
               </div>
 
               <motion.div

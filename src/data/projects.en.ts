@@ -88,7 +88,7 @@ export const projectsEn: Project[] = [
       { metric: "Markets", value: "4 Continents", description: "Exports to Asia, Africa, Europe, and Americas" },
     ],
     tags: ["WordPress", "Corporate Website", "Mining", "Export"],
-    thumbnail: "/images/projects/genesis-mining.jpg",
+    thumbnail: "/images/projects/genesis-mining-new.jpg",
     images: [
       "/images/projects/genesis-mining-2.jpg",
       "/images/projects/genesis-mining-3.jpg",

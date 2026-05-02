@@ -89,15 +89,15 @@ export default function ContactPageContent() {
     {
       icon: Mail,
       label: t("emailContact"),
-      value: "info@devixtech.com",
-      href: "mailto:info@devixtech.com",
+      value: "info@etqanly.com",
+      href: "mailto:info@etqanly.com",
       dir: "ltr" as const,
     },
     {
       icon: Phone,
       label: t("phoneContact"),
-      value: "+20 123 456 7890",
-      href: "tel:+201234567890",
+      value: "+20 109 480 7674",
+      href: "tel:+201094807674",
       dir: "ltr" as const,
     },
     {
@@ -402,7 +402,7 @@ export default function ContactPageContent() {
               {/* WhatsApp CTA */}
               <motion.div variants={fadeUp}>
                 <a
-                  href="https://wa.me/201234567890"
+                  href="https://wa.me/201094807674"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex items-center gap-4 p-5 rounded-2xl bg-[#25D366]/10 border border-[#25D366]/20 hover:bg-[#25D366]/15 transition-all duration-300"
@@ -556,7 +556,7 @@ export default function ContactPageContent() {
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <a
-                  href="https://wa.me/201234567890"
+                  href="https://wa.me/201094807674"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -565,7 +565,7 @@ export default function ContactPageContent() {
                     {t("freeConsultation")}
                   </Button>
                 </a>
-                <a href="tel:+201234567890">
+                <a href="tel:+201094807674">
                   <Button variant="outline" size="lg" className="border-white/50 text-white hover:bg-white/10">
                     <Phone className="w-5 h-5 ml-2" />
                     {t("callUsButton")}

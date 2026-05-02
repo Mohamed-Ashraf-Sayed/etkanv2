@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 
-const WHATSAPP_NUMBER = "201234567890";
+const WHATSAPP_NUMBER = "201094807674";
 
 export default function WhatsAppButton() {
   const t = useTranslations("common");

@@ -779,15 +779,23 @@ export default function ProjectScopeClient() {
         <div className="absolute inset-0">
           <div className="absolute top-20 start-10 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl" />
           <div className="absolute bottom-10 end-10 w-96 h-96 bg-[var(--color-accent)]/8 rounded-full blur-3xl" />
-          <div className="absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-3xl" />
         </div>
+        {/* Grid pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
+            backgroundSize: "60px 60px",
+          }}
+        />
         <Container className="relative z-10">
           <Breadcrumb items={[{ label: t("title") }]} />
           <motion.div
             initial="hidden"
             animate="visible"
             variants={staggerContainer}
-            className="max-w-3xl"
+            className="max-w-3xl mx-auto text-center"
           >
             <motion.div variants={fadeUp}>
               <div className="mb-6">
@@ -797,16 +805,16 @@ export default function ProjectScopeClient() {
                 </Badge>
               </div>
             </motion.div>
-            <motion.h1 variants={fadeUp} className="text-h1 font-bold font-cairo text-white mb-4">
+            <motion.h1 variants={fadeUp} className="text-display font-black font-cairo text-white mb-4">
               {t("title")}
             </motion.h1>
-            <motion.div variants={fadeUp} className="gold-line mb-6" />
-            <motion.p variants={fadeUp} className="text-lg text-white/60 font-cairo max-w-2xl leading-relaxed">
+            <motion.div variants={fadeUp} className="gold-line mx-auto mb-6" />
+            <motion.p variants={fadeUp} className="text-lg text-white/50 font-cairo max-w-2xl mx-auto leading-relaxed">
               {t("subtitle")}
             </motion.p>
 
-            {/* Mini features in hero */}
-            <motion.div variants={fadeUp} className="flex flex-wrap gap-6 mt-8">
+            {/* Mini features */}
+            <motion.div variants={fadeUp} className="flex flex-wrap justify-center gap-4 mt-8">
               {[
                 { icon: Target, label: t("heroFeature1") },
                 { icon: Cpu, label: t("heroFeature2") },
@@ -814,11 +822,9 @@ export default function ProjectScopeClient() {
               ].map((item, i) => {
                 const Icon = item.icon;
                 return (
-                  <div key={i} className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-white/[0.06] flex items-center justify-center">
-                      <Icon className="w-4 h-4 text-[var(--color-accent)]" />
-                    </div>
-                    <span className="text-sm text-white/40 font-cairo">{item.label}</span>
+                  <div key={i} className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.05] border border-white/[0.08]">
+                    <Icon className="w-4 h-4 text-[var(--color-accent)]" />
+                    <span className="text-sm text-white/50 font-cairo">{item.label}</span>
                   </div>
                 );
               })}
@@ -827,14 +833,8 @@ export default function ProjectScopeClient() {
         </Container>
       </section>
 
-      {/* Input Section - Dark gradient background like tech radar */}
-      <section className="relative py-16 bg-gradient-to-b from-[var(--color-navy)] via-[#0d2347] to-[var(--color-navy)]">
-        {/* Subtle grid pattern */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
-          backgroundSize: "40px 40px",
-        }} />
-
+      {/* Input Section */}
+      <section className="relative py-16 bg-white dark:bg-background">
         <Container className="relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -843,18 +843,18 @@ export default function ProjectScopeClient() {
             className="max-w-3xl mx-auto"
           >
             {/* Input Card */}
-            <div className="relative rounded-2xl bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm overflow-hidden">
+            <div className="relative rounded-2xl bg-surface border border-border shadow-xl shadow-navy/5 overflow-hidden">
               {/* Top accent */}
               <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-l from-[var(--color-accent)] via-purple-500 to-blue-500" />
 
               <div className="p-6 md:p-8">
                 <div className="flex items-center gap-3 mb-5">
-                  <div className="w-10 h-10 rounded-xl bg-[var(--color-accent)]/10 flex items-center justify-center">
-                    <Sparkles className="w-5 h-5 text-[var(--color-accent)]" />
+                  <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center">
+                    <Sparkles className="w-5 h-5 text-accent" />
                   </div>
                   <div>
-                    <h3 className="font-bold font-cairo text-white text-sm">{t("inputTitle")}</h3>
-                    <p className="text-xs text-white/40 font-cairo">{t("inputSub")}</p>
+                    <h3 className="font-bold font-cairo text-text-primary text-sm">{t("inputTitle")}</h3>
+                    <p className="text-xs text-text-muted font-cairo">{t("inputSub")}</p>
                   </div>
                 </div>
 
@@ -865,9 +865,9 @@ export default function ProjectScopeClient() {
                     setError("");
                   }}
                   placeholder={t("placeholder")}
-                  rows={4}
+                  rows={5}
                   disabled={isLoading}
-                  className="w-full bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 text-white font-cairo text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/30 focus:border-[var(--color-accent)]/40 transition-all placeholder:text-white/20 disabled:opacity-50"
+                  className="w-full bg-background rounded-xl border border-border p-4 text-text-primary font-cairo text-sm resize-none focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/40 transition-all placeholder:text-text-muted/50 disabled:opacity-50"
                   dir="auto"
                 />
 
@@ -888,7 +888,7 @@ export default function ProjectScopeClient() {
                       disabled={isLoading || description.trim().length < 5}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-[var(--color-accent)] text-white font-cairo font-bold text-sm shadow-lg shadow-[var(--color-accent)]/25 hover:shadow-xl hover:shadow-[var(--color-accent)]/35 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-accent text-navy font-cairo font-bold text-sm shadow-lg shadow-accent/25 hover:bg-accent-light hover:shadow-xl hover:shadow-accent/35 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       {isLoading ? (
                         <Sparkles className="w-4 h-4 animate-spin" />
@@ -904,7 +904,7 @@ export default function ProjectScopeClient() {
                       animate={{ opacity: 1 }}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-white/[0.06] text-white/70 font-cairo font-bold text-sm border border-white/[0.1] hover:bg-white/[0.1] hover:text-white transition-all"
+                      className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-surface-light text-text-secondary font-cairo font-bold text-sm border border-border hover:border-accent/30 hover:text-accent transition-all"
                     >
                       <RotateCcw className="w-4 h-4" />
                       {t("tryAgain")}
@@ -915,8 +915,8 @@ export default function ProjectScopeClient() {
 
               {/* Quick examples */}
               {!scope && !isLoading && (
-                <div className="px-6 md:px-8 pb-6 border-t border-white/[0.05] pt-5">
-                  <p className="text-xs text-white/25 font-cairo mb-3">
+                <div className="px-6 md:px-8 pb-6 border-t border-border pt-5">
+                  <p className="text-xs text-text-muted font-cairo mb-3">
                     {t("examples")}:
                   </p>
                   <div className="flex flex-wrap gap-2">
@@ -925,7 +925,7 @@ export default function ProjectScopeClient() {
                         <button
                           key={i}
                           onClick={() => handleExample(example)}
-                          className="px-3.5 py-2 rounded-xl bg-white/[0.03] text-xs text-white/35 font-cairo hover:bg-white/[0.07] hover:text-white/60 transition-all border border-white/[0.05] hover:border-white/[0.1]"
+                          className="px-3.5 py-2 rounded-xl bg-surface-light text-xs text-text-muted font-cairo hover:bg-accent/10 hover:text-accent transition-all border border-border hover:border-accent/20 cursor-pointer"
                         >
                           {example}
                         </button>

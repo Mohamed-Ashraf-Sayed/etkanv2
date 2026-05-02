@@ -4,6 +4,7 @@ export interface TeamMember {
   bio: string;
   initials: string;
   gender: "male" | "female";
+  image: string;
 }
 
 export const team: TeamMember[] = [
@@ -13,6 +14,7 @@ export const team: TeamMember[] = [
     bio: "أكثر من 12 سنة خبرة في قيادة المشاريع التقنية وبناء فرق تطوير ناجحة.",
     initials: "أم",
     gender: "male",
+    image: "https://randomuser.me/api/portraits/men/32.jpg",
   },
   {
     name: "م. خالد إبراهيم",
@@ -20,6 +22,7 @@ export const team: TeamMember[] = [
     bio: "متخصص في تصميم وتأمين شبكات المؤسسات مع شهادات Cisco وFortinet.",
     initials: "خإ",
     gender: "male",
+    image: "https://randomuser.me/api/portraits/men/45.jpg",
   },
   {
     name: "أ. ليلى أحمد",
@@ -27,6 +30,7 @@ export const team: TeamMember[] = [
     bio: "مصممة UX/UI بخبرة 8 سنوات في تصميم تجارب رقمية استثنائية.",
     initials: "لأ",
     gender: "female",
+    image: "https://randomuser.me/api/portraits/women/44.jpg",
   },
   {
     name: "م. عمر حسن",
@@ -34,6 +38,7 @@ export const team: TeamMember[] = [
     bio: "مطور Full-Stack بخبرة 10 سنوات، متخصص في بناء أنظمة معقدة وقابلة للتوسع.",
     initials: "عح",
     gender: "male",
+    image: "https://randomuser.me/api/portraits/men/22.jpg",
   },
   {
     name: "أ. سارة يوسف",
@@ -41,6 +46,7 @@ export const team: TeamMember[] = [
     bio: "PMP معتمدة مع خبرة في إدارة مشاريع تقنية كبرى في مصر والسعودية.",
     initials: "سي",
     gender: "female",
+    image: "https://randomuser.me/api/portraits/women/28.jpg",
   },
   {
     name: "م. محمود علي",
@@ -48,6 +54,7 @@ export const team: TeamMember[] = [
     bio: "متخصص في السحابة وأتمتة العمليات مع شهادات AWS وAzure.",
     initials: "مع",
     gender: "male",
+    image: "https://randomuser.me/api/portraits/men/67.jpg",
   },
 ];
 

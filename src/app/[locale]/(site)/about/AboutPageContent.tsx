@@ -22,6 +22,7 @@ import Button from "@/components/ui/Button";
 import AnimatedCounter from "@/components/shared/AnimatedCounter";
 import AvatarPlaceholder from "@/components/shared/AvatarPlaceholder";
 import Breadcrumb from "@/components/shared/Breadcrumb";
+import { WorldMap } from "@/components/ui/world-map";
 import { getTeam, getMilestones, getStats, getValues } from "@/lib/data";
 
 /* ── Icons ── */
@@ -284,33 +285,35 @@ export default function AboutPageContent() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.15 }}
           >
-            {teamData.map((member) => (
+            {teamData.map((member, index) => (
               <motion.div
                 key={member.name}
                 variants={fadeUp}
-                whileHover={{ y: -6, transition: { duration: 0.3 } }}
-                className="card rounded-2xl overflow-hidden h-full"
+                className="group relative flex flex-col items-center overflow-hidden rounded-2xl bg-surface border border-border p-8 text-center transition-all duration-500 hover:border-accent/40 hover:shadow-xl hover:shadow-accent/5 hover:-translate-y-1"
               >
-                {/* Card content */}
-                <div className="p-6">
-                  <div className="flex items-start gap-4">
-                    {/* Avatar */}
-                    <AvatarPlaceholder gender={member.gender} size="md" />
+                {/* Background wave on hover */}
+                <div className="absolute bottom-0 left-0 right-0 h-1/2 origin-bottom scale-y-0 rounded-t-[60px] bg-gradient-to-t from-accent/10 to-transparent transition-transform duration-500 ease-out group-hover:scale-y-100" />
 
-                    {/* Info */}
-                    <div className="flex-1 pt-1">
-                      <h3 className="text-lg font-bold font-cairo text-text-primary mb-0.5">
-                        {member.name}
-                      </h3>
-                      <p className="text-accent text-sm font-cairo font-medium mb-3">
-                        {member.role}
-                      </p>
-                      <p className="text-text-secondary text-sm font-cairo leading-relaxed">
-                        {member.bio}
-                      </p>
-                    </div>
-                  </div>
+                {/* Avatar */}
+                <div className="relative z-10 h-24 w-24 overflow-hidden rounded-full border-4 border-border bg-surface-light transition-all duration-500 group-hover:border-accent/50 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
+                  />
                 </div>
+
+                {/* Info */}
+                <h3 className="relative z-10 mt-5 text-lg font-bold font-cairo text-text-primary">
+                  {member.name}
+                </h3>
+                <p className="relative z-10 text-accent text-sm font-cairo font-semibold mt-1">
+                  {member.role}
+                </p>
+                <p className="relative z-10 text-text-muted text-sm font-cairo leading-relaxed mt-3 max-w-[260px]">
+                  {member.bio}
+                </p>
               </motion.div>
             ))}
           </motion.div>
@@ -459,6 +462,37 @@ export default function AboutPageContent() {
               );
             })}
           </motion.div>
+        </Container>
+      </section>
+
+      {/* ── World Map ── */}
+      <section className="section-padding">
+        <Container>
+          <SectionTitle
+            title={t("mapTitle")}
+            subtitle={t("mapSub")}
+          />
+          <WorldMap
+            lineColor="#D4AF37"
+            dots={[
+              {
+                start: { lat: 30.0444, lng: 31.2357, label: locale === "en" ? "Cairo" : "القاهرة" },
+                end: { lat: 24.7136, lng: 46.6753, label: locale === "en" ? "Riyadh" : "الرياض" },
+              },
+              {
+                start: { lat: 30.0444, lng: 31.2357, label: locale === "en" ? "Cairo" : "القاهرة" },
+                end: { lat: 25.2048, lng: 55.2708, label: locale === "en" ? "Dubai" : "دبي" },
+              },
+              {
+                start: { lat: 30.0444, lng: 31.2357, label: locale === "en" ? "Cairo" : "القاهرة" },
+                end: { lat: 21.4225, lng: 39.8262, label: locale === "en" ? "Jeddah" : "جدة" },
+              },
+              {
+                start: { lat: 24.7136, lng: 46.6753, label: locale === "en" ? "Riyadh" : "الرياض" },
+                end: { lat: 25.3548, lng: 51.1839, label: locale === "en" ? "Doha" : "الدوحة" },
+              },
+            ]}
+          />
         </Container>
       </section>
 

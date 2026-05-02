@@ -111,7 +111,7 @@ export const projects: Project[] = [
       { metric: "الأسواق", value: "4 قارات", description: "تصدير لآسيا وأفريقيا وأوروبا وأمريكا" },
     ],
     tags: ["WordPress", "موقع مؤسسي", "تعدين", "تصدير"],
-    thumbnail: "/images/projects/genesis-mining.jpg",
+    thumbnail: "/images/projects/genesis-mining-new.jpg",
     images: [
       "/images/projects/genesis-mining-2.jpg",
       "/images/projects/genesis-mining-3.jpg",

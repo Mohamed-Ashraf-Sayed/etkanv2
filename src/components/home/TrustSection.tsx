@@ -5,6 +5,8 @@ import Image from "next/image";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
 import AnimatedCounter from "@/components/shared/AnimatedCounter";
+import { InfiniteSlider } from "@/components/ui/infinite-slider";
+import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 import { getStats } from "@/lib/data";
 import { useTranslations, useLocale } from "next-intl";
 
@@ -64,7 +66,7 @@ export default function TrustSection() {
 
         {/* Stats counters */}
         <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-14"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
@@ -72,13 +74,15 @@ export default function TrustSection() {
         >
           {statsData.map((stat) => (
             <motion.div key={stat.label} variants={fadeUp}>
-              <div className="card rounded-xl p-6 text-center border border-border hover:border-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300">
-                <AnimatedCounter
-                  end={stat.value}
-                  suffix={stat.suffix}
-                  label={stat.label}
-                  icon={stat.icon}
-                />
+              <div className="group relative rounded-xl p-[1px] bg-gradient-to-b from-border via-border/40 to-transparent hover:from-accent/50 hover:via-accent/15 hover:to-transparent transition-all duration-500">
+                <div className="rounded-xl bg-surface p-5 h-full text-center hover:bg-surface-light transition-colors duration-500">
+                  <AnimatedCounter
+                    end={stat.value}
+                    suffix={stat.suffix}
+                    label={stat.label}
+                    icon={stat.icon}
+                  />
+                </div>
               </div>
             </motion.div>
           ))}
@@ -92,17 +96,18 @@ export default function TrustSection() {
           {t("clientsLabel")}
         </p>
 
-        {/* Company logos grid */}
-        <motion.div
-          className="grid grid-cols-2 sm:grid-cols-4 gap-4"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          {companies.map((company) => (
-            <motion.div key={company.name} variants={fadeUp}>
-              <div className="flex items-center gap-3 px-5 py-4 rounded-xl border border-border bg-surface hover:border-accent/40 hover:bg-accent/[0.03] hover:shadow-md hover:shadow-accent/10 hover:-translate-y-0.5 transition-all duration-300 group">
+        {/* Company logos slider */}
+        <div className="relative h-[80px] w-full overflow-hidden">
+          <InfiniteSlider
+            className="flex h-full w-full items-center"
+            duration={30}
+            gap={48}
+          >
+            {companies.map((company) => (
+              <div
+                key={company.name}
+                className="flex items-center gap-3 px-5 py-3 rounded-xl border border-border bg-surface shrink-0"
+              >
                 <Image
                   src={company.logo}
                   alt={company.name}
@@ -110,13 +115,23 @@ export default function TrustSection() {
                   height={36}
                   className="w-9 h-9 shrink-0"
                 />
-                <span className="font-cairo font-semibold text-sm text-text-secondary group-hover:text-text-primary transition-colors duration-200">
+                <span className="font-cairo font-semibold text-sm text-text-secondary whitespace-nowrap">
                   {company.name}
                 </span>
               </div>
-            </motion.div>
-          ))}
-        </motion.div>
+            ))}
+          </InfiniteSlider>
+          <ProgressiveBlur
+            className="pointer-events-none absolute top-0 left-0 h-full w-[200px]"
+            direction="left"
+            blurIntensity={1}
+          />
+          <ProgressiveBlur
+            className="pointer-events-none absolute top-0 right-0 h-full w-[200px]"
+            direction="right"
+            blurIntensity={1}
+          />
+        </div>
       </Container>
     </section>
   );

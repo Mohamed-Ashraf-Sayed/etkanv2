@@ -7,6 +7,7 @@ export const teamEn: TeamMember[] = [
     bio: "Over 12 years of experience in leading technical projects and building successful development teams.",
     initials: "AM",
     gender: "male",
+    image: "https://randomuser.me/api/portraits/men/32.jpg",
   },
   {
     name: "Eng. Khaled Ibrahim",
@@ -14,6 +15,7 @@ export const teamEn: TeamMember[] = [
     bio: "Specialized in designing and securing enterprise networks with Cisco and Fortinet certifications.",
     initials: "KI",
     gender: "male",
+    image: "https://randomuser.me/api/portraits/men/45.jpg",
   },
   {
     name: "Ms. Laila Ahmed",
@@ -21,6 +23,7 @@ export const teamEn: TeamMember[] = [
     bio: "UX/UI designer with 8 years of experience in creating exceptional digital experiences.",
     initials: "LA",
     gender: "female",
+    image: "https://randomuser.me/api/portraits/women/44.jpg",
   },
   {
     name: "Eng. Omar Hassan",
@@ -28,6 +31,7 @@ export const teamEn: TeamMember[] = [
     bio: "Full-Stack developer with 10 years of experience, specialized in building complex and scalable systems.",
     initials: "OH",
     gender: "male",
+    image: "https://randomuser.me/api/portraits/men/22.jpg",
   },
   {
     name: "Ms. Sarah Youssef",
@@ -35,6 +39,7 @@ export const teamEn: TeamMember[] = [
     bio: "Certified PMP with experience managing major technical projects in Egypt and Saudi Arabia.",
     initials: "SY",
     gender: "female",
+    image: "https://randomuser.me/api/portraits/women/28.jpg",
   },
   {
     name: "Eng. Mahmoud Ali",
@@ -42,6 +47,7 @@ export const teamEn: TeamMember[] = [
     bio: "Specialized in cloud and process automation with AWS and Azure certifications.",
     initials: "MA",
     gender: "male",
+    image: "https://randomuser.me/api/portraits/men/67.jpg",
   },
 ];
 
