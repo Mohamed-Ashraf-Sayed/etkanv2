@@ -115,6 +115,10 @@ export const metadata: Metadata = {
   },
   verification: {
     google: "BkAHwm5poUwLr4vAH32Gbs4CrSDLEyJtSyk8S8irKbA",
+    other: {
+      "msvalidate.01": process.env.NEXT_PUBLIC_BING_VERIFICATION || "",
+      "yandex-verification": process.env.NEXT_PUBLIC_YANDEX_VERIFICATION || "",
+    },
   },
 };
 

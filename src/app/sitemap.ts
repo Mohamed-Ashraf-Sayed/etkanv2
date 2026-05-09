@@ -3,6 +3,8 @@ import { services } from "@/data/services";
 import { blogPosts } from "@/data/blog";
 import { projects } from "@/data/projects";
 import { cities } from "@/data/cities";
+import { glossaryTerms } from "@/data/glossary";
+import { comparisons } from "@/data/comparisons";
 import { getPublishedBlogPosts } from "@/lib/db-blog";
 import {
   getAllCategories,
@@ -37,6 +39,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/scope", changeFrequency: "monthly" as const, priority: 0.6 },
     { path: "/booking", changeFrequency: "monthly" as const, priority: 0.7 },
     { path: "/contact", changeFrequency: "monthly" as const, priority: 0.7 },
+    { path: "/glossary", changeFrequency: "monthly" as const, priority: 0.7 },
+    { path: "/pricing", changeFrequency: "monthly" as const, priority: 0.9 },
+    { path: "/comparison", changeFrequency: "monthly" as const, priority: 0.7 },
   ];
 
   const staticRoutes: MetadataRoute.Sitemap = staticPaths.flatMap(
@@ -138,6 +143,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ),
   ];
 
+  // Glossary terms
+  const glossaryRoutes: MetadataRoute.Sitemap = glossaryTerms.flatMap((t) =>
+    locales.map((locale) => ({
+      url: localizedUrl(`/glossary/${t.slug}`, locale),
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.5,
+      alternates: withAlternates(`/glossary/${t.slug}`),
+    }))
+  );
+
+  // Comparisons
+  const comparisonRoutes: MetadataRoute.Sitemap = comparisons.flatMap((c) =>
+    locales.map((locale) => ({
+      url: localizedUrl(`/comparison/${c.slug}`, locale),
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+      alternates: withAlternates(`/comparison/${c.slug}`),
+    }))
+  );
+
   return [
     ...staticRoutes,
     ...serviceRoutes,
@@ -145,5 +172,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...blogRoutes,
     ...projectRoutes,
     ...archiveRoutes,
+    ...glossaryRoutes,
+    ...comparisonRoutes,
   ];
 }

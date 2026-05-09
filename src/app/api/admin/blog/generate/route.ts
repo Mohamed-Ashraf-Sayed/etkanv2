@@ -33,46 +33,66 @@ interface GeneratedArticle {
   titleEn: string;
   excerpt: string;
   excerptEn: string;
+  tldr?: string;
   content: string;
   contentEn: string;
   category: string;
   tags: string[];
+  faqs?: { question: string; answer: string }[];
   imagePrompts: string[];
   readingTime: number;
 }
 
-const ARTICLE_SYSTEM_PROMPT = `أنت كاتب محتوى تقني محترف لشركة "إتقان للحلول المتكاملة" - شركة برمجيات في مصر والسعودية.
+const ARTICLE_SYSTEM_PROMPT = `أنت كاتب محتوى SEO محترف لشركة "إتقان للحلول المتكاملة" - شركة برمجيات في مصر والسعودية.
 
-اكتب مقال احترافي بالعربية الفصحى البسيطة (مش عامية) عن الموضوع المطلوب.
+اكتب مقال احترافي محسن لـ Google AI Overviews و Featured Snippets.
 
-المتطلبات:
-- العنوان: جذاب، يحتوي على keywords، 50-65 حرف
-- المحتوى: 1500-2000 كلمة minimum
-- استخدم Markdown headings (## للأقسام الرئيسية، ### للفرعية)
-- اكتب مقدمة قوية + 5-8 أقسام + خاتمة
-- اذكر شركة "إتقان" بشكل طبيعي 2-3 مرات
-- استخدم bullet points و numbered lists
-- ضع في الاعتبار الـ SEO (keywords طبيعية، LSI keywords)
-- اكتب بأسلوب Egyptian-friendly لكن mostly Modern Standard Arabic
+📋 متطلبات المحتوى:
+- العنوان: جذاب، يحتوي keyword أساسي في أول 30 حرف، 50-65 حرف total
+- المحتوى: 1800-2500 كلمة (long-form بيرتب أعلى)
+- ابدأ بـ TL;DR (ملخص في 50 كلمة) في أول الـ content
+- استخدم Markdown: ## للأقسام، ### للفرعية
+- مقدمة 80-120 كلمة تجاوب السؤال في أول جملة
+- 6-9 أقسام H2 + H3 subsections
+- جمل قصيرة (15-20 كلمة) للـ AI Overviews
+- بيانات وأرقام حقيقية (مثل: "زاد بنسبة 40% حسب McKinsey 2025")
+- اذكر شركة "إتقان" بشكل طبيعي 2-3 مرات (مش spam)
+- الخاتمة: CTA واضح للاستشارة
 
-أرجع JSON valid (بدون markdown code fences) بالشكل ده بالظبط:
+🎯 SEO requirements:
+- استخدم primary keyword في: title, first paragraph, H2, H3, meta description, last paragraph
+- LSI keywords (synonyms) خلال المقال
+- Internal linking opportunities (سنضيفهم تلقائياً)
+- اللغة: عربية فصحى بسيطة + بعض المصطلحات الإنجليزية حسب السياق
+
+أرجع JSON valid (بدون markdown code fences):
 {
   "slug": "url-friendly-english-slug",
   "title": "العنوان بالعربية",
-  "titleEn": "Title in English",
-  "excerpt": "ملخص المقال 150-160 حرف",
-  "excerptEn": "Excerpt in English 150-160 chars",
-  "content": "المحتوى الكامل بـ markdown",
-  "contentEn": "Full content in English markdown",
-  "category": "تطوير الويب|تطبيقات الموبايل|أنظمة الإدارة|الأمن السيبراني|التحول الرقمي",
+  "titleEn": "Title in English (60-70 chars)",
+  "excerpt": "ملخص جذاب 150-160 حرف يحتوي keyword",
+  "excerptEn": "Compelling excerpt 150-160 chars in English",
+  "tldr": "ملخص سريع للقراء المستعجلين، 40-60 كلمة، يجاوب السؤال الرئيسي مباشرة",
+  "content": "المحتوى الكامل بـ markdown، يبدأ بمقدمة قوية، يحتوي 6-9 أقسام H2 مع H3 subsections",
+  "contentEn": "Full English content in markdown",
+  "category": "تطوير الويب|تطبيقات الموبايل|أنظمة الإدارة|الأمن السيبراني|التحول الرقمي|التسويق الرقمي",
   "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
-  "imagePrompts": [
-    "Hero image: detailed prompt describing a professional editorial cover image. Can include Arabic title text, infographic elements, charts, or scenes. Be specific about composition, subjects, and mood.",
-    "Inline image 1: detailed prompt for an explanatory illustration. Can show a diagram, process flow, before/after comparison with labels, or conceptual visualization.",
-    "Inline image 2: detailed prompt for a supporting image. Can be a screenshot mockup, infographic with stats, or scene illustrating practical application."
+  "faqs": [
+    { "question": "سؤال شائع 1", "answer": "إجابة 30-50 كلمة" },
+    { "question": "سؤال شائع 2", "answer": "إجابة 30-50 كلمة" },
+    { "question": "سؤال شائع 3", "answer": "إجابة 30-50 كلمة" },
+    { "question": "سؤال شائع 4", "answer": "إجابة 30-50 كلمة" },
+    { "question": "سؤال شائع 5", "answer": "إجابة 30-50 كلمة" }
   ],
-  "readingTime": 8
-}`;
+  "imagePrompts": [
+    "Hero image: detailed prompt for editorial cover. Professional 3D rendering style, navy blue and gold color scheme. Include relevant icons, text labels, charts. Should match the article topic exactly.",
+    "Inline image 1: explanatory diagram or infographic with labels showing key concept",
+    "Inline image 2: practical example or scenario visualization"
+  ],
+  "readingTime": 9
+}
+
+⚠️ مهم: اجعل الـ FAQs مبنية على أسئلة Google's 'People Also Ask' الفعلية.`;
 
 async function generateArticle(topic: string): Promise<GeneratedArticle> {
   const message = await getAnthropic().messages.create({
@@ -191,6 +211,41 @@ export async function POST(req: Request) {
     const heroImage = imagePaths[0] || "";
     const inlineImages = imagePaths.slice(1).filter(Boolean);
 
+    // Build enhanced content with TL;DR + FAQ
+    let enhancedContent = "";
+    if (article.tldr) {
+      enhancedContent += `> **الملخص السريع:** ${article.tldr}\n\n`;
+    }
+    enhancedContent += article.content;
+
+    // Insert inline images at strategic positions in content
+    if (inlineImages.length > 0) {
+      const sections = enhancedContent.split(/(?=^## )/m);
+      if (sections.length > 3 && inlineImages[0]) {
+        sections.splice(
+          2,
+          0,
+          `![صورة توضيحية](${inlineImages[0]})\n\n`
+        );
+      }
+      if (sections.length > 5 && inlineImages[1]) {
+        sections.splice(
+          4,
+          0,
+          `![صورة توضيحية](${inlineImages[1]})\n\n`
+        );
+      }
+      enhancedContent = sections.join("");
+    }
+
+    // Add FAQ section
+    if (article.faqs && article.faqs.length > 0) {
+      enhancedContent += `\n\n## الأسئلة الشائعة\n\n`;
+      for (const faq of article.faqs) {
+        enhancedContent += `### ${faq.question}\n\n${faq.answer}\n\n`;
+      }
+    }
+
     // 4. Save to DB as draft
     const post = await prisma.blogPost.create({
       data: {
@@ -199,7 +254,7 @@ export async function POST(req: Request) {
         titleEn: article.titleEn,
         excerpt: article.excerpt,
         excerptEn: article.excerptEn,
-        content: article.content,
+        content: enhancedContent,
         contentEn: article.contentEn,
         category: article.category,
         tags: JSON.stringify(article.tags),
