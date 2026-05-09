@@ -63,9 +63,11 @@ export default function Navbar() {
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 shrink-0">
-              <span className="text-2xl font-black tracking-tight text-white font-cairo">
-                {t("brand")}
-              </span>
+              <img
+                src="/logo.png"
+                alt={t("brand")}
+                className="h-10 w-auto"
+              />
               <span className="hidden sm:inline text-accent text-xs font-cairo opacity-70">
                 {t("brandSub")}
               </span>

@@ -58,9 +58,7 @@ export default function Footer() {
           {/* Column 1: Brand + Newsletter */}
           <div className="lg:col-span-4">
             <Link href="/" className="inline-block mb-4">
-              <span className="text-2xl font-black tracking-tight text-white font-cairo">
-                {tn("brand")}
-              </span>
+              <img src="/logo.png" alt={tn("brand")} className="h-12 w-auto" />
             </Link>
             <p className="text-sm text-white/60 font-cairo leading-relaxed max-w-xs mb-6">
               {t("description")}
