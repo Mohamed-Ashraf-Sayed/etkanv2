@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { services } from "@/data/services";
 import { blogPosts } from "@/data/blog";
 import { projects } from "@/data/projects";
+import { cities } from "@/data/cities";
 import { getPublishedBlogPosts } from "@/lib/db-blog";
 
 const BASE_URL =
@@ -54,6 +55,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
   );
 
+  // City × Service combinations (programmatic SEO)
+  const cityServiceRoutes: MetadataRoute.Sitemap = services.flatMap((s) =>
+    cities.flatMap((city) =>
+      locales.map((locale) => ({
+        url: localizedUrl(`/services/${s.slug}/${city.slug}`, locale),
+        lastModified: new Date(),
+        changeFrequency: "monthly" as const,
+        priority: locale === "ar" ? (city.popular ? 0.7 : 0.5) : 0.5,
+        alternates: withAlternates(`/services/${s.slug}/${city.slug}`),
+      }))
+    )
+  );
+
   // Merge static + DB posts (DB takes priority)
   const dbPosts = await getPublishedBlogPosts("ar");
   const dbSlugs = new Set(dbPosts.map((p) => p.slug));
@@ -82,5 +96,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
   );
 
-  return [...staticRoutes, ...serviceRoutes, ...blogRoutes, ...projectRoutes];
+  return [
+    ...staticRoutes,
+    ...serviceRoutes,
+    ...cityServiceRoutes,
+    ...blogRoutes,
+    ...projectRoutes,
+  ];
 }

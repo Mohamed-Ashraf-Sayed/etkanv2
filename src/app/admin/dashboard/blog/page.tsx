@@ -9,8 +9,9 @@ import {
   Trash2,
   Eye,
   EyeOff,
-  Plus,
+  Layers,
 } from "lucide-react";
+import { seedTopics } from "@/data/seo-topics";
 
 interface BlogPost {
   id: string;
@@ -31,6 +32,9 @@ export default function BlogAdminPage() {
   const [generating, setGenerating] = useState(false);
   const [topic, setTopic] = useState("");
   const [error, setError] = useState("");
+  const [batchOpen, setBatchOpen] = useState(false);
+  const [batchTopics, setBatchTopics] = useState("");
+  const [batchSubmitting, setBatchSubmitting] = useState(false);
 
   const loadPosts = async () => {
     try {
@@ -87,6 +91,47 @@ export default function BlogAdminPage() {
     }
   };
 
+  const handleBatchSubmit = async () => {
+    const topics = batchTopics
+      .split("\n")
+      .map((t) => t.trim())
+      .filter((t) => t.length >= 5);
+    if (topics.length === 0) {
+      alert("اكتب موضوع واحد على الأقل (5 أحرف+)");
+      return;
+    }
+    if (
+      !confirm(
+        `هتولد ${topics.length} مقال. ده هياخد وقت طويل وممكن يكلف ${(topics.length * 0.5).toFixed(2)}$. متأكد؟`
+      )
+    )
+      return;
+    setBatchSubmitting(true);
+    try {
+      const res = await fetch("/api/admin/blog/batch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ topics }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "فشل");
+      alert(
+        `تم البدء! ${data.total} مقال هيتولدوا في الخلفية. ارجع كل دقيقة عشان تشوف الـ progress.`
+      );
+      setBatchTopics("");
+      setBatchOpen(false);
+      setTimeout(loadPosts, 5000);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "خطأ");
+    } finally {
+      setBatchSubmitting(false);
+    }
+  };
+
+  const loadSeedTopics = () => {
+    setBatchTopics(seedTopics.join("\n"));
+  };
+
   const handleDelete = async (id: string) => {
     if (!confirm("متأكد إنك عايز تحذف المقال ده؟")) return;
     try {
@@ -108,6 +153,84 @@ export default function BlogAdminPage() {
             إنشاء وإدارة المقالات بالذكاء الاصطناعي
           </p>
         </div>
+      </div>
+
+      {/* Batch Generate */}
+      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 mb-6">
+        <button
+          type="button"
+          onClick={() => setBatchOpen(!batchOpen)}
+          className="flex items-center justify-between w-full"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+              <Layers className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            </div>
+            <div className="text-start">
+              <h2 className="font-bold text-gray-900 dark:text-white">
+                توليد جماعي (Batch)
+              </h2>
+              <p className="text-xs text-gray-500">
+                ضع قائمة بالمواضيع (واحد في كل سطر) لتوليد مجموعة مقالات
+              </p>
+            </div>
+          </div>
+          <span className="text-xl text-gray-400">{batchOpen ? "−" : "+"}</span>
+        </button>
+
+        {batchOpen && (
+          <div className="mt-5 space-y-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={loadSeedTopics}
+                className="text-xs px-3 py-1.5 rounded-lg border border-blue-200 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition"
+              >
+                تحميل قائمة جاهزة (35 موضوع SEO)
+              </button>
+              <span className="text-xs text-gray-500">
+                {
+                  batchTopics
+                    .split("\n")
+                    .map((t) => t.trim())
+                    .filter((t) => t.length >= 5).length
+                }{" "}
+                موضوع
+              </span>
+            </div>
+            <textarea
+              value={batchTopics}
+              onChange={(e) => setBatchTopics(e.target.value)}
+              placeholder={"موضوع 1\nموضوع 2\nموضوع 3\n..."}
+              rows={10}
+              disabled={batchSubmitting}
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white text-sm font-cairo placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30 disabled:opacity-50"
+            />
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleBatchSubmit}
+                disabled={batchSubmitting || batchTopics.trim().length === 0}
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              >
+                {batchSubmitting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    بدء...
+                  </>
+                ) : (
+                  <>
+                    <Layers className="w-5 h-5" />
+                    بدء التوليد الجماعي
+                  </>
+                )}
+              </button>
+              <p className="text-xs text-gray-400">
+                * يولد المقالات في الخلفية. عرف المواضيع، اضغط "بدء"، وارجع بعد
+                دقايق.
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Generate Section */}
