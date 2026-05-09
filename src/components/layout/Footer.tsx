@@ -61,7 +61,7 @@ export default function Footer() {
               <img
                 src="/logo.png"
                 alt={tn("brand")}
-                className="h-12 w-auto brightness-0 invert"
+                className="h-20 w-auto brightness-0 invert"
               />
             </Link>
             <p className="text-sm text-white/60 font-cairo leading-relaxed max-w-xs mb-6">

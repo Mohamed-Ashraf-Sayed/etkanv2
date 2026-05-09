@@ -62,15 +62,12 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-[70px]">
 
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2.5 shrink-0">
+            <Link href="/" className="flex items-center shrink-0">
               <img
                 src="/logo.png"
                 alt={t("brand")}
-                className="h-10 w-auto brightness-0 invert"
+                className="h-16 w-auto brightness-0 invert"
               />
-              <span className="hidden sm:inline text-accent text-xs font-cairo opacity-70">
-                {t("brandSub")}
-              </span>
             </Link>
 
             {/* Desktop Nav — pill container */}
