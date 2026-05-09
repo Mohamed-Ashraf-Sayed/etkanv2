@@ -66,7 +66,7 @@ export default function Navbar() {
               <img
                 src="/logo.png"
                 alt={t("brand")}
-                className="h-10 w-auto"
+                className="h-10 w-auto brightness-0 invert"
               />
               <span className="hidden sm:inline text-accent text-xs font-cairo opacity-70">
                 {t("brandSub")}
