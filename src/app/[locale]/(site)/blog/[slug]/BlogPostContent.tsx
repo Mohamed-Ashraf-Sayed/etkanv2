@@ -21,7 +21,7 @@ import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import SectionTitle from "@/components/ui/SectionTitle";
 import type { BlogPost } from "@/data/blog";
-import { formatDate } from "@/lib/utils";
+import { formatDate, slugify } from "@/lib/utils";
 
 interface BlogPostContentProps {
   post: BlogPost;
@@ -264,11 +264,13 @@ export default function BlogPostContent({
             transition={{ duration: 0.5, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
           >
             <div className="flex flex-wrap gap-2 mb-4">
-              <Badge variant="gold">{post.category}</Badge>
+              <Link href={`/blog/category/${slugify(post.category)}` as never}>
+                <Badge variant="gold">{post.category}</Badge>
+              </Link>
               {post.tags.map((tag) => (
-                <Badge key={tag} variant="muted">
-                  {tag}
-                </Badge>
+                <Link key={tag} href={`/blog/tag/${slugify(tag)}` as never}>
+                  <Badge variant="muted">{tag}</Badge>
+                </Link>
               ))}
             </div>
 
@@ -281,7 +283,12 @@ export default function BlogPostContent({
             <div className="flex flex-wrap items-center gap-6 text-white/70">
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4 text-accent" />
-                <span className="font-cairo">{post.author}</span>
+                <Link
+                  href={`/blog/author/${slugify(post.author)}` as never}
+                  className="font-cairo hover:text-accent transition-colors"
+                >
+                  {post.author}
+                </Link>
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-accent" />
@@ -443,22 +450,34 @@ export default function BlogPostContent({
                 >
                   <Link
                     href={`/blog/${related.slug}`}
-                    className="block h-full"
+                    className="block h-full group"
                   >
-                    <Card className="h-full flex flex-col" hover>
-                      <div className="mb-3">
-                        <Badge variant="gold">{related.category}</Badge>
-                      </div>
-                      <h3 className="text-lg font-bold font-cairo text-text-primary mb-3 line-clamp-2 leading-relaxed">
-                        {related.title}
-                      </h3>
-                      <p className="text-text-secondary text-sm font-cairo line-clamp-2 leading-relaxed flex-1 mb-4">
-                        {related.excerpt}
-                      </p>
-                      <div className="flex items-center gap-4 pt-3 border-t border-border text-xs text-text-secondary font-cairo">
-                        <span>{related.author}</span>
-                        <span className="text-accent">{formatDate(related.date)}</span>
-                        <span>{related.readingTime} {tb("readingTime")}</span>
+                    <Card className="h-full flex flex-col overflow-hidden p-0" hover>
+                      {related.heroImage && (
+                        <div className="aspect-[16/10] overflow-hidden bg-surface-light">
+                          <img
+                            src={related.heroImage}
+                            alt={related.title}
+                            loading="lazy"
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          />
+                        </div>
+                      )}
+                      <div className="flex flex-col flex-1 p-6">
+                        <div className="mb-3">
+                          <Badge variant="gold">{related.category}</Badge>
+                        </div>
+                        <h3 className="text-lg font-bold font-cairo text-text-primary mb-3 line-clamp-2 leading-relaxed group-hover:text-accent transition-colors">
+                          {related.title}
+                        </h3>
+                        <p className="text-text-secondary text-sm font-cairo line-clamp-2 leading-relaxed flex-1 mb-4">
+                          {related.excerpt}
+                        </p>
+                        <div className="flex items-center gap-4 pt-3 border-t border-border text-xs text-text-secondary font-cairo">
+                          <span>{related.author}</span>
+                          <span className="text-accent">{formatDate(related.date)}</span>
+                          <span>{related.readingTime} {tb("readingTime")}</span>
+                        </div>
                       </div>
                     </Card>
                   </Link>

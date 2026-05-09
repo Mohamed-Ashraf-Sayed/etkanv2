@@ -4,6 +4,11 @@ import { blogPosts } from "@/data/blog";
 import { projects } from "@/data/projects";
 import { cities } from "@/data/cities";
 import { getPublishedBlogPosts } from "@/lib/db-blog";
+import {
+  getAllCategories,
+  getAllTags,
+  getAllAuthors,
+} from "@/lib/blog-archive";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://etqanly.com";
@@ -96,11 +101,49 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
   );
 
+  // Archive pages: categories, tags, authors
+  const [categories, tags, authors] = await Promise.all([
+    getAllCategories("ar"),
+    getAllTags("ar"),
+    getAllAuthors("ar"),
+  ]);
+
+  const archiveRoutes: MetadataRoute.Sitemap = [
+    ...categories.flatMap((c) =>
+      locales.map((locale) => ({
+        url: localizedUrl(`/blog/category/${c.slug}`, locale),
+        lastModified: new Date(),
+        changeFrequency: "weekly" as const,
+        priority: 0.5,
+        alternates: withAlternates(`/blog/category/${c.slug}`),
+      }))
+    ),
+    ...tags.flatMap((t) =>
+      locales.map((locale) => ({
+        url: localizedUrl(`/blog/tag/${t.slug}`, locale),
+        lastModified: new Date(),
+        changeFrequency: "weekly" as const,
+        priority: 0.4,
+        alternates: withAlternates(`/blog/tag/${t.slug}`),
+      }))
+    ),
+    ...authors.flatMap((a) =>
+      locales.map((locale) => ({
+        url: localizedUrl(`/blog/author/${a.slug}`, locale),
+        lastModified: new Date(),
+        changeFrequency: "weekly" as const,
+        priority: 0.4,
+        alternates: withAlternates(`/blog/author/${a.slug}`),
+      }))
+    ),
+  ];
+
   return [
     ...staticRoutes,
     ...serviceRoutes,
     ...cityServiceRoutes,
     ...blogRoutes,
     ...projectRoutes,
+    ...archiveRoutes,
   ];
 }

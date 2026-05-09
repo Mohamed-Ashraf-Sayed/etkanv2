@@ -10,6 +10,7 @@ import {
   getBlogPostBySlugFromDB,
   getPublishedBlogPosts,
 } from "@/lib/db-blog";
+import { autoLinkContent, detectHowToSchema } from "@/lib/blog-enhance";
 import BlogPostContent from "./BlogPostContent";
 
 export const revalidate = 300;
@@ -85,7 +86,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const isArabic = locale === "ar";
   const baseUrl = `${BASE_URL}${isArabic ? "" : "/en"}`;
 
-  const schemas = [
+  // Apply auto-linking to content
+  post.content = autoLinkContent(post.content);
+
+  const articleUrl = `${baseUrl}/blog/${slug}`;
+  const howToSchema = detectHowToSchema(post.title, post.content, articleUrl);
+
+  const schemas: object[] = [
     getArticleSchema({
       title: post.title,
       excerpt: post.excerpt,
@@ -96,9 +103,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     getBreadcrumbSchema([
       { name: isArabic ? "الرئيسية" : "Home", url: `${baseUrl}/` },
       { name: isArabic ? "المدونة" : "Blog", url: `${baseUrl}/blog` },
-      { name: post.title, url: `${baseUrl}/blog/${slug}` },
+      { name: post.title, url: articleUrl },
     ]),
   ];
+  if (howToSchema) schemas.push(howToSchema);
 
   return (
     <>
