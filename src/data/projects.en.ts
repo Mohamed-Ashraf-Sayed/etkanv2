@@ -28,6 +28,12 @@ export const projectsEn: Project[] = [
     ],
     tags: ["Corporate Website", "Architecture", "Construction", "Saudi Arabia", "Bilingual"],
     thumbnail: "/images/projects/arab-future-architecture.jpg",
+    images: [
+      "/images/projects/arab-future-architecture-2.jpg",
+      "/images/projects/arab-future-architecture-3.jpg",
+      "/images/projects/arab-future-architecture-4.jpg",
+      "/images/projects/arab-future-architecture-5.jpg",
+    ],
     techStack: ["WordPress", "Elementor", "PHP", "MySQL"],
     testimonial: {
       text: "Etqan delivered a website that truly reflects our experience and position in the Saudi market. The design is professional and the delivery was on time.",

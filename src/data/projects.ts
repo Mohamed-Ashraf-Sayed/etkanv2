@@ -51,6 +51,12 @@ export const projects: Project[] = [
     ],
     tags: ["موقع مؤسسي", "عمارة", "مقاولات", "السعودية", "ثنائي اللغة"],
     thumbnail: "/images/projects/arab-future-architecture.jpg",
+    images: [
+      "/images/projects/arab-future-architecture-2.jpg",
+      "/images/projects/arab-future-architecture-3.jpg",
+      "/images/projects/arab-future-architecture-4.jpg",
+      "/images/projects/arab-future-architecture-5.jpg",
+    ],
     techStack: ["WordPress", "Elementor", "PHP", "MySQL"],
     testimonial: {
       text: "إتقان قدمت لنا موقع يعكس فعلاً حجم خبرتنا ومكانتنا في السوق السعودي. التصميم احترافي والتسليم كان في الوقت المحدد.",
