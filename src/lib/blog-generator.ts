@@ -2,6 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import OpenAI from "openai";
 import { prisma } from "@/lib/db";
 import { clearBlogCache } from "@/lib/db-blog";
+import { pingIndexNow } from "@/lib/indexnow";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 
@@ -222,11 +223,18 @@ export async function generateAndSaveArticle(topic: string): Promise<{
         inlineImages: JSON.stringify(inlineImages),
         readingTime: article.readingTime,
         author: "فريق إتقان",
-        status: "draft",
+        status: "published",
       },
     });
 
     clearBlogCache();
+
+    pingIndexNow([
+      `https://etqanly.com/blog/${finalSlug}`,
+      `https://etqanly.com/blog`,
+      `https://etqanly.com/sitemap.xml`,
+    ]).catch((e) => console.error("IndexNow ping failed:", e));
+
     console.log(`✓ Successfully generated: ${finalSlug}`);
     return { success: true, slug: finalSlug };
   } catch (error) {
