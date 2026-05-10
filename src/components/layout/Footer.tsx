@@ -36,6 +36,7 @@ export default function Footer() {
     { href: "/", label: tn("home") },
     { href: "/about", label: tn("about") },
     { href: "/portfolio", label: tn("portfolio") },
+    { href: "/pricing", label: "الأسعار" },
     { href: "/blog", label: tn("blog") },
     { href: "/contact", label: tn("contact") },
   ];
@@ -45,6 +46,21 @@ export default function Footer() {
     { href: "/services/crm", label: t("serviceEnterprise") },
     { href: "/services/networks", label: t("serviceInfra") },
     { href: "/services/it-support", label: t("serviceSupport") },
+  ];
+
+  const resourceLinks = [
+    { href: "/glossary", label: "قاموس تقني" },
+    { href: "/comparison", label: "مقارنات" },
+    { href: "/guides", label: "أدلة شاملة" },
+    { href: "/tools/cost-calculator", label: "حاسبة التكلفة" },
+    { href: "/scope", label: "مخطط AI" },
+  ];
+
+  const solutionLinks = [
+    { href: "/solutions/restaurants", label: "المطاعم" },
+    { href: "/solutions/clinics", label: "العيادات" },
+    { href: "/solutions/schools", label: "المدارس" },
+    { href: "/solutions/ecommerce", label: "التجارة الإلكترونية" },
   ];
 
   return (
@@ -119,7 +135,7 @@ export default function Footer() {
               {quickLinks.map((link) => (
                 <li key={link.href}>
                   <Link
-                    href={link.href}
+                    href={link.href as never}
                     className="text-sm text-white/60 font-cairo hover:text-accent transition-colors duration-200"
                   >
                     {link.label}
@@ -130,7 +146,7 @@ export default function Footer() {
           </div>
 
           {/* Column 3: Services */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-2">
             <h3 className="text-sm font-bold font-cairo text-accent uppercase tracking-wider mb-5">
               {t("ourServices")}
             </h3>
@@ -138,7 +154,7 @@ export default function Footer() {
               {serviceLinks.map((link) => (
                 <li key={link.label}>
                   <Link
-                    href={link.href}
+                    href={link.href as never}
                     className="text-sm text-white/60 font-cairo hover:text-accent transition-colors duration-200"
                   >
                     {link.label}
@@ -148,8 +164,27 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Contact Info */}
-          <div className="lg:col-span-3">
+          {/* Column 4: Resources */}
+          <div className="lg:col-span-2">
+            <h3 className="text-sm font-bold font-cairo text-accent uppercase tracking-wider mb-5">
+              مصادر
+            </h3>
+            <ul className="space-y-3">
+              {resourceLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href as never}
+                    className="text-sm text-white/60 font-cairo hover:text-accent transition-colors duration-200"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 5: Contact Info */}
+          <div className="lg:col-span-2">
             <h3 className="text-sm font-bold font-cairo text-accent uppercase tracking-wider mb-5">
               {t("contactUs")}
             </h3>
