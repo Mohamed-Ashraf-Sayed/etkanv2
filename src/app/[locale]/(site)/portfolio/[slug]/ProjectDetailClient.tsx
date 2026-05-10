@@ -6,7 +6,6 @@ import { motion, useInView, animate, AnimatePresence } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import {
   ChevronLeft,
-  Calendar,
   Clock,
   Building,
   Briefcase,
@@ -330,18 +329,6 @@ export default function ProjectDetailClient({
                       </p>
                       <p className="text-sm text-white font-cairo font-medium">
                         {project.industry}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
-                      <Calendar className="w-5 h-5 text-accent" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-white/40 font-cairo">{t("year")}</p>
-                      <p className="text-sm text-white font-cairo font-medium">
-                        {project.year}
                       </p>
                     </div>
                   </div>

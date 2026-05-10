@@ -65,9 +65,6 @@ export default function FeaturedProjects({ dbProjects = [] }: Props) {
                 <div className="flex flex-col justify-between gap-6 p-8 md:p-12 lg:p-14 order-2 lg:order-1">
                   <div className="flex items-center gap-3">
                     <Badge variant="gold">{featured.categoryLabel}</Badge>
-                    <span className="text-white/30 text-xs font-cairo">
-                      {featured.year}
-                    </span>
                   </div>
                   <div>
                     <p className="text-xs text-accent/60 font-cairo uppercase tracking-widest mb-3">
@@ -153,9 +150,6 @@ export default function FeaturedProjects({ dbProjects = [] }: Props) {
                     <div>
                       <div className="flex items-center gap-3 mb-4">
                         <Badge variant="gold">{project.categoryLabel}</Badge>
-                        <span className="text-white/30 text-xs font-cairo">
-                          {project.year}
-                        </span>
                       </div>
 
                       <p className="text-xs text-accent/60 font-cairo uppercase tracking-widest mb-2">
