@@ -5,26 +5,38 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://etqanly.com";
+// Use localhost to avoid nginx timeout for long-running generation
+const INTERNAL_URL = "http://localhost:3000";
 
 // Generate one article in background and continue with the next
 async function processBatch(topics: string[], jobId: string) {
   for (const topic of topics) {
     try {
-      // Call the existing generate endpoint internally
-      const res = await fetch(`${BASE_URL}/api/admin/blog/generate`, {
+      // Call the existing generate endpoint via localhost (bypass nginx)
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8 * 60 * 1000); // 8 min
+      const res = await fetch(`${INTERNAL_URL}/api/admin/blog/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ topic }),
+        signal: controller.signal,
       });
+      clearTimeout(timeout);
       if (!res.ok) {
-        console.error(`Batch ${jobId}: failed for "${topic}"`, res.status);
+        const text = await res.text().catch(() => "");
+        console.error(
+          `Batch ${jobId}: failed for "${topic}"`,
+          res.status,
+          text.slice(0, 200)
+        );
       } else {
         console.log(`Batch ${jobId}: completed "${topic}"`);
       }
     } catch (e) {
-      console.error(`Batch ${jobId}: error for "${topic}"`, e);
+      console.error(
+        `Batch ${jobId}: error for "${topic}"`,
+        e instanceof Error ? e.message : e
+      );
     }
     // Small delay to avoid rate limits
     await new Promise((r) => setTimeout(r, 2000));
