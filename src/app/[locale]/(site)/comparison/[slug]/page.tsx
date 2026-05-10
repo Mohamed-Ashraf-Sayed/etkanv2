@@ -12,7 +12,7 @@ import {
   getFAQSchema,
 } from "@/lib/seo";
 
-export const revalidate = 86400;
+export const dynamic = "force-dynamic";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://etqanly.com";
