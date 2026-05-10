@@ -7,6 +7,37 @@ export const projectCategoriesEn = [
 
 export const projectsEn: Project[] = [
   {
+    slug: "arab-future-architecture",
+    title: "Arab Future Architecture Company Website",
+    client: "Arab Future Ltd",
+    industry: "Architecture & Construction",
+    category: "website",
+    categoryLabel: "Websites",
+    summary:
+      "Professional corporate website for a leading Saudi architectural firm specializing in prefabricated decorative facades and historical building restoration",
+    description:
+      "We designed a comprehensive corporate website for Arab Future Ltd showcasing their 12+ years of experience and 350+ completed projects, with a complete portfolio gallery and detailed pages for each service line.",
+    problem:
+      "The company needed a website that reflects its position as a leader in architectural design and decorative facades in Saudi Arabia, showcasing its luxury projects and Vision 2030-aligned approach.",
+    solution:
+      "We built a bilingual corporate website with a modern design highlighting the firm's premium identity, featuring an interactive project gallery, detailed service pages (GRC, GRP, GRG, artificial stone), and a Vision 2030 section.",
+    results: [
+      { metric: "Years of Experience", value: "12+", description: "in the Saudi market" },
+      { metric: "Projects", value: "350+", description: "successfully delivered" },
+      { metric: "Services", value: "7", description: "integrated architectural services" },
+    ],
+    tags: ["Corporate Website", "Architecture", "Construction", "Saudi Arabia", "Bilingual"],
+    thumbnail: "/images/projects/arab-future-architecture.jpg",
+    techStack: ["WordPress", "Elementor", "PHP", "MySQL"],
+    testimonial: {
+      text: "Etqan delivered a website that truly reflects our experience and position in the Saudi market. The design is professional and the delivery was on time.",
+      author: "Arab Future Management",
+      role: "Client",
+    },
+    duration: "10 weeks",
+    year: "2025",
+  },
+  {
     slug: "masar-infrastructure",
     title: "Masar Infrastructure Company Website",
     client: "Masar Company",
