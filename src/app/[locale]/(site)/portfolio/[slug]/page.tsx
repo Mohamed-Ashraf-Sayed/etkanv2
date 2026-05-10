@@ -52,22 +52,37 @@ export default async function ProjectDetailPage({ params }: PageProps) {
   const isArabic = locale === "ar";
   const baseUrl = `${BASE_URL}${isArabic ? "" : "/en"}`;
 
-  const schemas = [
+  const schemas: object[] = [
     {
       "@context": "https://schema.org",
-      "@type": "CreativeWork",
-      name: project.title,
+      "@type": ["Article", "CaseStudy"],
+      headline: project.title,
       description: project.summary,
+      articleBody: `${project.problem}\n\n${project.solution}`,
       url: `${baseUrl}/portfolio/${slug}`,
       image: project.thumbnail
         ? `${BASE_URL}${project.thumbnail}`
-        : undefined,
-      creator: {
+        : `${BASE_URL}/opengraph-image`,
+      datePublished: `${project.year}-01-01`,
+      author: {
         "@type": "Organization",
         name: "إتقان للحلول المتكاملة",
         url: BASE_URL,
       },
-      about: project.industry,
+      publisher: {
+        "@type": "Organization",
+        name: "إتقان للحلول المتكاملة",
+        logo: { "@type": "ImageObject", url: `${BASE_URL}/icon.png` },
+      },
+      about: {
+        "@type": "Thing",
+        name: project.industry,
+      },
+      keywords: project.tags.join(", "),
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": `${baseUrl}/portfolio/${slug}`,
+      },
     },
     getBreadcrumbSchema([
       { name: isArabic ? "الرئيسية" : "Home", url: `${baseUrl}/` },
@@ -78,6 +93,33 @@ export default async function ProjectDetailPage({ params }: PageProps) {
       { name: project.title, url: `${baseUrl}/portfolio/${slug}` },
     ]),
   ];
+
+  if (project.testimonial) {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "Review",
+      reviewBody: project.testimonial.text,
+      author: {
+        "@type": "Person",
+        name: project.testimonial.author,
+        jobTitle: project.testimonial.role,
+      },
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: 5,
+        bestRating: 5,
+      },
+      itemReviewed: {
+        "@type": "Service",
+        name: project.title,
+        provider: {
+          "@type": "Organization",
+          name: "إتقان للحلول المتكاملة",
+          url: BASE_URL,
+        },
+      },
+    });
+  }
 
   return (
     <>

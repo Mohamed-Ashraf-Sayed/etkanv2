@@ -52,6 +52,7 @@ export default function Footer() {
     { href: "/glossary", label: "قاموس تقني" },
     { href: "/comparison", label: "مقارنات" },
     { href: "/guides", label: "أدلة شاملة" },
+    { href: "/insights", label: "تقارير وأبحاث" },
     { href: "/tools/cost-calculator", label: "حاسبة التكلفة" },
     { href: "/scope", label: "مخطط AI" },
   ];

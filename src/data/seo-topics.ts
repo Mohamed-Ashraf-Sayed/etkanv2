@@ -48,3 +48,55 @@ export const seedTopics = [
   "تكامل APIs: ربط أنظمتك بأمان وكفاءة",
   "DevOps للشركات الصغيرة: من أين تبدأ؟",
 ];
+
+// Wave 2: Long-tail keywords with high commercial intent
+export const longTailTopics = [
+  // Cost & Pricing variations (long-tail)
+  "تكلفة تطبيق توصيل طعام في القاهرة 2026",
+  "كم سعر موقع شركة احترافي في الرياض؟",
+  "أسعار نظام POS للمطاعم في السعودية",
+  "تكلفة تطبيق تاكسي مثل Uber في مصر",
+  "ميزانية متجر إلكتروني صغير في الإمارات",
+
+  // Industry-specific guides
+  "نظام إدارة عيادة أسنان: المميزات والتكلفة",
+  "تطبيق صالة جيم: كيف تبنيه ومميزاته",
+  "نظام محاسبة لمطعم صغير: الخيارات المتاحة",
+  "تطبيق حضور وانصراف للموظفين في السعودية",
+  "نظام إدارة مدرسة خاصة في مصر 2026",
+
+  // Comparison long-tail
+  "Shopify vs WooCommerce: الأفضل للسوق المصري",
+  "Odoo vs SAP Business One للشركات الصغيرة",
+  "Firebase vs Supabase للتطبيقات الجديدة",
+  "AWS vs Azure للشركات في السعودية",
+  "Wix vs WordPress: أيهما أوفر للشركات الناشئة",
+
+  // How-to specific
+  "كيف تنقل موقعك من WordPress إلى Custom",
+  "خطوات إطلاق MVP في 8 أسابيع",
+  "كيف تختار dashboard مناسب لشركتك",
+  "خطوات إعداد متجر إلكتروني للسوق السعودي",
+  "كيف تربط نظام الفواتير بمصلحة الضرائب المصرية",
+
+  // Trends 2026
+  "الذكاء الاصطناعي في خدمة العملاء العربية",
+  "Voice Search SEO للمحتوى العربي 2026",
+  "Edge Computing للتطبيقات السعودية",
+  "Multi-tenant SaaS في السوق العربي",
+  "Headless CMS: متى تحتاجه ومتى لا",
+
+  // Local SEO + cities
+  "أفضل شركات تطوير المواقع في الإسكندرية 2026",
+  "تطبيقات الموبايل في الكويت: الفرص والتكاليف",
+  "تطوير المتاجر الإلكترونية في الدوحة",
+  "خدمات IT في المنامة: السوق والشركات",
+  "شركات البرمجة في عمّان: مقارنة شاملة",
+
+  // Technical deep
+  "Microservices vs Monolith للشركات الناشئة",
+  "GraphQL vs REST: متى تستخدم كل واحد",
+  "PostgreSQL vs MongoDB للتطبيقات الحديثة",
+  "Server-Side Rendering vs Static Generation 2026",
+  "كيف تحسن SEO لتطبيق Next.js",
+];

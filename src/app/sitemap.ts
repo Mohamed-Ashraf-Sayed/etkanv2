@@ -52,6 +52,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/guides/erp-systems", changeFrequency: "monthly" as const, priority: 0.8 },
     { path: "/testimonials", changeFrequency: "monthly" as const, priority: 0.7 },
     { path: "/press-kit", changeFrequency: "yearly" as const, priority: 0.4 },
+    { path: "/insights", changeFrequency: "monthly" as const, priority: 0.8 },
+    { path: "/insights/tech-market-report-2026", changeFrequency: "monthly" as const, priority: 0.9 },
   ];
 
   const staticRoutes: MetadataRoute.Sitemap = staticPaths.flatMap(
