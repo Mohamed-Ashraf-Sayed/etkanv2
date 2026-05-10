@@ -5,6 +5,7 @@ import { projects } from "@/data/projects";
 import { cities } from "@/data/cities";
 import { glossaryTerms } from "@/data/glossary";
 import { comparisons } from "@/data/comparisons";
+import { industries } from "@/data/industries";
 import { getPublishedBlogPosts } from "@/lib/db-blog";
 import {
   getAllCategories,
@@ -42,6 +43,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/glossary", changeFrequency: "monthly" as const, priority: 0.7 },
     { path: "/pricing", changeFrequency: "monthly" as const, priority: 0.9 },
     { path: "/comparison", changeFrequency: "monthly" as const, priority: 0.7 },
+    { path: "/solutions", changeFrequency: "monthly" as const, priority: 0.9 },
+    { path: "/tools", changeFrequency: "monthly" as const, priority: 0.7 },
+    { path: "/tools/cost-calculator", changeFrequency: "monthly" as const, priority: 0.7 },
   ];
 
   const staticRoutes: MetadataRoute.Sitemap = staticPaths.flatMap(
@@ -165,6 +169,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
   );
 
+  // Industry Solutions
+  const solutionRoutes: MetadataRoute.Sitemap = industries.flatMap((i) =>
+    locales.map((locale) => ({
+      url: localizedUrl(`/solutions/${i.slug}`, locale),
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+      alternates: withAlternates(`/solutions/${i.slug}`),
+    }))
+  );
+
   return [
     ...staticRoutes,
     ...serviceRoutes,
@@ -174,5 +189,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...archiveRoutes,
     ...glossaryRoutes,
     ...comparisonRoutes,
+    ...solutionRoutes,
   ];
 }
