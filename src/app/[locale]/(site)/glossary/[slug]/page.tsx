@@ -12,9 +12,7 @@ import {
 } from "@/data/glossary";
 import { getAlternates, getBreadcrumbSchema } from "@/lib/seo";
 
-export const dynamic = "force-static";
-export const revalidate = false;
-export const dynamicParams = false;
+export const revalidate = 86400;
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://etqanly.com";
