@@ -48,6 +48,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/tools/cost-calculator", changeFrequency: "monthly" as const, priority: 0.7 },
     { path: "/guides", changeFrequency: "monthly" as const, priority: 0.8 },
     { path: "/guides/web-development", changeFrequency: "monthly" as const, priority: 0.8 },
+    { path: "/guides/mobile-app-development", changeFrequency: "monthly" as const, priority: 0.8 },
+    { path: "/guides/erp-systems", changeFrequency: "monthly" as const, priority: 0.8 },
+    { path: "/testimonials", changeFrequency: "monthly" as const, priority: 0.7 },
     { path: "/press-kit", changeFrequency: "yearly" as const, priority: 0.4 },
   ];
 

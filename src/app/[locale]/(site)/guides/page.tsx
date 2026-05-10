@@ -24,6 +24,20 @@ const guides = [
       "كل ما تحتاج معرفته عن تطوير المواقع: التقنيات، التكلفة، المراحل، اختيار الشركة المناسبة، وأمثلة عملية.",
     readingTime: 30,
   },
+  {
+    slug: "mobile-app-development",
+    title: "الدليل الشامل لتطوير تطبيقات الموبايل 2026",
+    description:
+      "تطوير تطبيقات iOS و Android: التقنيات، Native vs Hybrid، التكلفة، النشر على Stores.",
+    readingTime: 25,
+  },
+  {
+    slug: "erp-systems",
+    title: "الدليل الشامل لأنظمة ERP في 2026",
+    description:
+      "أنظمة ERP: التعريف، الفوائد، أفضل الأنظمة (SAP, Oracle, Odoo)، تكلفة التطبيق، والـ ROI.",
+    readingTime: 25,
+  },
 ];
 
 export default function GuidesHub() {
