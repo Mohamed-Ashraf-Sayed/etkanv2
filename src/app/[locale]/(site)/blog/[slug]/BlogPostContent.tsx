@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { motion } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import {
@@ -195,6 +195,7 @@ export default function BlogPostContent({
   const t = useTranslations("blogPost");
   const tn = useTranslations("nav");
   const tb = useTranslations("blog");
+  const locale = useLocale();
   const [copied, setCopied] = useState(false);
 
   const toc = useMemo(() => extractToc(post.content), [post.content]);
@@ -294,6 +295,14 @@ export default function BlogPostContent({
                 <Calendar className="w-4 h-4 text-accent" />
                 <span className="font-cairo">{formatDate(post.date)}</span>
               </div>
+              {post.dateModified && post.dateModified !== post.date && (
+                <div className="flex items-center gap-2">
+                  <span className="text-accent text-xs font-cairo">
+                    {locale === "en" ? "Updated:" : "آخر تحديث:"}
+                  </span>
+                  <span className="font-cairo">{formatDate(post.dateModified)}</span>
+                </div>
+              )}
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-accent" />
                 <span className="font-cairo">

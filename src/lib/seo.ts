@@ -266,19 +266,30 @@ export function getArticleSchema(article: {
   slug: string;
   date: string;
   author: string;
+  dateModified?: string;
+  image?: string;
+  locale?: string;
 }) {
+  const isEn = article.locale === "en";
+  const url = `${BASE_URL}${isEn ? "/en" : ""}/blog/${article.slug}`;
   return {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: article.title,
     description: article.excerpt,
-    url: `${BASE_URL}/blog/${article.slug}`,
+    url,
     datePublished: article.date,
-    image: `${BASE_URL}/opengraph-image`,
-    inLanguage: "ar",
+    dateModified: article.dateModified || article.date,
+    image: article.image || `${BASE_URL}/opengraph-image`,
+    inLanguage: isEn ? "en" : "ar",
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": url,
+    },
     author: {
       "@type": "Person",
       name: article.author,
+      url: `${BASE_URL}${isEn ? "/en" : ""}/blog/author/${slugifyAuthor(article.author)}`,
     },
     publisher: {
       "@type": "Organization",
@@ -287,6 +298,115 @@ export function getArticleSchema(article: {
         "@type": "ImageObject",
         url: `${BASE_URL}/icon.png`,
       },
+    },
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["h1", "h2", ".tldr", "article p:first-of-type"],
+    },
+  };
+}
+
+function slugifyAuthor(name: string): string {
+  return name
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9ء-ي-]/g, "")
+    .slice(0, 50);
+}
+
+export function getProductSchema(product: {
+  name: string;
+  slug: string;
+  description: string;
+  priceMin: number;
+  priceMax: number;
+  currency: string;
+  category: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description,
+    category: product.category,
+    url: `${BASE_URL}/pricing#${product.slug}`,
+    brand: {
+      "@type": "Brand",
+      name: "إتقان للحلول المتكاملة",
+    },
+    offers: {
+      "@type": "AggregateOffer",
+      priceCurrency: product.currency,
+      lowPrice: product.priceMin,
+      highPrice: product.priceMax,
+      offerCount: 1,
+      availability: "https://schema.org/InStock",
+      seller: {
+        "@type": "Organization",
+        name: "إتقان للحلول المتكاملة",
+        url: BASE_URL,
+      },
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.9",
+      reviewCount: "75",
+      bestRating: "5",
+      worstRating: "1",
+    },
+  };
+}
+
+export function getHowToSchema(howto: {
+  name: string;
+  description: string;
+  url: string;
+  totalTime?: string;
+  steps: Array<{ name: string; text: string; image?: string }>;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: howto.name,
+    description: howto.description,
+    url: howto.url,
+    ...(howto.totalTime ? { totalTime: howto.totalTime } : {}),
+    step: howto.steps.map((s, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: s.name,
+      text: s.text,
+      url: `${howto.url}#step-${i + 1}`,
+      ...(s.image ? { image: s.image } : {}),
+    })),
+  };
+}
+
+export function getPersonSchema(person: {
+  name: string;
+  slug: string;
+  jobTitle: string;
+  bio?: string;
+  image?: string;
+  sameAs?: string[];
+  knowsAbout?: string[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": `${BASE_URL}/blog/author/${person.slug}#person`,
+    name: person.name,
+    url: `${BASE_URL}/blog/author/${person.slug}`,
+    jobTitle: person.jobTitle,
+    ...(person.bio ? { description: person.bio } : {}),
+    ...(person.image ? { image: person.image } : {}),
+    ...(person.sameAs ? { sameAs: person.sameAs } : {}),
+    ...(person.knowsAbout ? { knowsAbout: person.knowsAbout } : {}),
+    worksFor: {
+      "@type": "Organization",
+      name: "إتقان للحلول المتكاملة",
+      url: BASE_URL,
     },
   };
 }

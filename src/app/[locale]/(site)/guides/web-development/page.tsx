@@ -24,6 +24,7 @@ import {
   getBreadcrumbSchema,
   getArticleSchema,
   getFAQSchema,
+  getHowToSchema,
 } from "@/lib/seo";
 
 const BASE_URL =
@@ -112,6 +113,46 @@ export default function WebDevelopmentGuide() {
       { name: TITLE, url },
     ]),
     getFAQSchema(faqs),
+    getHowToSchema({
+      name: "كيفية تطوير موقع إلكتروني احترافي خطوة بخطوة",
+      description: "دليل عملي لتطوير موقع إلكتروني من الفكرة حتى الإطلاق",
+      url,
+      totalTime: "P30D",
+      steps: [
+        {
+          name: "تحديد الهدف وجمهور الموقع",
+          text: "حدد الغرض من الموقع (تعريفي، متجر، تطبيق ويب)، الجمهور المستهدف، الميزانية، والمتطلبات الوظيفية الأساسية.",
+        },
+        {
+          name: "تصميم تجربة المستخدم (UX) والواجهة (UI)",
+          text: "ارسم wireframes للصفحات، صمم mockups بـ Figma أو Adobe XD، اختر نظام ألوان وخطوط متناسقة، اختبر التصميم مع مستخدمين حقيقيين.",
+        },
+        {
+          name: "اختيار التقنيات والاستضافة",
+          text: "اختر Frontend (React, Vue, Next.js) و Backend (Node.js, Laravel, Django)، استضافة (AWS, DigitalOcean, Vercel)، قاعدة بيانات (PostgreSQL, MongoDB).",
+        },
+        {
+          name: "تطوير الموقع (Frontend + Backend)",
+          text: "اكتب الكود بأفضل الممارسات، استخدم Git للتحكم في الإصدارات، اعمل code reviews، اتبع معايير الأمان (OWASP Top 10).",
+        },
+        {
+          name: "الاختبار وضمان الجودة (QA)",
+          text: "اختبر على متصفحات مختلفة (Chrome, Firefox, Safari, Edge)، اختبر على أجهزة موبايل وأحجام شاشات متعددة، اختبارات أداء وأمان.",
+        },
+        {
+          name: "تحسين SEO والأداء",
+          text: "اضبط meta tags، sitemap.xml، robots.txt، structured data (Schema.org)، حسّن سرعة الموقع لـ Core Web Vitals < 2.5s LCP.",
+        },
+        {
+          name: "النشر والإطلاق",
+          text: "اربط دومين، فعّل HTTPS/SSL، اعمل deploy على production، اضبط backups يومية، monitoring عبر Sentry/New Relic.",
+        },
+        {
+          name: "الصيانة والتحديثات المستمرة",
+          text: "حدّث التبعيات والإضافات شهرياً، راقب الأداء، أصلح bugs بسرعة، طوّر ميزات جديدة بناءً على feedback المستخدمين.",
+        },
+      ],
+    }),
     {
       "@context": "https://schema.org",
       "@type": "TechArticle",

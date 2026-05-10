@@ -5,7 +5,11 @@ import Badge from "@/components/ui/Badge";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import PostsGrid from "@/components/blog/PostsGrid";
 import { getAllAuthors, getPostsByAuthor } from "@/lib/blog-archive";
-import { getAlternates, getBreadcrumbSchema } from "@/lib/seo";
+import {
+  getAlternates,
+  getBreadcrumbSchema,
+  getPersonSchema,
+} from "@/lib/seo";
 
 export const revalidate = 300;
 
@@ -49,18 +53,29 @@ export default async function AuthorPage({ params }: PageProps) {
   const baseUrl = `${BASE_URL}${isArabic ? "" : "/en"}`;
 
   const schemas = [
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
+    getPersonSchema({
       name: authorName,
-      url: `${baseUrl}/blog/author/${slug}`,
-      jobTitle: isArabic ? "كاتب تقني" : "Tech Writer",
-      worksFor: {
-        "@type": "Organization",
-        name: "إتقان للحلول المتكاملة",
-        url: BASE_URL,
-      },
-    },
+      slug,
+      jobTitle: isArabic
+        ? "كاتب تقني متخصص في تطوير البرمجيات"
+        : "Senior Tech Writer & Software Engineer",
+      bio: isArabic
+        ? `${authorName} كاتب تقني محترف في إتقان للحلول المتكاملة، نشر ${posts.length}+ مقالة في مجالات تطوير المواقع، تطبيقات الموبايل، وأنظمة الأعمال.`
+        : `${authorName} is a senior tech writer at Etqan IT Solutions, with ${posts.length}+ published articles on web development, mobile apps, and business systems.`,
+      sameAs: [
+        "https://www.linkedin.com/company/etqanly",
+        "https://twitter.com/etqanly",
+      ],
+      knowsAbout: [
+        "Web Development",
+        "Mobile App Development",
+        "ERP Systems",
+        "CRM Systems",
+        "تطوير المواقع",
+        "تطبيقات الموبايل",
+        "أنظمة ERP",
+      ],
+    }),
     getBreadcrumbSchema([
       { name: isArabic ? "الرئيسية" : "Home", url: `${baseUrl}/` },
       { name: isArabic ? "المدونة" : "Blog", url: `${baseUrl}/blog` },

@@ -23,15 +23,19 @@ function dbToBlog(p: {
   readingTime: number;
   publishedAt: Date | null;
   createdAt: Date;
+  updatedAt?: Date;
 }, locale: string): BlogPost {
   const isEn = locale === "en";
+  const publishedDate = p.publishedAt || p.createdAt;
+  const updatedDate = p.updatedAt && p.updatedAt > publishedDate ? p.updatedAt : null;
   return {
     slug: p.slug,
     title: isEn ? p.titleEn || p.title : p.title,
     excerpt: isEn ? p.excerptEn || p.excerpt : p.excerpt,
     content: isEn ? p.contentEn || p.content : p.content,
     author: p.author,
-    date: (p.publishedAt || p.createdAt).toISOString().split("T")[0],
+    date: publishedDate.toISOString().split("T")[0],
+    dateModified: updatedDate ? updatedDate.toISOString().split("T")[0] : undefined,
     readingTime: p.readingTime,
     tags: JSON.parse(p.tags || "[]"),
     category: p.category,

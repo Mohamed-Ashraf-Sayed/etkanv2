@@ -19,6 +19,7 @@ import {
   getBreadcrumbSchema,
   getArticleSchema,
   getFAQSchema,
+  getHowToSchema,
 } from "@/lib/seo";
 
 const BASE_URL =
@@ -96,6 +97,50 @@ export default function MobileGuide() {
       { name: TITLE, url },
     ]),
     getFAQSchema(faqs),
+    getHowToSchema({
+      name: "كيفية تطوير تطبيق موبايل ناجح من الصفر",
+      description: "خطوات عملية لتطوير تطبيق iOS و Android من الفكرة للنشر",
+      url,
+      totalTime: "P90D",
+      steps: [
+        {
+          name: "بلورة الفكرة ودراسة السوق",
+          text: "حدد المشكلة التي يحلها التطبيق، حلل المنافسين على Google Play و App Store، حدد الـ unique value proposition وقياس الطلب عبر استبيانات.",
+        },
+        {
+          name: "تحديد المنصة (iOS, Android, Both)",
+          text: "في السوق العربي Android بيغطي 70-75% من المستخدمين. لو الميزانية محدودة ابدأ بـ Android، أو استخدم Flutter/React Native للمنصتين بكود واحد.",
+        },
+        {
+          name: "تصميم UX/UI متوافق مع الـ Platform",
+          text: "اتبع Material Design لـ Android و Human Interface Guidelines لـ iOS. اعمل prototypes في Figma، اختبرها مع 5-10 مستخدمين قبل البرمجة.",
+        },
+        {
+          name: "اختيار التقنية: Native أم Hybrid",
+          text: "Native (Swift/Kotlin) لأداء أعلى لتطبيقات gaming/AR. Hybrid (Flutter/React Native) للتطبيقات business بكود مشترك يوفر 30-40% من التكلفة.",
+        },
+        {
+          name: "تطوير الـ Backend والـ APIs",
+          text: "معظم التطبيقات تحتاج backend لإدارة المستخدمين والبيانات. استخدم Node.js/Python مع PostgreSQL، أو Firebase لتسريع MVP.",
+        },
+        {
+          name: "تطوير التطبيق وتكامل الميزات",
+          text: "ابني الميزات الأساسية (MVP) أولاً، ادمج push notifications (FCM/APNS)، analytics (Firebase/Amplitude)، payment gateways إن لزم.",
+        },
+        {
+          name: "الاختبار على أجهزة حقيقية",
+          text: "اختبر على 5+ أجهزة Android بإصدارات مختلفة (Samsung, Xiaomi, etc.) و iPhone بإصدارات iOS مختلفة. استخدم Firebase Test Lab أو BrowserStack.",
+        },
+        {
+          name: "النشر على Google Play و App Store",
+          text: "Google Play: $25 رسوم لمرة واحدة، الموافقة خلال 1-3 أيام. App Store: $99/سنة، 1-2 أسبوع للموافقة. جهز screenshots وstore descriptions محسنة لـ ASO.",
+        },
+        {
+          name: "الصيانة والتحديثات الدورية",
+          text: "أصدر تحديث كل 4-6 أسابيع لإصلاح bugs وإضافة ميزات. راقب crash reports عبر Sentry/Crashlytics واستجب لـ reviews المستخدمين بسرعة.",
+        },
+      ],
+    }),
   ];
 
   return (

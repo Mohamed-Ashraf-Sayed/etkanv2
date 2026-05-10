@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import ServicesPageClient from "./ServicesPageClient";
-import { getAlternates, getFAQSchema, getBreadcrumbSchema } from "@/lib/seo";
+import {
+  getAlternates,
+  getFAQSchema,
+  getBreadcrumbSchema,
+  getReviewSchema,
+} from "@/lib/seo";
+import { testimonials } from "@/data/testimonials";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://etqanly.com";
@@ -51,12 +57,21 @@ const faqs = [
   },
 ];
 
-export const servicesSchemas = [
+const reviewSchemas = getReviewSchema(
+  testimonials.slice(0, 6).map((t) => ({
+    author: t.author,
+    text: t.text,
+    rating: t.rating,
+  }))
+);
+
+export const servicesSchemas: object[] = [
   getFAQSchema(faqs),
   getBreadcrumbSchema([
     { name: "الرئيسية", url: `${BASE_URL}/` },
     { name: "خدماتنا", url: `${BASE_URL}/services` },
   ]),
+  ...reviewSchemas,
 ];
 
 export default function ServicesPage() {

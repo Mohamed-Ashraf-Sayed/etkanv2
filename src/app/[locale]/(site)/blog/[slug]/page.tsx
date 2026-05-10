@@ -54,6 +54,7 @@ export async function generateMetadata({
       authors: [post.author],
       tags: post.tags,
       publishedTime: post.date,
+      modifiedTime: post.dateModified || post.date,
       url: `${BASE_URL}${locale === "en" ? "/en" : ""}/blog/${slug}`,
     },
   };
@@ -98,7 +99,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       excerpt: post.excerpt,
       slug: post.slug,
       date: post.date,
+      dateModified: post.dateModified,
       author: post.author,
+      image: post.heroImage ? `${BASE_URL}${post.heroImage}` : undefined,
+      locale,
     }),
     getBreadcrumbSchema([
       { name: isArabic ? "الرئيسية" : "Home", url: `${baseUrl}/` },

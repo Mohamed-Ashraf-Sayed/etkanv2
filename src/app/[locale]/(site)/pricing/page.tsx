@@ -14,6 +14,7 @@ import {
   getAlternates,
   getBreadcrumbSchema,
   getFAQSchema,
+  getProductSchema,
 } from "@/lib/seo";
 
 export const revalidate = 86400;
@@ -86,26 +87,18 @@ export default function PricingPage() {
     getFAQSchema(faqs),
   ];
 
-  // Add Product schema for each package
   pricingPackages.forEach((pkg) => {
-    schema.push({
-      "@context": "https://schema.org",
-      "@type": "Product",
-      name: pkg.name,
-      description: pkg.description,
-      brand: { "@type": "Brand", name: "إتقان للحلول المتكاملة" },
-      offers: {
-        "@type": "AggregateOffer",
-        priceCurrency: pkg.priceRange.currency,
-        lowPrice: pkg.priceRange.min,
-        highPrice: pkg.priceRange.max,
-        availability: "https://schema.org/InStock",
-        seller: {
-          "@type": "Organization",
-          name: "إتقان للحلول المتكاملة",
-        },
-      },
-    });
+    schema.push(
+      getProductSchema({
+        name: pkg.name,
+        slug: pkg.slug,
+        description: pkg.description,
+        priceMin: pkg.priceRange.min,
+        priceMax: pkg.priceRange.max,
+        currency: pkg.priceRange.currency,
+        category: pkg.category,
+      })
+    );
   });
 
   const formatPrice = (n: number) =>

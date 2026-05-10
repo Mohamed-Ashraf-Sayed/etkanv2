@@ -16,6 +16,7 @@ import {
   getBreadcrumbSchema,
   getArticleSchema,
   getFAQSchema,
+  getHowToSchema,
 } from "@/lib/seo";
 
 const BASE_URL =
@@ -90,6 +91,50 @@ export default function ErpGuide() {
       { name: TITLE, url },
     ]),
     getFAQSchema(faqs),
+    getHowToSchema({
+      name: "كيفية اختيار وتطبيق نظام ERP لشركتك",
+      description: "دليل عملي لاختيار وتنفيذ نظام ERP يناسب حجم شركتك وميزانيتك",
+      url,
+      totalTime: "P180D",
+      steps: [
+        {
+          name: "تحليل احتياجات الشركة والعمليات الحالية",
+          text: "اعمل audit لكل قسم (محاسبة، مخازن، مبيعات، HR)، حدد نقاط الألم، اجمع متطلبات من رؤساء الأقسام، وثّق الـ workflows الحالية.",
+        },
+        {
+          name: "تحديد الميزانية والـ ROI المتوقع",
+          text: "احسب التكلفة الكلية (TCO): الترخيص + التطبيق + التدريب + الصيانة السنوية. حدد الـ ROI المتوقع (تقليل تكاليف، زيادة إنتاجية، إلخ).",
+        },
+        {
+          name: "تقييم خيارات الـ ERP المتاحة",
+          text: "قارن بين SAP, Oracle NetSuite, Odoo, Microsoft Dynamics, Custom ERP. اعمل demo لكل خيار، اطلب references من عملاء شبيهين بحجم شركتك.",
+        },
+        {
+          name: "اختيار شريك التنفيذ (Implementation Partner)",
+          text: "اختر شركة محلية بخبرة في القطاع، اطلب case studies، تحقق من شهادات الفريق، اتفق على مراحل التنفيذ والـ deliverables بوضوح.",
+        },
+        {
+          name: "تخطيط وتصميم النظام (Configuration)",
+          text: "صمم الـ chart of accounts، حدد user roles & permissions، اضبط workflows لكل قسم، عرّف الـ approval hierarchies والـ KPIs.",
+        },
+        {
+          name: "هجرة البيانات (Data Migration)",
+          text: "نظف البيانات من الأنظمة القديمة، عرّف data mapping، انقل البيانات على دفعات، تحقق من سلامة البيانات بعد الهجرة.",
+        },
+        {
+          name: "تدريب الموظفين بشكل مكثف",
+          text: "اعمل تدريبات منفصلة لكل قسم، جهز user manuals بالعربية، عيّن super-users في كل قسم لمساعدة الزملاء، اعمل sandbox environment للتجربة.",
+        },
+        {
+          name: "الإطلاق التدريجي (Go-Live)",
+          text: "ابدأ بـ pilot في قسم واحد لمدة 4-6 أسابيع، اجمع feedback، صحّح الأخطاء، ثم وسّع لباقي الأقسام تدريجياً.",
+        },
+        {
+          name: "الدعم والتحسين المستمر",
+          text: "راقب KPIs شهرياً، اجمع feedback من المستخدمين، حدّث النظام حسب التغيرات، اعمل audits سنوية لقياس الـ ROI الفعلي.",
+        },
+      ],
+    }),
   ];
 
   return (
