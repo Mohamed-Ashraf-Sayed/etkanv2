@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import Container from "@/components/ui/Container";
 import Badge from "@/components/ui/Badge";
@@ -26,7 +27,13 @@ export const metadata: Metadata = {
   alternates: getAlternates("/glossary"),
 };
 
-export default function GlossaryPage() {
+export default async function GlossaryPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   const categories = getCategories();
 
   const schema = [

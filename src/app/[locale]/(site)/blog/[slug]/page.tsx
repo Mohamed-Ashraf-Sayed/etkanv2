@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { setRequestLocale } from "next-intl/server";
 import { findBlogPostBySlug, getBlogPosts } from "@/lib/data";
 import {
   getAlternates,
@@ -62,6 +63,7 @@ export async function generateMetadata({
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug, locale } = await params;
+  setRequestLocale(locale);
   const post = await getPost(slug, locale);
 
   if (!post) {

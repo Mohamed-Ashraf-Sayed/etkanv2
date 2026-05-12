@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { setRequestLocale } from "next-intl/server";
 import { findServiceBySlug } from "@/lib/data";
 import { getCityBySlug, cities } from "@/data/cities";
 import {
@@ -21,10 +22,13 @@ interface PageProps {
 // Pre-generate all combinations at build time
 export async function generateStaticParams() {
   const services = ["web-dev", "mobile-dev", "crm", "networks", "it-support"];
-  const params: { slug: string; city: string }[] = [];
-  for (const slug of services) {
-    for (const city of cities) {
-      params.push({ slug, city: city.slug });
+  const locales = ["ar", "en"];
+  const params: { slug: string; city: string; locale: string }[] = [];
+  for (const locale of locales) {
+    for (const slug of services) {
+      for (const city of cities) {
+        params.push({ locale, slug, city: city.slug });
+      }
     }
   }
   return params;
@@ -82,6 +86,7 @@ export async function generateMetadata({
 
 export default async function ServiceCityPage({ params }: PageProps) {
   const { slug, city: citySlug, locale } = await params;
+  setRequestLocale(locale);
   const service = findServiceBySlug(slug, locale);
   const city = getCityBySlug(citySlug);
 

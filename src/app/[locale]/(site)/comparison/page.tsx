@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { ArrowLeft, GitCompare } from "lucide-react";
 import Container from "@/components/ui/Container";
@@ -26,7 +27,13 @@ export const metadata: Metadata = {
   alternates: getAlternates("/comparison"),
 };
 
-export default function ComparisonsHub() {
+export default async function ComparisonsHub({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   const schema = getBreadcrumbSchema([
     { name: "الرئيسية", url: `${BASE_URL}/` },
     { name: "مقارنات تقنية", url: `${BASE_URL}/comparison` },

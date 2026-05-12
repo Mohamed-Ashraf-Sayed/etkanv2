@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { setRequestLocale } from "next-intl/server";
 import Container from "@/components/ui/Container";
 import Badge from "@/components/ui/Badge";
 import Breadcrumb from "@/components/shared/Breadcrumb";
@@ -11,6 +12,7 @@ import {
 import { getAlternates, getBreadcrumbSchema } from "@/lib/seo";
 
 export const revalidate = 300;
+export const dynamicParams = true;
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://etqanly.com";
@@ -44,6 +46,7 @@ export async function generateMetadata({
 
 export default async function CategoryPage({ params }: PageProps) {
   const { slug, locale } = await params;
+  setRequestLocale(locale);
   const { posts, categoryName } = await getPostsByCategory(slug, locale);
 
   if (posts.length === 0) notFound();

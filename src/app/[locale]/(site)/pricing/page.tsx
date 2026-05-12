@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { CheckCircle2, X, Star, ArrowLeft, MessageCircle } from "lucide-react";
 import Container from "@/components/ui/Container";
@@ -76,7 +77,13 @@ const faqs = [
   },
 ];
 
-export default function PricingPage() {
+export default async function PricingPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   const categories = getCategories();
 
   const schema: object[] = [

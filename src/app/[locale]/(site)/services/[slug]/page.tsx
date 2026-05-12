@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { setRequestLocale } from "next-intl/server";
 import { findServiceBySlug } from "@/lib/data";
 import {
   getAlternates,
@@ -44,6 +45,7 @@ export async function generateMetadata({
 
 export default async function ServiceDetailPage({ params }: PageProps) {
   const { slug, locale } = await params;
+  setRequestLocale(locale);
   const service = findServiceBySlug(slug, locale);
 
   if (!service) {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { setRequestLocale } from "next-intl/server";
 import BlogPageContent from "./BlogPageContent";
 import { getAlternates, getBreadcrumbSchema } from "@/lib/seo";
 import { getPublishedBlogPosts } from "@/lib/db-blog";
@@ -33,6 +34,7 @@ export default async function BlogPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  setRequestLocale(locale);
   const dbPosts = await getPublishedBlogPosts(locale);
 
   return (
