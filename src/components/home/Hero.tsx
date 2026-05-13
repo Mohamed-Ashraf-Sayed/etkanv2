@@ -5,6 +5,7 @@ import MagneticButton from "@/components/shared/MagneticButton";
 import { getTranslations } from "next-intl/server";
 import HeroScrollButton from "./HeroScrollButton";
 import HeroParallax from "./HeroParallax";
+import { SITE_STATS } from "@/config/site-stats";
 
 export default async function Hero() {
   const t = await getTranslations("hero");
@@ -82,10 +83,10 @@ export default async function Hero() {
           {/* Stats row */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8 mt-16 pt-10 border-t border-white/[0.06] animate-[slideUp_0.5s_ease-out_0.35s_both]">
             {[
-              { value: "+50", label: t("clients") },
-              { value: "+100", label: t("projects") },
-              { value: "+5", label: t("years") },
-              { value: "٪98", label: t("satisfaction") },
+              { value: `+${SITE_STATS.clients}`, label: t("clients") },
+              { value: `+${SITE_STATS.projects}`, label: t("projects") },
+              { value: `+${SITE_STATS.yearsExperience}`, label: t("years") },
+              { value: `٪${SITE_STATS.satisfaction}`, label: t("satisfaction") },
             ].map((stat) => (
               <div key={stat.label} className="text-center sm:text-start">
                 <span className="block text-2xl sm:text-3xl font-bold text-accent font-cairo">

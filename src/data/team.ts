@@ -68,11 +68,13 @@ export const milestones = [
   { year: "2024", title: "قيادة السوق", description: "أصبحنا من أفضل شركات الحلول التقنية في المنطقة" },
 ];
 
+import { SITE_STATS } from "@/config/site-stats";
+
 export const stats = [
-  { value: 200, suffix: "+", label: "مشروع ناجح", icon: "Briefcase" },
-  { value: 75, suffix: "+", label: "عميل نشط", icon: "Users" },
-  { value: 30, suffix: "+", label: "مهندس محترف", icon: "Code2" },
-  { value: 6, suffix: "+", label: "سنوات خبرة", icon: "Calendar" },
+  { value: SITE_STATS.projects, suffix: "+", label: "مشروع ناجح", icon: "Briefcase" },
+  { value: SITE_STATS.clients, suffix: "+", label: "عميل نشط", icon: "Users" },
+  { value: SITE_STATS.engineers, suffix: "+", label: "مهندس محترف", icon: "Code2" },
+  { value: SITE_STATS.yearsExperience, suffix: "+", label: "سنوات خبرة", icon: "Calendar" },
 ];
 
 export const values = [

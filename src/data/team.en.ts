@@ -61,11 +61,13 @@ export const milestonesEn = [
   { year: "2024", title: "Market Leadership", description: "We became one of the top IT solutions companies in the region" },
 ];
 
+import { SITE_STATS } from "@/config/site-stats";
+
 export const statsEn = [
-  { value: 200, suffix: "+", label: "Successful Projects", icon: "Briefcase" },
-  { value: 75, suffix: "+", label: "Active Clients", icon: "Users" },
-  { value: 30, suffix: "+", label: "Professional Engineers", icon: "Code2" },
-  { value: 6, suffix: "+", label: "Years of Experience", icon: "Calendar" },
+  { value: SITE_STATS.projects, suffix: "+", label: "Successful Projects", icon: "Briefcase" },
+  { value: SITE_STATS.clients, suffix: "+", label: "Active Clients", icon: "Users" },
+  { value: SITE_STATS.engineers, suffix: "+", label: "Professional Engineers", icon: "Code2" },
+  { value: SITE_STATS.yearsExperience, suffix: "+", label: "Years of Experience", icon: "Calendar" },
 ];
 
 export const valuesEn = [

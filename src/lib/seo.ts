@@ -1,3 +1,5 @@
+import { SITE_STATS } from "@/config/site-stats";
+
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://etqanly.com";
 
@@ -126,7 +128,7 @@ export function getLocalBusinessSchema() {
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: "4.9",
-      reviewCount: "75",
+      reviewCount: String(SITE_STATS.clients),
       bestRating: "5",
       worstRating: "1",
     },
@@ -351,7 +353,7 @@ export function getProductSchema(product: {
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: "4.9",
-      reviewCount: "75",
+      reviewCount: String(SITE_STATS.clients),
       bestRating: "5",
       worstRating: "1",
     },
