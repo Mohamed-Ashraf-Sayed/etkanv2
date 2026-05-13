@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
 import AnimatedCounter from "@/components/shared/AnimatedCounter";
@@ -10,30 +11,35 @@ import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 import { getStats } from "@/lib/data";
 import { useTranslations, useLocale } from "next-intl";
 
-const companiesAr = [
-  { name: "عرب فيوتشر المحدودة" },
-  { name: "شركة مسار" },
+interface ClientLogo {
+  name: string;
+  logo?: string;
+}
+
+const companiesAr: ClientLogo[] = [
+  { name: "عرب فيوتشر المحدودة", logo: "/images/logos/arab-future.png" },
+  { name: "شركة مسار", logo: "/images/logos/masar.png" },
+  { name: "جينيسيس للتعدين", logo: "/images/logos/genesis-mining.png" },
+  { name: "Art Vision", logo: "/images/logos/art-vision.png" },
+  { name: "الصالح للقدرات التعليمية", logo: "/images/logos/al-saleh.png" },
+  { name: "فواصل الجوف", logo: "/images/logos/fwaljouf.png" },
+  { name: "ميدة التأسيسية", logo: "/images/logos/mida.png" },
+  { name: "Klinicon", logo: "/images/logos/klinicon.png" },
   { name: "مسارات" },
-  { name: "جينيسيس للتعدين" },
-  { name: "Art Vision" },
   { name: "القيروانة للمقاولات" },
-  { name: "الصالح للقدرات التعليمية" },
-  { name: "فواصل الجوف" },
-  { name: "ميدة التأسيسية" },
-  { name: "Klinicon" },
 ];
 
-const companiesEn = [
-  { name: "Arab Future Ltd" },
-  { name: "Masar Company" },
+const companiesEn: ClientLogo[] = [
+  { name: "Arab Future Ltd", logo: "/images/logos/arab-future.png" },
+  { name: "Masar Company", logo: "/images/logos/masar.png" },
+  { name: "Genesis Mining", logo: "/images/logos/genesis-mining.png" },
+  { name: "Art Vision", logo: "/images/logos/art-vision.png" },
+  { name: "Al-Saleh Educational", logo: "/images/logos/al-saleh.png" },
+  { name: "Fawasil Aljouf", logo: "/images/logos/fwaljouf.png" },
+  { name: "Mida United", logo: "/images/logos/mida.png" },
+  { name: "Klinicon", logo: "/images/logos/klinicon.png" },
   { name: "Masarat" },
-  { name: "Genesis Mining" },
-  { name: "Art Vision" },
   { name: "Al-Qayrawana Contracting" },
-  { name: "Al-Saleh Educational" },
-  { name: "Fawasil Aljouf" },
-  { name: "Mida United" },
-  { name: "Klinicon" },
 ];
 
 const staggerContainer = {
@@ -110,13 +116,25 @@ export default function TrustSection() {
             {companies.map((company) => (
               <div
                 key={company.name}
-                className="flex items-center gap-3 px-5 py-3 rounded-xl border border-border bg-surface shrink-0"
+                className="flex items-center gap-3 px-5 py-3 rounded-xl border border-border bg-surface shrink-0 h-[56px]"
               >
-                <InitialsAvatar
-                  name={company.name}
-                  className="h-9 w-9"
-                  textClassName="text-xs"
-                />
+                {company.logo ? (
+                  <div className="relative h-9 w-9 shrink-0">
+                    <Image
+                      src={company.logo}
+                      alt={`${company.name} logo`}
+                      fill
+                      className="object-contain"
+                      sizes="36px"
+                    />
+                  </div>
+                ) : (
+                  <InitialsAvatar
+                    name={company.name}
+                    className="h-9 w-9"
+                    textClassName="text-xs"
+                  />
+                )}
                 <span className="font-cairo font-semibold text-sm text-text-secondary whitespace-nowrap">
                   {company.name}
                 </span>
