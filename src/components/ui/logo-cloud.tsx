@@ -72,13 +72,4 @@ export function LogoCloud({ className, logos, ...props }: LogoCloudProps) {
   );
 }
 
-const defaultLogos: Logo[] = [
-  { src: "/images/logos/logo-1.svg", alt: "Future Tech" },
-  { src: "/images/logos/logo-2.svg", alt: "Gulf Trading" },
-  { src: "/images/logos/logo-3.svg", alt: "United Industries" },
-  { src: "/images/logos/logo-4.svg", alt: "New Media" },
-  { src: "/images/logos/logo-5.svg", alt: "Al-Aman Finance" },
-  { src: "/images/logos/logo-6.svg", alt: "Smart Solutions" },
-  { src: "/images/logos/logo-7.svg", alt: "Modern Construction" },
-  { src: "/images/logos/logo-8.svg", alt: "Al-Rowad Business" },
-];
+const defaultLogos: Logo[] = [];

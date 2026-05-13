@@ -1,35 +1,39 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
 import AnimatedCounter from "@/components/shared/AnimatedCounter";
+import InitialsAvatar from "@/components/shared/InitialsAvatar";
 import { InfiniteSlider } from "@/components/ui/infinite-slider";
 import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 import { getStats } from "@/lib/data";
 import { useTranslations, useLocale } from "next-intl";
 
 const companiesAr = [
-  { name: "تقنية المستقبل", logo: "/images/logos/logo-1.svg" },
-  { name: "الخليج للتجارة", logo: "/images/logos/logo-2.svg" },
-  { name: "المتحدة للصناعات", logo: "/images/logos/logo-3.svg" },
-  { name: "نيو ميديا", logo: "/images/logos/logo-4.svg" },
-  { name: "الأمان المالي", logo: "/images/logos/logo-5.svg" },
-  { name: "سمارت سولوشنز", logo: "/images/logos/logo-6.svg" },
-  { name: "البناء الحديث", logo: "/images/logos/logo-7.svg" },
-  { name: "الرواد للأعمال", logo: "/images/logos/logo-8.svg" },
+  { name: "عرب فيوتشر المحدودة" },
+  { name: "شركة مسار" },
+  { name: "مسارات" },
+  { name: "جينيسيس للتعدين" },
+  { name: "Art Vision" },
+  { name: "القيروانة للمقاولات" },
+  { name: "الصالح للقدرات التعليمية" },
+  { name: "فواصل الجوف" },
+  { name: "ميدة التأسيسية" },
+  { name: "Klinicon" },
 ];
 
 const companiesEn = [
-  { name: "Future Tech", logo: "/images/logos/logo-1.svg" },
-  { name: "Gulf Trading", logo: "/images/logos/logo-2.svg" },
-  { name: "United Industries", logo: "/images/logos/logo-3.svg" },
-  { name: "New Media", logo: "/images/logos/logo-4.svg" },
-  { name: "Al-Aman Finance", logo: "/images/logos/logo-5.svg" },
-  { name: "Smart Solutions", logo: "/images/logos/logo-6.svg" },
-  { name: "Modern Construction", logo: "/images/logos/logo-7.svg" },
-  { name: "Al-Rowad Business", logo: "/images/logos/logo-8.svg" },
+  { name: "Arab Future Ltd" },
+  { name: "Masar Company" },
+  { name: "Masarat" },
+  { name: "Genesis Mining" },
+  { name: "Art Vision" },
+  { name: "Al-Qayrawana Contracting" },
+  { name: "Al-Saleh Educational" },
+  { name: "Fawasil Aljouf" },
+  { name: "Mida United" },
+  { name: "Klinicon" },
 ];
 
 const staggerContainer = {
@@ -108,12 +112,10 @@ export default function TrustSection() {
                 key={company.name}
                 className="flex items-center gap-3 px-5 py-3 rounded-xl border border-border bg-surface shrink-0"
               >
-                <Image
-                  src={company.logo}
-                  alt={company.name}
-                  width={36}
-                  height={36}
-                  className="w-9 h-9 shrink-0"
+                <InitialsAvatar
+                  name={company.name}
+                  className="h-9 w-9"
+                  textClassName="text-xs"
                 />
                 <span className="font-cairo font-semibold text-sm text-text-secondary whitespace-nowrap">
                   {company.name}
