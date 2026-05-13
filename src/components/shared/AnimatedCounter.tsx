@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useInView, animate } from "framer-motion";
 import {
   Briefcase,
   Users,
@@ -32,25 +31,73 @@ export default function AnimatedCounter({
   prefix = "",
   label,
   icon,
-  duration = 2,
+  duration = 1.8,
 }: AnimatedCounterProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-  const [displayValue, setDisplayValue] = useState(0);
+  const [displayValue, setDisplayValue] = useState(end);
+  const [hasAnimated, setHasAnimated] = useState(false);
 
   useEffect(() => {
-    if (!isInView) return;
+    const node = ref.current;
+    if (!node || hasAnimated) return;
 
-    const controls = animate(0, end, {
-      duration,
-      ease: "easeOut",
-      onUpdate(value) {
-        setDisplayValue(Math.round(value));
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (prefersReducedMotion) {
+      setDisplayValue(end);
+      setHasAnimated(true);
+      return;
+    }
+
+    const startAnimation = () => {
+      setHasAnimated(true);
+      const startTime = performance.now();
+      const durationMs = duration * 1000;
+
+      const tick = (now: number) => {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / durationMs, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        setDisplayValue(Math.round(eased * end));
+        if (progress < 1) requestAnimationFrame(tick);
+      };
+
+      setDisplayValue(0);
+      requestAnimationFrame(tick);
+    };
+
+    if (typeof IntersectionObserver === "undefined") {
+      startAnimation();
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            startAnimation();
+            observer.disconnect();
+            break;
+          }
+        }
       },
-    });
+      { threshold: 0.1, rootMargin: "0px 0px -10% 0px" }
+    );
 
-    return () => controls.stop();
-  }, [isInView, end, duration]);
+    observer.observe(node);
+
+    const fallback = window.setTimeout(() => {
+      observer.disconnect();
+      if (!hasAnimated) startAnimation();
+    }, 2000);
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(fallback);
+    };
+  }, [end, duration, hasAnimated]);
 
   const IconComponent = icon ? iconMap[icon] : null;
 
