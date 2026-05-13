@@ -41,7 +41,6 @@ const teamSchemas = team.map((member) => ({
   name: member.name,
   jobTitle: member.role,
   description: member.bio,
-  image: member.image,
   worksFor: {
     "@type": "Organization",
     "@id": `${BASE_URL}/#organization`,

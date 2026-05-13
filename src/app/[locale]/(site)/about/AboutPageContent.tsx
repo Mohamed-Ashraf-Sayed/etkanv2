@@ -18,6 +18,7 @@ import {
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
 import Badge from "@/components/ui/Badge";
+import InitialsAvatar from "@/components/shared/InitialsAvatar";
 import Button from "@/components/ui/Button";
 import AnimatedCounter from "@/components/shared/AnimatedCounter";
 import AvatarPlaceholder from "@/components/shared/AvatarPlaceholder";
@@ -295,12 +296,11 @@ export default function AboutPageContent() {
                 <div className="absolute bottom-0 left-0 right-0 h-1/2 origin-bottom scale-y-0 rounded-t-[60px] bg-gradient-to-t from-accent/10 to-transparent transition-transform duration-500 ease-out group-hover:scale-y-100" />
 
                 {/* Avatar */}
-                <div className="relative z-10 h-24 w-24 overflow-hidden rounded-full border-4 border-border bg-surface-light transition-all duration-500 group-hover:border-accent/50 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(212,175,55,0.2)]">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    loading="lazy"
+                <div className="relative z-10 transition-all duration-500 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(212,175,55,0.2)] rounded-full">
+                  <InitialsAvatar
+                    name={member.name}
+                    className="h-24 w-24 border-4 border-border group-hover:border-accent/50"
+                    textClassName="text-2xl"
                   />
                 </div>
 

@@ -1,3 +1,5 @@
+import { SITE_STATS } from "@/config/site-stats";
+
 export interface TeamMember {
   name: string;
   role: string;
@@ -14,7 +16,7 @@ export const team: TeamMember[] = [
     bio: "أكثر من 12 سنة خبرة في قيادة المشاريع التقنية وبناء فرق تطوير ناجحة.",
     initials: "أم",
     gender: "male",
-    image: "https://randomuser.me/api/portraits/men/32.jpg",
+    image: "",
   },
   {
     name: "م. خالد إبراهيم",
@@ -22,7 +24,7 @@ export const team: TeamMember[] = [
     bio: "متخصص في تصميم وتأمين شبكات المؤسسات مع شهادات Cisco وFortinet.",
     initials: "خإ",
     gender: "male",
-    image: "https://randomuser.me/api/portraits/men/45.jpg",
+    image: "",
   },
   {
     name: "أ. ليلى أحمد",
@@ -30,7 +32,7 @@ export const team: TeamMember[] = [
     bio: "مصممة UX/UI بخبرة 8 سنوات في تصميم تجارب رقمية استثنائية.",
     initials: "لأ",
     gender: "female",
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
+    image: "",
   },
   {
     name: "م. عمر حسن",
@@ -38,7 +40,7 @@ export const team: TeamMember[] = [
     bio: "مطور Full-Stack بخبرة 10 سنوات، متخصص في بناء أنظمة معقدة وقابلة للتوسع.",
     initials: "عح",
     gender: "male",
-    image: "https://randomuser.me/api/portraits/men/22.jpg",
+    image: "",
   },
   {
     name: "أ. سارة يوسف",
@@ -46,7 +48,7 @@ export const team: TeamMember[] = [
     bio: "PMP معتمدة مع خبرة في إدارة مشاريع تقنية كبرى في مصر والسعودية.",
     initials: "سي",
     gender: "female",
-    image: "https://randomuser.me/api/portraits/women/28.jpg",
+    image: "",
   },
   {
     name: "م. محمود علي",
@@ -54,7 +56,7 @@ export const team: TeamMember[] = [
     bio: "متخصص في السحابة وأتمتة العمليات مع شهادات AWS وAzure.",
     initials: "مع",
     gender: "male",
-    image: "https://randomuser.me/api/portraits/men/67.jpg",
+    image: "",
   },
 ];
 
@@ -67,8 +69,6 @@ export const milestones = [
   { year: "2023", title: "أكثر من 100 مشروع", description: "تجاوزنا 100 مشروع ناجح و50 عميل نشط" },
   { year: "2024", title: "قيادة السوق", description: "أصبحنا من أفضل شركات الحلول التقنية في المنطقة" },
 ];
-
-import { SITE_STATS } from "@/config/site-stats";
 
 export const stats = [
   { value: SITE_STATS.projects, suffix: "+", label: "مشروع ناجح", icon: "Briefcase" },

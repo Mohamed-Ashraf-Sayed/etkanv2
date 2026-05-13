@@ -1,4 +1,5 @@
 import { TeamMember } from "./team";
+import { SITE_STATS } from "@/config/site-stats";
 
 export const teamEn: TeamMember[] = [
   {
@@ -7,7 +8,7 @@ export const teamEn: TeamMember[] = [
     bio: "Over 12 years of experience in leading technical projects and building successful development teams.",
     initials: "AM",
     gender: "male",
-    image: "https://randomuser.me/api/portraits/men/32.jpg",
+    image: "",
   },
   {
     name: "Eng. Khaled Ibrahim",
@@ -15,7 +16,7 @@ export const teamEn: TeamMember[] = [
     bio: "Specialized in designing and securing enterprise networks with Cisco and Fortinet certifications.",
     initials: "KI",
     gender: "male",
-    image: "https://randomuser.me/api/portraits/men/45.jpg",
+    image: "",
   },
   {
     name: "Ms. Laila Ahmed",
@@ -23,7 +24,7 @@ export const teamEn: TeamMember[] = [
     bio: "UX/UI designer with 8 years of experience in creating exceptional digital experiences.",
     initials: "LA",
     gender: "female",
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
+    image: "",
   },
   {
     name: "Eng. Omar Hassan",
@@ -31,7 +32,7 @@ export const teamEn: TeamMember[] = [
     bio: "Full-Stack developer with 10 years of experience, specialized in building complex and scalable systems.",
     initials: "OH",
     gender: "male",
-    image: "https://randomuser.me/api/portraits/men/22.jpg",
+    image: "",
   },
   {
     name: "Ms. Sarah Youssef",
@@ -39,7 +40,7 @@ export const teamEn: TeamMember[] = [
     bio: "Certified PMP with experience managing major technical projects in Egypt and Saudi Arabia.",
     initials: "SY",
     gender: "female",
-    image: "https://randomuser.me/api/portraits/women/28.jpg",
+    image: "",
   },
   {
     name: "Eng. Mahmoud Ali",
@@ -47,7 +48,7 @@ export const teamEn: TeamMember[] = [
     bio: "Specialized in cloud and process automation with AWS and Azure certifications.",
     initials: "MA",
     gender: "male",
-    image: "https://randomuser.me/api/portraits/men/67.jpg",
+    image: "",
   },
 ];
 
@@ -60,8 +61,6 @@ export const milestonesEn = [
   { year: "2023", title: "Over 100 Projects", description: "We surpassed 100 successful projects and 50 active clients" },
   { year: "2024", title: "Market Leadership", description: "We became one of the top IT solutions companies in the region" },
 ];
-
-import { SITE_STATS } from "@/config/site-stats";
 
 export const statsEn = [
   { value: SITE_STATS.projects, suffix: "+", label: "Successful Projects", icon: "Briefcase" },

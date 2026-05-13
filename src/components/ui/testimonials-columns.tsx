@@ -1,10 +1,11 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
+import InitialsAvatar from "@/components/shared/InitialsAvatar";
 
 export type Testimonial = {
   text: string;
-  image: string;
+  image?: string;
   name: string;
   role: string;
 };
@@ -31,7 +32,7 @@ export const TestimonialsColumn = (props: {
         {[
           ...new Array(2).fill(0).map((_, index) => (
             <React.Fragment key={index}>
-              {props.testimonials.map(({ text, image, name, role }, i) => (
+              {props.testimonials.map(({ text, name, role }, i) => (
                 <div
                   className="p-10 rounded-3xl border border-white/[0.08] shadow-lg shadow-accent/10 max-w-xs w-full bg-white/[0.07] backdrop-blur-sm"
                   key={i}
@@ -39,13 +40,11 @@ export const TestimonialsColumn = (props: {
                   <div className="text-white/90 font-cairo leading-relaxed text-[15px]">
                     &ldquo;{text}&rdquo;
                   </div>
-                  <div className="flex items-center gap-2 mt-5">
-                    <img
-                      width={40}
-                      height={40}
-                      src={image}
-                      alt={name}
-                      className="h-10 w-10 rounded-full object-cover border-2 border-accent/30"
+                  <div className="flex items-center gap-3 mt-5">
+                    <InitialsAvatar
+                      name={name}
+                      className="h-10 w-10 border-accent/30"
+                      textClassName="text-sm"
                     />
                     <div className="flex flex-col">
                       <div className="font-cairo font-bold tracking-tight leading-5 text-white">
