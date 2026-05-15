@@ -79,6 +79,10 @@
     "allServices": "All Services",
     "notFound": "Service Not Found"
   },
+  "homeFaq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Straight answers to the questions most clients ask before getting started"
+  },
   "howWeWork": {
     "title": "How We Work",
     "subtitle": "A proven methodology to ensure your project's success from start to finish",

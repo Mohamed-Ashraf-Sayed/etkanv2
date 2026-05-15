@@ -5,6 +5,7 @@ import ServicesSection from "@/components/home/ServicesSection";
 import HowWeWork from "@/components/home/HowWeWork";
 import FeaturedProjects from "@/components/home/FeaturedProjects";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
+import HomeFAQ from "@/components/home/HomeFAQ";
 import CTABanner from "@/components/home/CTABanner";
 
 export default function HomePage() {
@@ -17,6 +18,7 @@ export default function HomePage() {
       <HowWeWork />
       <FeaturedProjects />
       <TestimonialsSection />
+      <HomeFAQ />
       <CTABanner />
     </>
   );
