@@ -378,75 +378,127 @@ export default function CostCalculatorClient() {
 
       {/* Result */}
       <div className="lg:sticky lg:top-24 self-start">
-        <div className="bg-gradient-to-br from-accent/10 to-accent/5 border-2 border-accent/30 rounded-2xl p-8 text-center">
-          <Calculator className="w-10 h-10 text-accent mx-auto mb-4" />
-          <p className="text-sm text-text-muted font-cairo mb-3">
-            التكلفة التقديرية
-          </p>
-          <div className="text-3xl md:text-4xl font-black font-cairo text-accent mb-1">
-            {formatPrice(result.priceMin)}
-          </div>
-          <div className="text-text-muted font-cairo">
-            - {formatPrice(result.priceMax)} جنيه
+        <div className="bg-gradient-to-br from-accent/[0.08] to-transparent border-2 border-accent/30 rounded-2xl p-7">
+          <div className="flex items-center gap-2 text-accent mb-4">
+            <Calculator className="w-5 h-5" />
+            <span className="text-sm font-cairo font-bold uppercase tracking-wider">
+              تقدير مبدئي لمشروعك
+            </span>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 mt-6">
-            <div className="bg-surface rounded-xl p-3">
-              <div className="text-xs text-text-muted font-cairo mb-1">
-                المدة
-              </div>
-              <div className="font-bold font-cairo text-text-primary">
+          {/* Price - Anchored on starting price */}
+          <div>
+            <p className="text-xs text-text-muted font-cairo mb-1">
+              المشروع يبدأ من
+            </p>
+            <div className="flex items-baseline gap-2 mb-2">
+              <span className="text-4xl md:text-5xl font-black font-cairo text-text-primary">
+                {formatPrice(result.priceMin)}
+              </span>
+              <span className="text-lg text-text-secondary font-cairo">
+                جنيه
+              </span>
+            </div>
+            <p className="text-sm text-text-muted font-cairo">
+              يصل لـ{" "}
+              <span className="text-text-secondary font-bold">
+                {formatPrice(result.priceMax)} جنيه
+              </span>{" "}
+              للنسخة المتقدمة بكل المميزات
+            </p>
+          </div>
+
+          {/* Visual range bar */}
+          <div className="mt-5 mb-6">
+            <div className="relative h-2 bg-surface rounded-full overflow-hidden">
+              <div className="absolute inset-y-0 bg-gradient-to-r from-accent/40 via-accent to-accent/40 rounded-full w-full" />
+            </div>
+            <div className="flex justify-between mt-2 text-xs text-text-muted font-cairo">
+              <span>أساسي</span>
+              <span>متقدم</span>
+            </div>
+          </div>
+
+          {/* Details */}
+          <div className="space-y-3 mb-6">
+            <div className="flex items-center justify-between p-3 rounded-xl bg-surface">
+              <span className="text-sm text-text-muted font-cairo">
+                مدة التنفيذ
+              </span>
+              <span className="text-sm font-bold font-cairo text-text-primary">
                 {result.weeksMin}-{result.weeksMax} أسبوع
-              </div>
+              </span>
             </div>
-            <div className="bg-surface rounded-xl p-3">
-              <div className="text-xs text-text-muted font-cairo mb-1">
-                ميزات
+            {config.features.length > 0 && (
+              <div className="flex items-center justify-between p-3 rounded-xl bg-surface">
+                <span className="text-sm text-text-muted font-cairo">
+                  المميزات المختارة
+                </span>
+                <span className="text-sm font-bold font-cairo text-text-primary">
+                  {config.features.length} ميزة
+                </span>
               </div>
-              <div className="font-bold font-cairo text-text-primary">
-                {config.features.length}
-              </div>
-            </div>
+            )}
           </div>
 
           {(result.monthlyHosting > 0 ||
             result.monthlyMaintenance > 0) && (
-            <div className="mt-4 pt-4 border-t border-border text-start">
-              <p className="text-xs text-text-muted font-cairo mb-2">
-                + التكلفة الشهرية:
+            <div className="mb-6 pt-4 border-t border-border">
+              <p className="text-xs text-text-muted font-cairo mb-3">
+                تكاليف شهرية اختيارية:
               </p>
-              {result.monthlyHosting > 0 && (
-                <div className="flex justify-between text-sm font-cairo mb-1">
-                  <span className="text-text-muted">استضافة:</span>
-                  <span className="text-text-primary font-bold">
-                    {formatPrice(result.monthlyHosting)} ج/شهر
-                  </span>
-                </div>
-              )}
-              {result.monthlyMaintenance > 0 && (
-                <div className="flex justify-between text-sm font-cairo">
-                  <span className="text-text-muted">صيانة:</span>
-                  <span className="text-text-primary font-bold">
-                    {formatPrice(result.monthlyMaintenance)} ج/شهر
-                  </span>
-                </div>
-              )}
+              <div className="space-y-2">
+                {result.monthlyHosting > 0 && (
+                  <div className="flex items-center justify-between text-sm font-cairo">
+                    <span className="text-text-secondary">
+                      الاستضافة والـ Domain
+                    </span>
+                    <span className="text-text-primary font-bold">
+                      {formatPrice(result.monthlyHosting)} ج/شهر
+                    </span>
+                  </div>
+                )}
+                {result.monthlyMaintenance > 0 && (
+                  <div className="flex items-center justify-between text-sm font-cairo">
+                    <span className="text-text-secondary">
+                      الصيانة والتحديثات
+                    </span>
+                    <span className="text-text-primary font-bold">
+                      {formatPrice(result.monthlyMaintenance)} ج/شهر
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
           )}
+
+          {/* What's Included */}
+          <div className="mb-6 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/20">
+            <p className="text-xs font-cairo font-bold text-emerald-700 dark:text-emerald-400 mb-2">
+              ✓ السعر يشمل
+            </p>
+            <ul className="text-xs text-text-secondary font-cairo space-y-1">
+              <li>• تحليل المتطلبات + تصميم UX/UI</li>
+              <li>• تطوير كامل + اختبارات شاملة</li>
+              <li>• تسليم الكود + التوثيق</li>
+              <li>• ضمان 6 شهور بعد التسليم</li>
+              <li>• تدريب الفريق على الاستخدام</li>
+            </ul>
+          </div>
 
           <Button
             href="/booking"
             variant="gold"
             size="lg"
-            className="w-full mt-6"
+            className="w-full"
           >
-            احصل على عرض دقيق مجاناً
+            احجز استشارة لعرض دقيق
             <ArrowLeft className="w-4 h-4" />
           </Button>
 
-          <p className="text-xs text-text-muted font-cairo mt-4">
-            * الأسعار تقديرية وتعتمد على المتطلبات النهائية. للحصول على عرض
-            دقيق، احجز استشارة مجانية مع فريقنا.
+          <p className="text-xs text-text-muted font-cairo mt-4 text-center leading-relaxed">
+            الأرقام تقديرية. السعر النهائي يتحدد بعد جلسة تحليل مجانية لمتطلبات
+            مشروعك.
           </p>
         </div>
       </div>
