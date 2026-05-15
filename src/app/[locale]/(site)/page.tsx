@@ -1,4 +1,5 @@
 import Hero from "@/components/home/Hero";
+import TrustBadges from "@/components/home/TrustBadges";
 import TrustSection from "@/components/home/TrustSection";
 import ServicesSection from "@/components/home/ServicesSection";
 import HowWeWork from "@/components/home/HowWeWork";
@@ -10,6 +11,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <TrustBadges />
       <TrustSection />
       <ServicesSection />
       <HowWeWork />

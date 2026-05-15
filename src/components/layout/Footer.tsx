@@ -19,10 +19,10 @@ import Container from "@/components/ui/Container";
 import { TextHoverEffect, FooterBackgroundGradient } from "@/components/ui/hover-footer";
 
 const socialLinks = [
-  { href: "#", icon: Twitter, label: "Twitter" },
-  { href: "#", icon: Linkedin, label: "LinkedIn" },
-  { href: "#", icon: Facebook, label: "Facebook" },
-  { href: "#", icon: Instagram, label: "Instagram" },
+  { href: "https://www.linkedin.com/company/etqanly", icon: Linkedin, label: "LinkedIn" },
+  { href: "https://twitter.com/etqanly", icon: Twitter, label: "Twitter" },
+  { href: "https://www.facebook.com/etqanly", icon: Facebook, label: "Facebook" },
+  { href: "https://www.instagram.com/etqanly", icon: Instagram, label: "Instagram" },
 ];
 
 const partnerships = [
@@ -319,14 +319,14 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-4">
               <Link
-                href="#"
+                href={"/privacy" as never}
                 className="text-xs text-white/60 font-cairo hover:text-accent transition-colors"
               >
                 {t("privacy")}
               </Link>
               <span className="text-white/20">|</span>
               <Link
-                href="#"
+                href={"/terms" as never}
                 className="text-xs text-white/60 font-cairo hover:text-accent transition-colors"
               >
                 {t("terms")}

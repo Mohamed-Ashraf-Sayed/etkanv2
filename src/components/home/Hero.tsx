@@ -1,4 +1,4 @@
-import { ArrowLeft, Star } from "lucide-react";
+import { ArrowLeft, Star, ShieldCheck, Clock, Gift } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import MagneticButton from "@/components/shared/MagneticButton";
@@ -95,6 +95,22 @@ export default async function Hero() {
                 {t("ctaSecondary")}
               </Button>
             </MagneticButton>
+          </div>
+
+          {/* Trust signals under CTAs */}
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mt-6 animate-[slideUp_0.5s_ease-out_0.3s_both]">
+            <div className="inline-flex items-center gap-2 text-sm text-white/60 font-cairo">
+              <Gift className="w-4 h-4 text-accent" />
+              {t("trustFree")}
+            </div>
+            <div className="inline-flex items-center gap-2 text-sm text-white/60 font-cairo">
+              <Clock className="w-4 h-4 text-accent" />
+              {t("trustResponse")}
+            </div>
+            <div className="inline-flex items-center gap-2 text-sm text-white/60 font-cairo">
+              <ShieldCheck className="w-4 h-4 text-accent" />
+              {t("trustWarranty")}
+            </div>
           </div>
 
           {/* Stats row */}
