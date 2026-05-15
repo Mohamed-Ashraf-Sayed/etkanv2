@@ -79,8 +79,25 @@ export default function HomeFAQ() {
   const locale = useLocale();
   const faqs = locale === "en" ? faqsEn : faqsAr;
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.a,
+      },
+    })),
+  };
+
   return (
     <section className="section-padding bg-white dark:bg-background">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <Container>
         <SectionTitle title={t("title")} subtitle={t("subtitle")} />
 
