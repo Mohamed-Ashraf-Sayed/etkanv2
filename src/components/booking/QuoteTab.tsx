@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -62,10 +63,79 @@ const slideVariants = {
   }),
 };
 
+function buildCalculatorSummary(params: URLSearchParams): string {
+  const type = params.get("type");
+  const platform = params.get("platform");
+  const complexity = params.get("complexity");
+  const pages = params.get("pages");
+  const mobilePlatforms = params.get("mobilePlatforms");
+  const features = params.get("features");
+  const priceMin = params.get("priceMin");
+  const priceMax = params.get("priceMax");
+  const weeksMin = params.get("weeksMin");
+  const weeksMax = params.get("weeksMax");
+  const bilingual = params.get("bilingual") === "1";
+  const hosting = params.get("hosting") === "1";
+  const maintenance = params.get("maintenance") === "1";
+
+  const typeLabels: Record<string, string> = {
+    website: "موقع إلكتروني",
+    mobile: "تطبيق موبايل",
+    system: "نظام إدارة (ERP/CRM)",
+  };
+  const complexityLabels: Record<string, string> = {
+    simple: "بسيط",
+    medium: "متوسط",
+    complex: "معقد",
+  };
+
+  const lines: string[] = ["📊 من حاسبة التكلفة:"];
+  if (type) lines.push(`• نوع المشروع: ${typeLabels[type] || type}`);
+  if (platform)
+    lines.push(`• منصة التطوير: ${platform === "wordpress" ? "WordPress" : "برمجة مخصصة"}`);
+  if (complexity) lines.push(`• مستوى التعقيد: ${complexityLabels[complexity] || complexity}`);
+  if (pages) lines.push(`• عدد الصفحات: ${pages}`);
+  if (mobilePlatforms) lines.push(`• منصات الموبايل: ${mobilePlatforms}`);
+  if (features) lines.push(`• الميزات: ${features.split(",").join("، ")}`);
+  const extras: string[] = [];
+  if (bilingual) extras.push("ثنائي اللغة");
+  if (hosting) extras.push("استضافة");
+  if (maintenance) extras.push("صيانة");
+  if (extras.length) lines.push(`• خيارات إضافية: ${extras.join("، ")}`);
+  if (priceMin && priceMax)
+    lines.push(`• التكلفة التقديرية: ${Number(priceMin).toLocaleString("ar-EG")} - ${Number(priceMax).toLocaleString("ar-EG")} جنيه`);
+  if (weeksMin && weeksMax)
+    lines.push(`• المدة المتوقعة: ${weeksMin}-${weeksMax} أسبوع`);
+  lines.push("", "تفاصيل إضافية:");
+  return lines.join("\n");
+}
+
+function priceToBudgetRange(priceMin: number): string {
+  if (priceMin < 10000) return "under-10k";
+  if (priceMin < 25000) return "10k-25k";
+  if (priceMin < 50000) return "25k-50k";
+  if (priceMin < 100000) return "50k-100k";
+  return "above-100k";
+}
+
+function weeksToTimeline(weeksMax: number): string {
+  if (weeksMax <= 4) return "urgent";
+  if (weeksMax <= 12) return "1-3months";
+  if (weeksMax <= 24) return "3-6months";
+  return "flexible";
+}
+
+function typeToServiceCategory(type: string): string {
+  if (type === "system") return "systems";
+  if (type === "mobile") return "web-mobile";
+  return "web-mobile";
+}
+
 export default function QuoteTab() {
   const t = useTranslations("quote");
   const tc = useTranslations("common");
   const locale = useLocale();
+  const searchParams = useSearchParams();
   const quoteServiceFeatures = getQuoteServiceFeatures(locale);
   const budgetRanges = getBudgetRanges(locale);
   const timelineOptions = getTimelineOptions(locale);
@@ -120,6 +190,27 @@ export default function QuoteTab() {
   const selectedFeatures = watch("features");
   const selectedBudget = watch("budgetRange");
   const selectedTimeline = watch("timeline");
+
+  // Prefill from cost calculator (when navigated via ?from=calculator)
+  useEffect(() => {
+    if (searchParams.get("from") !== "calculator") return;
+
+    const type = searchParams.get("type");
+    if (type) {
+      const cat = typeToServiceCategory(type);
+      const availableCats = Object.keys(quoteServiceFeatures);
+      const matched = availableCats.includes(cat) ? cat : availableCats[0];
+      if (matched) setValue("serviceCategories", [matched]);
+    }
+
+    const priceMin = Number(searchParams.get("priceMin"));
+    if (priceMin > 0) setValue("budgetRange", priceToBudgetRange(priceMin));
+
+    const weeksMax = Number(searchParams.get("weeksMax"));
+    if (weeksMax > 0) setValue("timeline", weeksToTimeline(weeksMax));
+
+    setValue("projectDescription", buildCalculatorSummary(searchParams));
+  }, [searchParams, setValue, quoteServiceFeatures]);
 
   const toggleCategory = (cat: string) => {
     const current = [...selectedCategories];

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -21,7 +22,15 @@ import QuoteTab from "@/components/booking/QuoteTab";
 
 export default function BookingPageContent() {
   const t = useTranslations("booking");
-  const [activeTab, setActiveTab] = useState("consultation");
+  const searchParams = useSearchParams();
+  const [activeTab, setActiveTab] = useState(
+    searchParams.get("tab") === "quote" ? "quote" : "consultation"
+  );
+
+  useEffect(() => {
+    const t = searchParams.get("tab");
+    if (t === "quote" || t === "consultation") setActiveTab(t);
+  }, [searchParams]);
 
   const tabs = [
     { id: "consultation", label: t("tabConsultation"), icon: Calendar },

@@ -228,6 +228,33 @@ export default function CostCalculatorClient() {
   const formatPrice = (n: number) =>
     new Intl.NumberFormat("ar-EG").format(n);
 
+  const bookingUrl = useMemo(() => {
+    const params = new URLSearchParams({
+      from: "calculator",
+      tab: "quote",
+      type: config.type,
+      complexity: config.complexity,
+      priceMin: String(result.priceMin),
+      priceMax: String(result.priceMax),
+      weeksMin: String(result.weeksMin),
+      weeksMax: String(result.weeksMax),
+    });
+    if (config.type === "website") {
+      params.set("platform", config.websitePlatform);
+      if (config.pages) params.set("pages", String(config.pages));
+    }
+    if (config.type === "mobile" && config.platforms) {
+      params.set("mobilePlatforms", config.platforms.join(","));
+    }
+    if (config.features.length > 0) {
+      params.set("features", config.features.join(","));
+    }
+    if (config.bilingual) params.set("bilingual", "1");
+    if (config.needsHosting) params.set("hosting", "1");
+    if (config.needsMaintenance) params.set("maintenance", "1");
+    return `/booking?${params.toString()}`;
+  }, [config, result]);
+
   const toggleFeature = (id: string) => {
     setConfig((prev) => ({
       ...prev,
@@ -616,7 +643,7 @@ export default function CostCalculatorClient() {
           </div>
 
           <Button
-            href="/booking"
+            href={bookingUrl}
             variant="gold"
             size="lg"
             className="w-full"
