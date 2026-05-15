@@ -9,13 +9,17 @@ import {
   CheckCircle2,
   ArrowLeft,
   Calculator,
+  Code2,
+  Zap,
 } from "lucide-react";
 import Button from "@/components/ui/Button";
 
 type ProjectType = "website" | "mobile" | "system";
+type WebsitePlatform = "custom" | "wordpress";
 
 interface ProjectConfig {
   type: ProjectType;
+  websitePlatform: WebsitePlatform;
   complexity: "simple" | "medium" | "complex";
   features: string[];
   pages?: number;
@@ -58,6 +62,27 @@ const complexityMultipliers = {
   complex: { min: 3, max: 6, label: "معقد (advanced + integrations)" },
 };
 
+const websitePlatforms = [
+  {
+    id: "custom" as const,
+    name: "برمجة مخصصة",
+    icon: Code2,
+    description: "كود مخصص، أداء أعلى، تحكم كامل في كل التفاصيل",
+    pros: ["أداء وسرعة أعلى", "أمان أقوى", "قابل للتوسع بلا حدود", "ملكية كاملة للكود"],
+    multiplier: { min: 1, max: 1 },
+    weekShift: 0,
+  },
+  {
+    id: "wordpress" as const,
+    name: "WordPress",
+    icon: Zap,
+    description: "تنفيذ أسرع، تكلفة أقل، سهل الإدارة بعد التسليم",
+    pros: ["أسرع تنفيذ (وقت أقل بـ 40%)", "تكلفة أوفر (~50% أقل)", "سهل التعديل بنفسك", "آلاف الـ Plugins جاهزة"],
+    multiplier: { min: 0.5, max: 0.55 },
+    weekShift: -3,
+  },
+];
+
 const websiteFeatures = [
   { id: "ecommerce", name: "متجر إلكتروني (e-commerce)", price: 15000 },
   { id: "blog", name: "مدونة + CMS", price: 5000 },
@@ -95,6 +120,7 @@ const systemFeatures = [
 export default function CostCalculatorClient() {
   const [config, setConfig] = useState<ProjectConfig>({
     type: "website",
+    websitePlatform: "custom",
     complexity: "medium",
     features: [],
     pages: 5,
@@ -126,6 +152,15 @@ export default function CostCalculatorClient() {
 
     baseMin += featureCost * 0.7;
     baseMax += featureCost * 1.3;
+
+    // WordPress platform: cheaper but lower customization
+    if (config.type === "website" && config.websitePlatform === "wordpress") {
+      const platformMultiplier = websitePlatforms.find(
+        (p) => p.id === "wordpress"
+      )!.multiplier;
+      baseMin *= platformMultiplier.min;
+      baseMax *= platformMultiplier.max;
+    }
 
     // Mobile platforms multiplier
     if (config.type === "mobile" && config.platforms) {
@@ -166,6 +201,12 @@ export default function CostCalculatorClient() {
     if (config.type === "system") {
       weeksMin += 6;
       weeksMax += 10;
+    }
+
+    // WordPress is faster
+    if (config.type === "website" && config.websitePlatform === "wordpress") {
+      weeksMin = Math.max(2, weeksMin - 3);
+      weeksMax = Math.max(4, weeksMax - 5);
     }
 
     // Hosting + maintenance
@@ -239,10 +280,76 @@ export default function CostCalculatorClient() {
           </div>
         </div>
 
+        {/* Website Platform: Custom vs WordPress */}
+        {config.type === "website" && (
+          <div className="bg-surface border border-border rounded-2xl p-6">
+            <h3 className="font-bold font-cairo text-text-primary mb-2">
+              2. منصة التطوير
+            </h3>
+            <p className="text-xs text-text-muted font-cairo mb-4">
+              عايز موقعك مبرمج خصيصاً أم تفضّل WordPress الأسرع والأرخص؟
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {websitePlatforms.map((p) => {
+                const Icon = p.icon;
+                const isActive = config.websitePlatform === p.id;
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() =>
+                      setConfig({ ...config, websitePlatform: p.id })
+                    }
+                    className={`p-5 rounded-xl border-2 text-start transition-all ${
+                      isActive
+                        ? "border-accent bg-accent/5"
+                        : "border-border hover:border-accent/30"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <Icon
+                        className={`w-7 h-7 ${
+                          isActive ? "text-accent" : "text-text-muted"
+                        }`}
+                      />
+                      {p.id === "wordpress" && (
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-cairo">
+                          أوفر ~50%
+                        </span>
+                      )}
+                    </div>
+                    <h4 className="font-bold font-cairo text-text-primary text-base mb-1">
+                      {p.name}
+                    </h4>
+                    <p className="text-xs text-text-muted font-cairo mb-3 leading-relaxed">
+                      {p.description}
+                    </p>
+                    <ul className="space-y-1">
+                      {p.pros.map((pro, i) => (
+                        <li
+                          key={i}
+                          className="flex items-start gap-1.5 text-xs text-text-secondary font-cairo"
+                        >
+                          <CheckCircle2
+                            className={`w-3 h-3 mt-0.5 shrink-0 ${
+                              isActive ? "text-accent" : "text-text-muted/40"
+                            }`}
+                          />
+                          <span>{pro}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* Complexity */}
         <div className="bg-surface border border-border rounded-2xl p-6">
           <h3 className="font-bold font-cairo text-text-primary mb-4">
-            2. مستوى التعقيد
+            {config.type === "website" ? "3." : "2."} مستوى التعقيد
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {(
@@ -270,7 +377,7 @@ export default function CostCalculatorClient() {
         {/* Features */}
         <div className="bg-surface border border-border rounded-2xl p-6">
           <h3 className="font-bold font-cairo text-text-primary mb-4">
-            3. الميزات المطلوبة
+            {config.type === "website" ? "4." : "3."} الميزات المطلوبة
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             {features.map((f) => {
@@ -308,7 +415,7 @@ export default function CostCalculatorClient() {
         {/* Extras */}
         <div className="bg-surface border border-border rounded-2xl p-6 space-y-3">
           <h3 className="font-bold font-cairo text-text-primary mb-4">
-            4. خيارات إضافية
+            {config.type === "website" ? "5." : "4."} خيارات إضافية
           </h3>
 
           {config.type === "website" && (
@@ -421,6 +528,18 @@ export default function CostCalculatorClient() {
 
           {/* Details */}
           <div className="space-y-3 mb-6">
+            {config.type === "website" && (
+              <div className="flex items-center justify-between p-3 rounded-xl bg-surface">
+                <span className="text-sm text-text-muted font-cairo">
+                  منصة التطوير
+                </span>
+                <span className="text-sm font-bold font-cairo text-text-primary">
+                  {config.websitePlatform === "wordpress"
+                    ? "WordPress"
+                    : "برمجة مخصصة"}
+                </span>
+              </div>
+            )}
             <div className="flex items-center justify-between p-3 rounded-xl bg-surface">
               <span className="text-sm text-text-muted font-cairo">
                 مدة التنفيذ
@@ -477,13 +596,23 @@ export default function CostCalculatorClient() {
             <p className="text-xs font-cairo font-bold text-emerald-700 dark:text-emerald-400 mb-2">
               ✓ السعر يشمل
             </p>
-            <ul className="text-xs text-text-secondary font-cairo space-y-1">
-              <li>• تحليل المتطلبات + تصميم UX/UI</li>
-              <li>• تطوير كامل + اختبارات شاملة</li>
-              <li>• تسليم الكود + التوثيق</li>
-              <li>• ضمان 6 شهور بعد التسليم</li>
-              <li>• تدريب الفريق على الاستخدام</li>
-            </ul>
+            {config.type === "website" && config.websitePlatform === "wordpress" ? (
+              <ul className="text-xs text-text-secondary font-cairo space-y-1">
+                <li>• تركيب WordPress + تخصيص قالب premium</li>
+                <li>• إعداد الـ Plugins المطلوبة</li>
+                <li>• تخصيص التصميم بهوية شركتك</li>
+                <li>• ضمان 3 شهور بعد التسليم</li>
+                <li>• تدريب على إدارة الموقع بنفسك</li>
+              </ul>
+            ) : (
+              <ul className="text-xs text-text-secondary font-cairo space-y-1">
+                <li>• تحليل المتطلبات + تصميم UX/UI</li>
+                <li>• تطوير كامل + اختبارات شاملة</li>
+                <li>• تسليم الكود + التوثيق</li>
+                <li>• ضمان 6 شهور بعد التسليم</li>
+                <li>• تدريب الفريق على الاستخدام</li>
+              </ul>
+            )}
           </div>
 
           <Button
