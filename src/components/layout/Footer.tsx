@@ -217,7 +217,7 @@ export default function Footer() {
           {/* Column 4: Resources */}
           <div className="lg:col-span-2">
             <h3 className="text-sm font-bold font-cairo text-accent uppercase tracking-wider mb-5">
-              مصادر
+              {t("resources")}
             </h3>
             <ul className="space-y-3">
               {resourceLinks.map((link) => (

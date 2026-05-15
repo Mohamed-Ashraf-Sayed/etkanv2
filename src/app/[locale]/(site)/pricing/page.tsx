@@ -7,6 +7,14 @@ import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import {
+  ShieldCheck,
+  FileCheck2,
+  Wallet,
+  KeyRound,
+  EyeOff,
+  Phone,
+} from "lucide-react";
+import {
   pricingPackages,
   getCategories,
   getPackagesByCategory,
@@ -134,6 +142,37 @@ export default async function PricingPage({
               أسعار واضحة وشفافة لكل خدماتنا. لا توجد رسوم خفية. كل باقة قابلة
               للتخصيص حسب احتياجاتك.
             </p>
+          </div>
+        </Container>
+      </section>
+
+      {/* Value Proposition Strip */}
+      <section className="py-10 bg-white dark:bg-background border-b border-border">
+        <Container>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-6xl mx-auto">
+            {[
+              { icon: ShieldCheck, title: "ضمان 6 شهور", sub: "بعد التسليم مجاناً" },
+              { icon: Wallet, title: "دفع على مراحل", sub: "30% / 30% / 40%" },
+              { icon: KeyRound, title: "الكود ملكك", sub: "بعد آخر دفعة" },
+              { icon: EyeOff, title: "اتفاقية سرية", sub: "NDA عند الطلب" },
+              { icon: FileCheck2, title: "عقد رسمي", sub: "موثَّق لكل مشروع" },
+              { icon: Phone, title: "استشارة مجانية", sub: "خلال 24 ساعة" },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className="flex flex-col items-center text-center gap-2 p-3"
+              >
+                <div className="w-9 h-9 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center">
+                  <item.icon className="w-4 h-4 text-accent" />
+                </div>
+                <div className="text-xs font-bold font-cairo text-text-primary leading-tight">
+                  {item.title}
+                </div>
+                <div className="text-[11px] text-text-muted font-cairo leading-tight">
+                  {item.sub}
+                </div>
+              </div>
+            ))}
           </div>
         </Container>
       </section>
