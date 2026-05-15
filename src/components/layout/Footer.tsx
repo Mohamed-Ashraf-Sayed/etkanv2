@@ -34,6 +34,7 @@ export default function Footer() {
 
   const quickLinks = [
     { href: "/", label: tn("home") },
+    { href: "/etqan", label: "عن إتقان" },
     { href: "/about", label: tn("about") },
     { href: "/portfolio", label: tn("portfolio") },
     { href: "/pricing", label: "الأسعار" },
