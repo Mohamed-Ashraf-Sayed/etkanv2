@@ -123,3 +123,17 @@ model Project {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+
+model NewsletterSubscriber {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  locale      String   @default("ar")
+  source      String   @default("footer")
+  ipAddress   String?
+  userAgent   String?  @db.Text
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+}

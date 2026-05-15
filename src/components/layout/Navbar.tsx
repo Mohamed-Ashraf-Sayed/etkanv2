@@ -20,12 +20,12 @@ export default function Navbar() {
 
   const navLinks = [
     { href: "/" as const, label: t("home") },
-    { href: "/about" as const, label: t("about") },
     { href: "/services" as const, label: t("services") },
     { href: "/portfolio" as const, label: t("portfolio") },
+    { href: "/pricing" as const, label: t("pricing") },
+    { href: "/tools/cost-calculator" as const, label: t("calculator") },
     { href: "/blog" as const, label: t("blog") },
-    { href: "/scope" as const, label: t("scope") },
-    { href: "/booking" as const, label: t("booking") },
+    { href: "/about" as const, label: t("about") },
     { href: "/contact" as const, label: t("contact") },
   ];
 

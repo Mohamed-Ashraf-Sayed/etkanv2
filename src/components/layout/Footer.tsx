@@ -1,6 +1,7 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import {
   Twitter,
@@ -11,6 +12,8 @@ import {
   Phone,
   MapPin,
   Send,
+  CheckCircle2,
+  Loader2,
 } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { TextHoverEffect, FooterBackgroundGradient } from "@/components/ui/hover-footer";
@@ -31,6 +34,33 @@ const partnerships = [
 export default function Footer() {
   const t = useTranslations("footer");
   const tn = useTranslations("nav");
+  const locale = useLocale();
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterStatus, setNewsletterStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+
+  const handleNewsletter = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail || newsletterStatus === "loading") return;
+    setNewsletterStatus("loading");
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: newsletterEmail,
+          locale,
+          source: "footer",
+        }),
+      });
+      if (!res.ok) throw new Error("subscribe failed");
+      setNewsletterStatus("success");
+      setNewsletterEmail("");
+    } catch {
+      setNewsletterStatus("error");
+    }
+  };
 
   const quickLinks = [
     { href: "/", label: tn("home") },
@@ -91,24 +121,42 @@ export default function Footer() {
               <p className="text-xs font-cairo font-semibold text-accent mb-3">
                 {t("newsletter")}
               </p>
-              <form
-                className="flex gap-2"
-                onSubmit={(e) => e.preventDefault()}
-              >
-                <input
-                  type="email"
-                  placeholder={t("emailPlaceholder")}
-                  dir="ltr"
-                  className="flex-1 px-3 py-2 text-sm rounded-lg bg-white/10 border border-white/20 text-white placeholder:text-white/60 focus:outline-none focus:border-accent transition-colors font-cairo"
-                />
-                <button
-                  type="submit"
-                  className="px-3 py-2 rounded-lg bg-accent hover:bg-accent-light text-navy font-bold transition-colors duration-200"
-                  aria-label="Subscribe"
-                >
-                  <Send size={14} />
-                </button>
-              </form>
+              {newsletterStatus === "success" ? (
+                <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-sm font-cairo">
+                  <CheckCircle2 className="w-4 h-4 shrink-0" />
+                  <span>{t("newsletterThanks")}</span>
+                </div>
+              ) : (
+                <form className="flex gap-2" onSubmit={handleNewsletter}>
+                  <input
+                    type="email"
+                    required
+                    value={newsletterEmail}
+                    onChange={(e) => setNewsletterEmail(e.target.value)}
+                    disabled={newsletterStatus === "loading"}
+                    placeholder={t("emailPlaceholder")}
+                    dir="ltr"
+                    className="flex-1 px-3 py-2 text-sm rounded-lg bg-white/10 border border-white/20 text-white placeholder:text-white/60 focus:outline-none focus:border-accent transition-colors font-cairo disabled:opacity-50"
+                  />
+                  <button
+                    type="submit"
+                    disabled={newsletterStatus === "loading"}
+                    className="px-3 py-2 rounded-lg bg-accent hover:bg-accent-light text-navy font-bold transition-colors duration-200 disabled:opacity-50"
+                    aria-label="Subscribe"
+                  >
+                    {newsletterStatus === "loading" ? (
+                      <Loader2 size={14} className="animate-spin" />
+                    ) : (
+                      <Send size={14} />
+                    )}
+                  </button>
+                </form>
+              )}
+              {newsletterStatus === "error" && (
+                <p className="text-xs text-red-400 font-cairo mt-2">
+                  {t("newsletterError")}
+                </p>
+              )}
             </div>
 
             {/* Social Icons */}

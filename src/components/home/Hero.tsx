@@ -1,4 +1,4 @@
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Star } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import MagneticButton from "@/components/shared/MagneticButton";
@@ -60,10 +60,27 @@ export default async function Hero() {
             {t("subtitle")}
           </p>
 
+          {/* Star rating */}
+          <div className="mt-6 inline-flex items-center gap-3 px-4 py-2.5 rounded-full bg-white/[0.04] border border-white/[0.06] backdrop-blur-sm animate-[slideUp_0.5s_ease-out_0.2s_both]">
+            <div className="flex items-center gap-0.5">
+              {[0, 1, 2, 3, 4].map((i) => (
+                <Star
+                  key={i}
+                  className="w-4 h-4 fill-accent text-accent"
+                  strokeWidth={0}
+                />
+              ))}
+            </div>
+            <span className="text-sm font-cairo font-bold text-white">4.9</span>
+            <span className="text-xs font-cairo text-white/50">
+              ({SITE_STATS.clients}+ {t("reviewsLabel")})
+            </span>
+          </div>
+
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 mt-12 animate-[slideUp_0.5s_ease-out_0.25s_both]">
+          <div className="flex flex-col sm:flex-row gap-4 mt-8 animate-[slideUp_0.5s_ease-out_0.25s_both]">
             <MagneticButton strength={0.25}>
-              <Button variant="gold" size="lg" href="/contact">
+              <Button variant="gold" size="lg" href="/booking">
                 <span>{t("ctaPrimary")}</span>
                 <ArrowLeft className="w-5 h-5" />
               </Button>
@@ -72,7 +89,7 @@ export default async function Hero() {
               <Button
                 variant="ghost"
                 size="lg"
-                href="/portfolio"
+                href="/tools/cost-calculator"
                 className="text-white/70 hover:text-white hover:bg-white/5 border border-white/10 hover:border-white/20"
               >
                 {t("ctaSecondary")}
