@@ -80,11 +80,12 @@ export default function Footer() {
   ];
 
   const resourceLinks = [
-    { href: "/glossary", label: "قاموس تقني" },
-    { href: "/comparison", label: "مقارنات" },
-    { href: "/guides", label: "أدلة شاملة" },
-    { href: "/insights", label: "تقارير وأبحاث" },
+    { href: "/audit", label: "تقييم مجاني لموقعك" },
     { href: "/tools/cost-calculator", label: "حاسبة التكلفة" },
+    { href: "/guides", label: "أدلة شاملة" },
+    { href: "/comparison", label: "مقارنات" },
+    { href: "/glossary", label: "قاموس تقني" },
+    { href: "/insights", label: "تقارير وأبحاث" },
     { href: "/scope", label: "مخطط AI" },
   ];
 

@@ -37,6 +37,8 @@ export async function POST(req: NextRequest) {
       const subject =
         data.type === "consultation"
           ? `حجز استشارة جديد - ${data.name}`
+          : data.type === "audit"
+          ? `طلب تقييم مجاني - ${data.name}`
           : `طلب عرض سعر جديد - ${data.name}`;
 
       await resend.emails.send({

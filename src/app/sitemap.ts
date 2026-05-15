@@ -55,6 +55,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/insights", changeFrequency: "monthly" as const, priority: 0.8 },
     { path: "/insights/tech-market-report-2026", changeFrequency: "monthly" as const, priority: 0.9 },
     { path: "/etqan", changeFrequency: "monthly" as const, priority: 1 },
+    { path: "/audit", changeFrequency: "monthly" as const, priority: 0.9 },
     { path: "/privacy", changeFrequency: "yearly" as const, priority: 0.3 },
     { path: "/terms", changeFrequency: "yearly" as const, priority: 0.3 },
   ];
