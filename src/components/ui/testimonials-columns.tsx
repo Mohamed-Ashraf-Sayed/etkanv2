@@ -1,6 +1,4 @@
-"use client";
 import React from "react";
-import { motion } from "framer-motion";
 import InitialsAvatar from "@/components/shared/InitialsAvatar";
 
 export type Testimonial = {
@@ -15,19 +13,13 @@ export const TestimonialsColumn = (props: {
   testimonials: Testimonial[];
   duration?: number;
 }) => {
+  const duration = props.duration || 10;
+
   return (
     <div className={props.className}>
-      <motion.div
-        animate={{
-          translateY: "-50%",
-        }}
-        transition={{
-          duration: props.duration || 10,
-          repeat: Infinity,
-          ease: "linear",
-          repeatType: "loop",
-        }}
-        className="flex flex-col gap-6 pb-6"
+      <div
+        className="flex flex-col gap-6 pb-6 animate-marquee-y motion-reduce:animate-none"
+        style={{ "--marquee-duration": `${duration}s` } as React.CSSProperties}
       >
         {[
           ...new Array(2).fill(0).map((_, index) => (
@@ -60,7 +52,7 @@ export const TestimonialsColumn = (props: {
             </React.Fragment>
           )),
         ]}
-      </motion.div>
+      </div>
     </div>
   );
 };

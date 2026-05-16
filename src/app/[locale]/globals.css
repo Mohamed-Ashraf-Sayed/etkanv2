@@ -61,6 +61,7 @@
   /* ---- Animations ---- */
   --animate-fade-in: fadeIn 0.5s ease-out;
   --animate-slide-up: slideUp 0.5s ease-out;
+  --animate-marquee-y: marqueeY var(--marquee-duration, 10s) linear infinite;
 }
 
 /* ================================================
@@ -148,6 +149,11 @@
 @keyframes voiceBar {
   0%, 100% { transform: scaleY(1); }
   50% { transform: scaleY(1.8); }
+}
+
+@keyframes marqueeY {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
 }
 
 /* ================================================
