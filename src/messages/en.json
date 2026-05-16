@@ -79,6 +79,11 @@
     "allServices": "All Services",
     "notFound": "Service Not Found"
   },
+  "announcement": {
+    "text": "🎁 Get a free 48-hour audit for your website —",
+    "cta": "Claim free audit",
+    "dismiss": "Dismiss"
+  },
   "pricingTeaser": {
     "badge": "Transparent Pricing",
     "title": "Find the package that fits your budget",
