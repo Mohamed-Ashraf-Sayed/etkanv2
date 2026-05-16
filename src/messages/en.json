@@ -79,6 +79,18 @@
     "allServices": "All Services",
     "notFound": "Service Not Found"
   },
+  "whyEtqan": {
+    "title": "Why Etqan over the alternatives?",
+    "subtitle": "Compare for yourself: Etqan vs freelancer, big agency, and DIY platforms",
+    "featureCol": "Criteria",
+    "etqan": "Etqan",
+    "freelancer": "Freelancer",
+    "bigAgency": "Big Agency",
+    "diy": "DIY / Template",
+    "legendYes": "Available",
+    "legendPartial": "Limited",
+    "legendNo": "Not available"
+  },
   "homeFaq": {
     "title": "Frequently Asked Questions",
     "subtitle": "Straight answers to the questions most clients ask before getting started"
