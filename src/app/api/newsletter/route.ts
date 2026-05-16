@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { sendTelegramMessage } from "@/lib/telegram";
 
 export const runtime = "nodejs";
 
@@ -22,18 +23,31 @@ export async function POST(req: Request) {
       req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
       null;
     const userAgent = req.headers.get("user-agent");
+    const normalizedEmail = email.toLowerCase().trim();
+    const cleanSource = typeof source === "string" ? source : "footer";
 
-    await prisma.newsletterSubscriber.upsert({
-      where: { email: email.toLowerCase().trim() },
+    const result = await prisma.newsletterSubscriber.upsert({
+      where: { email: normalizedEmail },
       update: { active: true },
       create: {
-        email: email.toLowerCase().trim(),
+        email: normalizedEmail,
         locale: typeof locale === "string" ? locale : "ar",
-        source: typeof source === "string" ? source : "footer",
+        source: cleanSource,
         ipAddress: ip,
         userAgent: userAgent || null,
       },
     });
+
+    const isNew = Math.abs(result.createdAt.getTime() - Date.now()) < 5000;
+    if (isNew) {
+      await sendTelegramMessage(
+        `📧 <b>اشتراك جديد في النشرة</b>\n\n` +
+          `<b>البريد:</b> ${normalizedEmail}\n` +
+          `<b>المصدر:</b> ${cleanSource}\n` +
+          `<b>اللغة:</b> ${result.locale}\n` +
+          `<b>IP:</b> ${ip || "—"}`
+      ).catch((e) => console.error("Telegram notify failed:", e));
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {
