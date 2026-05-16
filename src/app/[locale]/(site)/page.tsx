@@ -5,6 +5,7 @@ import ServicesSection from "@/components/home/ServicesSection";
 import HowWeWork from "@/components/home/HowWeWork";
 import FeaturedProjects from "@/components/home/FeaturedProjects";
 import WhyEtqan from "@/components/home/WhyEtqan";
+import PricingTeaser from "@/components/home/PricingTeaser";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import HomeFAQ from "@/components/home/HomeFAQ";
 import CTABanner from "@/components/home/CTABanner";
@@ -19,6 +20,7 @@ export default function HomePage() {
       <HowWeWork />
       <FeaturedProjects />
       <WhyEtqan />
+      <PricingTeaser />
       <TestimonialsSection />
       <HomeFAQ />
       <CTABanner />
