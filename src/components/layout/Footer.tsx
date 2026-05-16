@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import {
@@ -107,9 +108,11 @@ export default function Footer() {
           {/* Column 1: Brand + Newsletter */}
           <div className="lg:col-span-4">
             <Link href="/" className="inline-block mb-4">
-              <img
+              <Image
                 src="/logo.png"
                 alt={tn("brand")}
+                width={150}
+                height={80}
                 className="h-20 w-auto brightness-0 invert"
               />
             </Link>

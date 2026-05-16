@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -63,9 +64,12 @@ export default function Navbar() {
 
             {/* Logo */}
             <Link href="/" className="flex items-center shrink-0">
-              <img
+              <Image
                 src="/logo.png"
                 alt={t("brand")}
+                width={120}
+                height={64}
+                priority
                 className="h-16 w-auto brightness-0 invert"
               />
             </Link>
