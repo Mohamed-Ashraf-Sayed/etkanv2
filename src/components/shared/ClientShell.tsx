@@ -8,7 +8,6 @@ const ScrollToTop = dynamic(() => import("@/components/shared/ScrollToTop"), { s
 const WhatsAppButton = dynamic(() => import("@/components/shared/WhatsAppButton"), { ssr: false });
 const ChatWidget = dynamic(() => import("@/components/chat/ChatWidget"), { ssr: false });
 const AIVoiceCall = dynamic(() => import("@/components/chat/AIVoiceCall"), { ssr: false });
-const MobileStickyCTA = dynamic(() => import("@/components/layout/MobileStickyCTA"), { ssr: false });
 
 export default function ClientShell() {
   return (
@@ -19,7 +18,6 @@ export default function ClientShell() {
       <WhatsAppButton />
       <AIVoiceCall />
       <ChatWidget />
-      <MobileStickyCTA />
     </>
   );
 }
