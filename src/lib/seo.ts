@@ -96,17 +96,6 @@ export function getOrganizationSchema() {
       "Cybersecurity",
       "Digital Transformation",
     ],
-    award: [
-      "Top IT Services Provider in MENA 2025",
-      "Trusted by 75+ Enterprises across Egypt and Saudi Arabia",
-    ],
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.9",
-      reviewCount: String(SITE_STATS.clients),
-      bestRating: "5",
-      worstRating: "1",
-    },
   };
 }
 
