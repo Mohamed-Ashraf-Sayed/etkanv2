@@ -367,7 +367,10 @@ function slugifyAuthor(name: string): string {
     .trim()
     .toLowerCase()
     .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9ء-ي-]/g, "")
+    .replace(/[^\w؀-ۿ-]+/g, "")
+    .replace(/--+/g, "-")
+    .replace(/^-+/, "")
+    .replace(/-+$/, "")
     .slice(0, 50);
 }
 

@@ -5,8 +5,9 @@ export function cn(...classes: (string | undefined | null | false)[]): string {
 export function slugify(text: string): string {
   return text
     .toLowerCase()
+    .trim()
     .replace(/\s+/g, "-")
-    .replace(/[^\w-]+/g, "")
+    .replace(/[^\w؀-ۿ-]+/g, "")
     .replace(/--+/g, "-")
     .replace(/^-+/, "")
     .replace(/-+$/, "");
