@@ -22,9 +22,10 @@ import {
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://etqanly.com";
 
-const TITLE = "الدليل الشامل لأنظمة ERP في 2026";
+const TITLE =
+  "أسعار أنظمة ERP في السعودية 2026 — دليل اختيار النظام لشركتك";
 const DESCRIPTION =
-  "كل ما تحتاج معرفته عن أنظمة ERP: التعريف، الفوائد، أفضل الأنظمة (SAP, Oracle, Odoo)، تكلفة تطبيق ERP، خطوات الاختيار، والـ ROI المتوقع.";
+  "أسعار أنظمة ERP في السعودية حسب فئة الشركة (صغيرة/متوسطة/كبيرة). مقارنة SAP، Oracle، Odoo + ROI متوقع + خطوات الاختيار. استشارة مجانية من إتقان.";
 
 export const metadata: Metadata = {
   title: TITLE,

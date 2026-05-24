@@ -15,6 +15,163 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "what-is-devops",
+    title: "ما هو DevOps؟ دليل شامل بالعربي للمبتدئين والمحترفين (2026)",
+    excerpt:
+      "إيه هو DevOps بالظبط؟ شرح مبسّط بالعربي للثقافة والممارسات + أدوات (Docker, Kubernetes, Jenkins) + خطوات التطبيق العملي في شركتك.",
+    content: `
+DevOps هي **ثقافة وممارسات** تقنية بتربط بين فريق التطوير (Developers) وفريق التشغيل (Operations) في الشركات اللي بتبني منتجات رقمية. الهدف الأساسي: **تسريع تسليم البرمجيات بجودة عالية**، عن طريق دمج الفريقين في عملية واحدة بدل ما يكونوا منفصلين.
+
+## الفرق بين DevOps والطريقة التقليدية
+
+في الشركات التقليدية، فريق التطوير بيكتب الكود ويرميه على فريق الـ Operations يـ deploy. النتيجة:
+- **بطء في الإصدار**: تسليم النسخة الجديدة بياخد أسابيع أو شهور
+- **مشاكل في الإنتاج**: كل فريق بيـ blame التاني لما حاجة تقع
+- **تكاليف عالية**: إعادة العمل اليدوي على نفس الـ tasks
+
+مع DevOps، الفريقين بيشتغلوا **سوا من بداية المشروع** باستخدام أتمتة (Automation) ومراقبة (Monitoring) مستمرة.
+
+## أصل المصطلح
+
+كلمة "DevOps" اتولدت سنة **2009** من Patrick Debois اللي عمل مؤتمر "DevOpsDays" في بلجيكا. الفكرة كانت ردة فعل على مشاكل الـ "Wall of Confusion" بين الفريقين. من ساعتها، كل شركة تقنية كبيرة (Google, Amazon, Netflix) تبنّت DevOps كمنهجية أساسية.
+
+## الأرقام بتقول إيه؟
+
+تقرير **DORA (DevOps Research and Assessment)** من Google بيوضح إن الشركات اللي بتستخدم DevOps بكفاءة:
+- **Deploy أسرع 200x** من الشركات التقليدية
+- **Mean Time to Recovery (MTTR) أقل بـ 24x** عند حدوث مشكلة
+- **معدل فشل التغييرات أقل بـ 3x**
+- **Lead time للميزات الجديدة أقل بـ 200x**
+
+## المبادئ الأساسية للـ DevOps
+
+### 1. Culture (الثقافة)
+DevOps في الأول ثقافة قبل ما تكون أدوات. الفريق بياخد ملكية مشتركة للمنتج. مفيش "فريقي" و"فريقك" — كله "فريقنا".
+
+### 2. Automation (الأتمتة)
+أي حاجة بتتعمل أكتر من 3 مرات لازم تتأتمت. ده يشمل:
+- البناء (Build)
+- الاختبار (Testing)
+- النشر (Deployment)
+- المراقبة (Monitoring)
+
+### 3. Continuous Integration (CI)
+كل مبرمج بيـ merge كوده عدة مرات في اليوم في الـ branch الرئيسي. أتمتة بتختبر التغييرات وتـ build تلقائياً، فالـ bugs بتظهر مبكراً.
+
+### 4. Continuous Delivery (CD)
+الكود بعد ما يعدّي الـ CI، بيبقى **جاهز للإنتاج فوراً**. النشر بيتعمل بضغطة زرار بدون تدخل يدوي.
+
+### 5. Monitoring & Observability
+مراقبة كل حاجة في الإنتاج: الـ logs, metrics, traces. لما حاجة تقع، الفريق بيعرف الإنتاج فوراً قبل ما العميل يشتكي.
+
+## أهم أدوات DevOps في 2026
+
+### CI/CD Pipelines
+- **GitHub Actions**: مدمج مع GitHub، الأشهر والأسهل
+- **GitLab CI**: للشركات اللي بتستخدم GitLab
+- **Jenkins**: الأقدم والأكثر مرونة (open source)
+- **CircleCI**: cloud-based, بسيط للستارت-أبس
+
+### Containerization
+- **Docker**: تشغيل التطبيقات في containers معزولة
+- **Podman**: بديل Docker بدون daemon
+
+### Orchestration
+- **Kubernetes (K8s)**: إدارة مئات الـ containers على cluster
+- **Docker Swarm**: أبسط، للمشاريع الصغيرة
+- **AWS ECS / Google Cloud Run**: managed services
+
+### Infrastructure as Code (IaC)
+- **Terraform**: provisioning للسيرفرات بـ كود
+- **Ansible**: configuration management
+- **Pulumi**: IaC بـ JavaScript/Python بدل HCL
+
+### Monitoring
+- **Prometheus + Grafana**: metrics + visualizations
+- **Datadog**: SaaS متكامل (مدفوع)
+- **Sentry**: error tracking للتطبيقات
+- **New Relic**: APM شامل
+
+## خطوات تطبيق DevOps في شركتك
+
+### المرحلة 1: التقييم (أسبوع)
+- خريطة العمليات الحالية: كم وقت بياخد deploy؟
+- لاقي الـ bottlenecks: فيه manual approval؟ tests يدوية؟
+- قيّم الفريق: عندهم خبرة git/cloud؟
+
+### المرحلة 2: البداية الصغيرة (شهر)
+- ابدأ بمشروع pilot واحد
+- اعمل CI pipeline يـ run automated tests
+- استخدم Git branching strategy واضحة (Git Flow أو GitHub Flow)
+
+### المرحلة 3: التوسع (3-6 شهور)
+- ضيف Continuous Deployment للـ staging environment
+- اتبنّى Docker للتطبيقات
+- اعمل monitoring + alerting أساسي
+
+### المرحلة 4: النضج (6-12 شهر)
+- Kubernetes orchestration
+- Infrastructure as Code (Terraform)
+- Blue-Green أو Canary deployments
+- SRE practices (Site Reliability Engineering)
+
+## الفرق بين DevOps و SRE و Platform Engineering
+
+| | DevOps | SRE | Platform Engineering |
+|---|--------|-----|---------------------|
+| **الأصل** | Patrick Debois 2009 | Google 2003 | Recent (2022+) |
+| **الهدف** | تسريع التسليم | الـ reliability | تطوير منصّة داخلية للمطورين |
+| **الفريق** | كل المطورين | فريق منفصل | فريق منفصل بـ "internal product" mindset |
+
+## DevOps لشركات صغيرة ومتوسطة
+
+كتير من الشركات بتفتكر DevOps حاجة معقدة وغالية. الحقيقة، تقدر تبدأ بـ:
+- **GitHub Actions** (مجاني للستارت-أبس)
+- **Vercel** أو **Netlify** للـ deployment التلقائي
+- **Sentry** (مجاني للمشاريع الصغيرة) للـ error tracking
+- **UptimeRobot** (مجاني) للمراقبة
+
+ميزانية شهرية بـ **$0-50** كافية لمعظم الستارت-أبس عشان تطبّق DevOps أساسي.
+
+## الـ ROI المتوقع من DevOps
+
+شركة متوسطة (50-200 موظف) بعد تطبيق DevOps:
+- **توفير 30-40%** في وقت تسليم الميزات
+- **تقليل 50%** في المشاكل التي تصل للإنتاج
+- **زيادة 25%** في رضا الفريق التقني (أقل ضغط، أقل firefighting)
+- **عائد استثمار** تقريباً بعد 6-9 شهور من بداية التطبيق
+
+## أكثر الأخطاء الشائعة في تطبيق DevOps
+
+1. **التركيز على الأدوات قبل الثقافة**: شراء Kubernetes بدون تغيير mindset = فشل
+2. **محاولة عمل كل حاجة دفعة واحدة**: ابدأ صغير وتوسع
+3. **إهمال الـ Security (DevSecOps)**: الأمان لازم يكون جزء من الـ pipeline من البداية
+4. **عدم الاستثمار في التدريب**: الأدوات تتغير بسرعة، الفريق محتاج تطوير مستمر
+5. **عدم قياس النتايج**: استخدم DORA metrics لقياس التقدم
+
+## هل شركتك جاهزة لـ DevOps؟
+
+اسأل نفسك:
+- هل عندك فريق تقني داخلي؟ (لو لأ، DevOps مش أولوية)
+- هل بتنشر تحديثات أكتر من مرة في الشهر؟
+- هل عندك مشاكل متكررة في الإنتاج؟
+- هل التواصل بين الفرق التقنية بطيء؟
+
+لو 3+ من الأسئلة دي بـ "نعم"، فمشروع DevOps هيكون له **ROI ضخم** على شركتك.
+
+## الخلاصة
+
+DevOps مش رفاهية، ده **ضرورة تنافسية** في 2026. الشركات اللي بتطبّقه بتسلّم أسرع وبجودة أعلى من المنافسين. ابدأ بخطوة صغيرة، استثمر في الفريق، وقيس النتايج.
+
+في **إتقان للحلول المتكاملة**، بنساعد الشركات في رحلة تطبيق DevOps من الصفر — تقييم الوضع الحالي، اختيار الأدوات المناسبة، تدريب الفريق، وبناء الـ CI/CD pipelines. تواصل معانا لاستشارة مجانية.
+    `,
+    author: "م. محمود علي",
+    date: "2026-05-20",
+    readingTime: 12,
+    tags: ["DevOps", "بنية تحتية", "أدوات", "أتمتة"],
+    category: "بنية تحتية",
+  },
+  {
     slug: "why-custom-software-matters",
     title: "ليه البرمجيات المخصصة أفضل لشركتك من الحلول الجاهزة؟",
     excerpt:
