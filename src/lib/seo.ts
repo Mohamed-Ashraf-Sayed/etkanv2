@@ -25,7 +25,7 @@ export function getOrganizationSchema() {
       width: 512,
       height: 512,
     },
-    image: `${BASE_URL}/opengraph-image`,
+    image: `${BASE_URL}/icon.png`,
     description:
       "شركة إتقان للحلول المتكاملة (Etqan IT Solutions) — شركة برمجيات مصرية رائدة، تأسست 2019 في القاهرة، متخصصة في تطوير المواقع الإلكترونية، تطبيقات الموبايل، أنظمة ERP و CRM، والبنية التحتية. تخدم 75+ عميلاً في مصر والسعودية والخليج.",
     slogan: "شريكك التقني الموثوق",
@@ -129,7 +129,7 @@ export function getLocalBusinessSchema() {
     alternateName: "Etqan IT Solutions",
     url: BASE_URL,
     logo: `${BASE_URL}/icon.png`,
-    image: `${BASE_URL}/opengraph-image`,
+    image: `${BASE_URL}/icon.png`,
     priceRange: "$$",
     telephone: "+201094807674",
     email: "info@etqanly.com",
@@ -336,7 +336,7 @@ export function getArticleSchema(article: {
     url,
     datePublished: article.date,
     dateModified: article.dateModified || article.date,
-    image: article.image || `${BASE_URL}/opengraph-image`,
+    image: article.image || `${BASE_URL}/icon.png`,
     inLanguage: isEn ? "en" : "ar",
     mainEntityOfPage: {
       "@type": "WebPage",

@@ -25,6 +25,9 @@ const nextConfig: NextConfig = {
       { source: "/en/blog/tag", destination: "/en/blog", permanent: true },
       { source: "/en/blog/category", destination: "/en/blog", permanent: true },
       { source: "/en/blog/author", destination: "/en/blog", permanent: true },
+      // /tech-radar was an old route that got removed; send to /scope
+      { source: "/tech-radar", destination: "/scope", permanent: true },
+      { source: "/en/tech-radar", destination: "/en/scope", permanent: true },
     ];
   },
   async headers() {
