@@ -11,9 +11,21 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
-      { protocol: "https", hostname: "randomuser.me" },
       { protocol: "https", hostname: "images.unsplash.com" },
     ],
+  },
+  async redirects() {
+    return [
+      // Soft 404s: blog taxonomy root URLs were being caught by /blog/[slug]
+      // and rendering "post not found" with HTTP 200. Send Google to /blog
+      // with a clean 308 instead.
+      { source: "/blog/tag", destination: "/blog", permanent: true },
+      { source: "/blog/category", destination: "/blog", permanent: true },
+      { source: "/blog/author", destination: "/blog", permanent: true },
+      { source: "/en/blog/tag", destination: "/en/blog", permanent: true },
+      { source: "/en/blog/category", destination: "/en/blog", permanent: true },
+      { source: "/en/blog/author", destination: "/en/blog", permanent: true },
+    ];
   },
   async headers() {
     return [
