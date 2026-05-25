@@ -33,9 +33,14 @@ export async function generateMetadata({
   const title = `#${tagName} | مقالات إتقان`;
   const description = `${posts.length}+ مقالة عن ${tagName} من خبراء إتقان للحلول المتكاملة.`;
 
+  // Tag pages with fewer than 3 posts are thin content — tell Google not to index
+  const robots =
+    posts.length < 3 ? { index: false, follow: true } : undefined;
+
   return {
     title,
     description,
+    robots,
     alternates: getAlternates(`/blog/tag/${slug}`),
     openGraph: { title, description, type: "website" },
   };
