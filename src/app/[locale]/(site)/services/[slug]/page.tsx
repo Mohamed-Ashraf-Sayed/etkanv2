@@ -22,11 +22,11 @@ interface PageProps {
 const SEO_OVERRIDES: Record<string, { titleAr: string; descAr: string; titleEn: string; descEn: string; keywords: string[] }> = {
   "web-dev": {
     titleAr:
-      "أفضل شركة تطوير مواقع في مصر والسعودية 2026 — إتقان للحلول المتكاملة",
+      "أفضل شركة تطوير مواقع في مصر والسعودية 2026",
     descAr:
       "شركة تطوير مواقع احترافية في مصر والسعودية. تصميم مواقع شركات، متاجر إلكترونية، ومنصات بـ Next.js و WordPress. أسعار من 5,000 جنيه + ضمان 6 شهور.",
     titleEn:
-      "Best Web Development Company in Egypt & Saudi Arabia 2026 | Etqan",
+      "Best Web Development Company in Egypt & Saudi Arabia 2026",
     descEn:
       "Professional web development company in Egypt & Saudi Arabia. Corporate websites, e-commerce, and platforms with Next.js & WordPress. Pricing from $200 + 6-month warranty.",
     keywords: [
@@ -45,7 +45,7 @@ const SEO_OVERRIDES: Record<string, { titleAr: string; descAr: string; titleEn: 
     descAr:
       "شركة تطوير تطبيقات الموبايل لـ iOS و Android في مصر والسعودية. تطبيقات أصلية وهجينة (Flutter, React Native). تكلفة من 80,000 جنيه + استشارة مجانية.",
     titleEn:
-      "Best Mobile App Development Company in Egypt & Saudi Arabia 2026",
+      "Mobile App Development Company in Egypt & Saudi Arabia 2026 — iOS + Android",
     descEn:
       "iOS & Android mobile app development company in Egypt & Saudi Arabia. Native and hybrid apps (Flutter, React Native). Starting from $3,200 + free consultation.",
     keywords: [
