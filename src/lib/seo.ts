@@ -64,12 +64,14 @@ export function getOrganizationSchema() {
     },
     knowsLanguage: ["ar", "en"],
     sameAs: [
-      "https://www.facebook.com/etqanly",
       "https://www.linkedin.com/company/etqanly",
       "https://twitter.com/etqanly",
+      "https://www.facebook.com/etqanly",
       "https://www.instagram.com/etqanly",
       "https://www.youtube.com/@etqanly",
       "https://github.com/etqanly",
+      "https://clutch.co/profile/etqan-it-solutions",
+      "https://www.goodfirms.co/company/etqan-it-solutions",
     ],
     areaServed: [
       { "@type": "Country", name: "Egypt" },
@@ -159,10 +161,12 @@ export function getLocalBusinessSchema() {
       },
     ],
     sameAs: [
-      "https://www.facebook.com/etqanly",
       "https://www.linkedin.com/company/etqanly",
       "https://twitter.com/etqanly",
+      "https://www.facebook.com/etqanly",
       "https://www.instagram.com/etqanly",
+      "https://clutch.co/profile/etqan-it-solutions",
+      "https://www.goodfirms.co/company/etqan-it-solutions",
     ],
     areaServed: [
       { "@type": "Country", name: "Egypt" },
