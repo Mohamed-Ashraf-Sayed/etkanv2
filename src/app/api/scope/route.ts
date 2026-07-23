@@ -110,8 +110,9 @@ export async function POST(req: Request) {
     }
 
     const response = await client.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-opus-4-8",
       max_tokens: 1500,
+      thinking: { type: "disabled" },
       system: locale === "en" ? SYSTEM_PROMPT_EN : SYSTEM_PROMPT,
       messages: [{ role: "user", content: description }],
     });

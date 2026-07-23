@@ -84,8 +84,9 @@ const ARTICLE_SYSTEM_PROMPT = `أنت كاتب محتوى SEO محترف لشر�
 
 export async function generateArticleData(topic: string): Promise<GeneratedArticle> {
   const message = await getAnthropic().messages.create({
-    model: "claude-sonnet-4-20250514",
+    model: "claude-opus-4-8",
     max_tokens: 16000,
+    thinking: { type: "disabled" },
     system: ARTICLE_SYSTEM_PROMPT,
     messages: [
       {

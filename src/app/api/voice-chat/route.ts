@@ -95,8 +95,9 @@ export async function POST(req: Request) {
       }));
 
     const stream = await client.messages.stream({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-opus-4-8",
       max_tokens: 150,
+      thinking: { type: "disabled" },
       system: locale === "en" ? VOICE_SYSTEM_EN : VOICE_SYSTEM_AR,
       messages: apiMessages,
     });

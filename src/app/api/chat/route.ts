@@ -79,8 +79,9 @@ export async function POST(req: Request) {
       }));
 
     const stream = await client.messages.stream({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-opus-4-8",
       max_tokens: 300,
+      thinking: { type: "disabled" },
       system: locale === "en" ? SYSTEM_PROMPT_EN : SYSTEM_PROMPT,
       messages: apiMessages,
     });

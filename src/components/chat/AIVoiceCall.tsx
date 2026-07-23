@@ -303,7 +303,7 @@ export default function AIVoiceCall() {
           JSON.stringify({
             type: "response.create",
             response: {
-              modalities: ["text", "audio"],
+              output_modalities: ["audio"],
               instructions: `Say exactly this and nothing else: "${greeting}"`,
             },
           })
@@ -317,7 +317,7 @@ export default function AIVoiceCall() {
       await pc.setLocalDescription(offer);
 
       const sdpRes = await fetch(
-        "https://api.openai.com/v1/realtime?model=gpt-realtime-1.5",
+        "https://api.openai.com/v1/realtime/calls",
         {
           method: "POST",
           headers: {
@@ -328,7 +328,11 @@ export default function AIVoiceCall() {
         }
       );
 
-      if (!sdpRes.ok) throw new Error("SDP exchange failed");
+      if (!sdpRes.ok) {
+        const sdpErr = await sdpRes.text().catch(() => "");
+        console.error("SDP exchange failed:", sdpRes.status, sdpErr);
+        throw new Error("SDP exchange failed");
+      }
       const answerSdp = await sdpRes.text();
       await pc.setRemoteDescription({ type: "answer", sdp: answerSdp });
     } catch (err) {
