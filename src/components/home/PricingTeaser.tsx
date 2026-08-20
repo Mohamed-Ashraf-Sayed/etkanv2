@@ -50,10 +50,10 @@ export default async function PricingTeaser() {
           {tiers.map((tier, i) => (
             <div
               key={i}
-              className={`relative rounded-2xl p-7 border transition-all hover:-translate-y-1 ${
+              className={`relative rounded-2xl p-7 border transition-all duration-300 hover:-translate-y-1 ${
                 tier.badge
-                  ? "border-accent bg-accent/[0.04]"
-                  : "border-border bg-surface"
+                  ? "border-accent bg-accent/[0.04] shadow-gold hover:shadow-[0_8px_32px_rgba(212,175,55,0.25)]"
+                  : "border-border bg-surface hover:border-accent/40 hover:shadow-card-hover"
               }`}
             >
               {tier.badge && (

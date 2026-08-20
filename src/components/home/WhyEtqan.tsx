@@ -1,5 +1,6 @@
 import { Check, X, Minus } from "lucide-react";
 import Container from "@/components/ui/Container";
+import SectionTitle from "@/components/ui/SectionTitle";
 import { getLocale, getTranslations } from "next-intl/server";
 
 interface Row {
@@ -53,21 +54,16 @@ export default async function WhyEtqan() {
     <section className="section-padding section-alt">
       <Container>
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-h2 font-bold font-cairo text-text-primary mb-3">
-              {t("title")}
-            </h2>
-            <p className="text-text-secondary font-cairo">{t("subtitle")}</p>
-          </div>
+          <SectionTitle title={t("title")} subtitle={t("subtitle")} />
 
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto rounded-2xl border border-border bg-surface shadow-card">
             <table className="w-full border-collapse min-w-[700px]">
               <thead>
-                <tr className="border-b-2 border-border bg-surface">
+                <tr className="border-b-2 border-border bg-surface-light/50">
                   <th className="text-start p-4 font-bold font-cairo text-text-primary text-sm">
                     {t("featureCol")}
                   </th>
-                  <th className="p-4 font-bold font-cairo text-accent text-sm border-x border-accent/20 bg-accent/[0.04]">
+                  <th className="p-4 font-bold font-cairo text-accent text-sm border-x border-accent/20 bg-accent/[0.06]">
                     {t("etqan")}
                   </th>
                   <th className="p-4 font-bold font-cairo text-text-muted text-sm">
@@ -83,7 +79,10 @@ export default async function WhyEtqan() {
               </thead>
               <tbody>
                 {rows.map((row, i) => (
-                  <tr key={i} className="border-b border-border">
+                  <tr
+                    key={i}
+                    className="border-b border-border last:border-b-0 hover:bg-surface-light/40 transition-colors"
+                  >
                     <td className="p-4 text-sm font-cairo text-text-secondary">
                       {row.feature}
                     </td>

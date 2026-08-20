@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
+import GoldDivider from "@/components/ui/GoldDivider";
 import AnimatedCounter from "@/components/shared/AnimatedCounter";
 import InitialsAvatar from "@/components/shared/InitialsAvatar";
 import { InfiniteSlider } from "@/components/ui/infinite-slider";
@@ -91,7 +92,7 @@ export default function TrustSection() {
         </motion.div>
 
         {/* Divider */}
-        <div className="gold-line mx-auto mb-10" />
+        <GoldDivider className="mb-10" />
 
         {/* Company logos label */}
         <p className="text-center text-base md:text-lg text-text-secondary font-cairo font-semibold mb-10 tracking-wide">

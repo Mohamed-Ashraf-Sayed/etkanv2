@@ -9,12 +9,6 @@ import { useTranslations, useLocale } from "next-intl";
 
 const testimonialsAr: Testimonial[] = [
   {
-    text: "إتقان غيرت طريقة شغلنا بالكامل. الموقع اللي بنوه لينا رفع المبيعات أونلاين بنسبة 200% في أول 3 شهور.",
-    image: "",
-    name: "أحمد محمود",
-    role: "المدير التنفيذي - شركة مسار",
-  },
-  {
     text: "فريق محترف جداً، فهموا متطلباتنا من أول اجتماع وسلموا المشروع قبل الموعد. شغل ممتاز!",
     image: "",
     name: "سارة الخالدي",
@@ -65,12 +59,6 @@ const testimonialsAr: Testimonial[] = [
 ];
 
 const testimonialsEn: Testimonial[] = [
-  {
-    text: "Etqan completely transformed our operations. The website they built boosted our online sales by 200% in the first 3 months.",
-    image: "",
-    name: "Ahmed Mahmoud",
-    role: "CEO - Masar Company",
-  },
   {
     text: "A highly professional team. They understood our requirements from the first meeting and delivered ahead of schedule.",
     image: "",
