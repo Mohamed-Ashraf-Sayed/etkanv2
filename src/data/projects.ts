@@ -67,37 +67,6 @@ export const projects: Project[] = [
     year: "2025",
   },
   {
-    slug: "masar-infrastructure",
-    title: "موقع شركة مسار للبنية التحتية",
-    client: "شركة مسار",
-    industry: "المقاولات والبنية التحتية",
-    category: "website",
-    categoryLabel: "مواقع",
-    summary: "موقع مؤسسي لشركة مقاولات متخصصة في مشاريع البنية التحتية الكبرى في مصر",
-    description:
-      "صممنا موقعاً احترافياً لشركة مسار يعكس حجم مشاريعها الكبرى في البنية التحتية، مع عرض تفصيلي للمشاريع والشراكات والقدرات التقنية.",
-    problem:
-      "الشركة كانت محتاجة موقع يعكس حجمها الحقيقي كشركة بنية تحتية كبرى ويعرض مشاريعها القومية بشكل احترافي.",
-    solution:
-      "بنينا موقع مؤسسي متكامل بتصميم قوي يعرض المشاريع الكبرى زي قناة السويس الجديدة والقطار الكهربائي، مع صفحات تفصيلية لكل مشروع.",
-    results: [
-      { metric: "المشاريع المعروضة", value: "15+", description: "مشروع قومي معروض على الموقع" },
-      { metric: "الشراكات", value: "Siemens", description: "شراكات دولية مع كبرى الشركات" },
-      { metric: "رأس المال", value: "4 مليار", description: "جنيه حجم مشاريع معروضة" },
-    ],
-    tags: ["WordPress", "موقع مؤسسي", "بنية تحتية", "مقاولات"],
-    thumbnail: "/images/projects/masar-infrastructure.jpg",
-    images: [
-      "/images/projects/masar-infrastructure-2.jpg",
-      "/images/projects/masar-infrastructure-3.jpg",
-      "/images/projects/masar-infrastructure-4.jpg",
-      "/images/projects/masar-infrastructure-5.jpg",
-    ],
-    techStack: ["WordPress", "Elementor", "PHP", "MySQL"],
-    duration: "8 أسابيع",
-    year: "2024",
-  },
-  {
     slug: "masarat-education-platform",
     title: "منصة مسارات التعليمية",
     client: "مسارات",
@@ -126,68 +95,6 @@ export const projects: Project[] = [
     ],
     techStack: ["Next.js", "React", "Node.js", "PostgreSQL", "Stripe"],
     duration: "12 أسبوع",
-    year: "2024",
-  },
-  {
-    slug: "genesis-mining",
-    title: "موقع شركة جينيسيس للتعدين",
-    client: "Genesis Mining",
-    industry: "التعدين والموارد المعدنية",
-    category: "website",
-    categoryLabel: "مواقع",
-    summary: "موقع مؤسسي لشركة تعدين مصرية كبرى بعمليات تصدير عالمية",
-    description:
-      "صممنا موقعاً احترافياً ثنائي اللغة لشركة جينيسيس للتعدين يعرض منتجاتها المعدنية وعملياتها التشغيلية وخطط التوسع العالمية.",
-    problem:
-      "الشركة برأس مال 300 مليون دولار كانت محتاجة موقع يعكس حجمها العالمي ويستهدف عملاء في آسيا وأفريقيا وأوروبا.",
-    solution:
-      "بنينا موقع متعدد اللغات بتصميم عصري يعرض المنتجات والعمليات التشغيلية مع كتالوج رقمي وصفحات تفصيلية لكل منتج.",
-    results: [
-      { metric: "الإنتاج الشهري", value: "500K طن", description: "طاقة إنتاجية شهرية" },
-      { metric: "العمالة", value: "1,800+", description: "مهندس وفني وعامل" },
-      { metric: "الأسواق", value: "4 قارات", description: "تصدير لآسيا وأفريقيا وأوروبا وأمريكا" },
-    ],
-    tags: ["WordPress", "موقع مؤسسي", "تعدين", "تصدير"],
-    thumbnail: "/images/projects/genesis-mining-new.jpg",
-    images: [
-      "/images/projects/genesis-mining-2.jpg",
-      "/images/projects/genesis-mining-3.jpg",
-      "/images/projects/genesis-mining-4.jpg",
-      "/images/projects/genesis-mining-5.jpg",
-    ],
-    techStack: ["WordPress", "Elementor", "WooCommerce", "PHP"],
-    duration: "10 أسابيع",
-    year: "2024",
-  },
-  {
-    slug: "art-vision-agency",
-    title: "موقع وكالة Art Vision الإبداعية",
-    client: "Art Vision",
-    industry: "التسويق والإبداع الرقمي",
-    category: "website",
-    categoryLabel: "مواقع",
-    summary: "موقع لوكالة إبداعية متكاملة متخصصة في المحتوى الرقمي والتسويق",
-    description:
-      "صممنا موقعاً مميزاً لوكالة Art Vision يعرض خدماتها في التسويق الرقمي وإنشاء المحتوى وإدارة العلامات التجارية بتصميم إبداعي جذاب.",
-    problem:
-      "الوكالة كانت محتاجة موقع يعكس إبداعها ويعرض أعمالها بطريقة مميزة تجذب العملاء والعلامات التجارية.",
-    solution:
-      "بنينا موقع بتصميم إبداعي فريد مع معرض أعمال تفاعلي، صفحات خدمات مفصلة، ومدونة لعرض الخبرات.",
-    results: [
-      { metric: "العملاء الجدد", value: "+60%", description: "زيادة في استفسارات العملاء" },
-      { metric: "التفاعل", value: "3x", description: "زيادة في وقت تصفح الموقع" },
-      { metric: "المشاريع", value: "25+", description: "مشروع معروض في البورتفوليو" },
-    ],
-    tags: ["WordPress", "وكالة إبداعية", "تسويق رقمي", "محتوى"],
-    thumbnail: "/images/projects/art-vision-agency.jpg",
-    images: [
-      "/images/projects/art-vision-agency-2.jpg",
-      "/images/projects/art-vision-agency-3.jpg",
-      "/images/projects/art-vision-agency-4.jpg",
-      "/images/projects/art-vision-agency-5.jpg",
-    ],
-    techStack: ["WordPress", "Elementor", "PHP", "Bootstrap"],
-    duration: "8 أسابيع",
     year: "2024",
   },
   {
@@ -312,37 +219,6 @@ export const projects: Project[] = [
     ],
     techStack: ["HTML/CSS", "JavaScript", "Responsive Design"],
     duration: "7 أسابيع",
-    year: "2024",
-  },
-  {
-    slug: "klinicon-healthcare",
-    title: "منصة Klinicon الطبية",
-    client: "Klinicon",
-    industry: "الرعاية الصحية",
-    category: "website",
-    categoryLabel: "مواقع",
-    summary: "منصة طبية متكاملة لتقديم الخدمات الصحية والاستشارات الطبية",
-    description:
-      "طورنا منصة طبية شاملة لـ Klinicon تربط المرضى بالأطباء وتقدم خدمات صحية متكاملة بتصميم عصري وسهل الاستخدام.",
-    problem:
-      "العميل كان محتاج منصة طبية تربط المرضى بالأطباء وتسهّل عملية البحث والحجز والاستشارات.",
-    solution:
-      "بنينا منصة طبية بنظام بحث ذكي عن الأطباء والتخصصات، نظام حجز مواعيد، وواجهة سهلة للمرضى والأطباء.",
-    results: [
-      { metric: "الأطباء", value: "100+", description: "طبيب مسجل على المنصة" },
-      { metric: "التخصصات", value: "20+", description: "تخصص طبي متاح" },
-      { metric: "الحجوزات", value: "2,000+", description: "حجز شهري عبر المنصة" },
-    ],
-    tags: ["WordPress", "منصة طبية", "رعاية صحية", "حجز مواعيد"],
-    thumbnail: "/images/projects/klinicon-healthcare.jpg",
-    images: [
-      "/images/projects/klinicon-healthcare-2.jpg",
-      "/images/projects/klinicon-healthcare-3.jpg",
-      "/images/projects/klinicon-healthcare-4.jpg",
-      "/images/projects/klinicon-healthcare-5.jpg",
-    ],
-    techStack: ["WordPress", "Elementor", "PHP", "MySQL"],
-    duration: "14 أسبوع",
     year: "2024",
   },
 ];

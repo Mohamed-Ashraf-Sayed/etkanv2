@@ -28,6 +28,15 @@ const nextConfig: NextConfig = {
       // /tech-radar was an old route that got removed; send to /scope
       { source: "/tech-radar", destination: "/scope", permanent: true },
       { source: "/en/tech-radar", destination: "/en/scope", permanent: true },
+      // Portfolio projects removed from the site; redirect indexed URLs to the listing
+      { source: "/portfolio/masar-infrastructure", destination: "/portfolio", permanent: true },
+      { source: "/portfolio/genesis-mining", destination: "/portfolio", permanent: true },
+      { source: "/portfolio/art-vision-agency", destination: "/portfolio", permanent: true },
+      { source: "/portfolio/klinicon-healthcare", destination: "/portfolio", permanent: true },
+      { source: "/en/portfolio/masar-infrastructure", destination: "/en/portfolio", permanent: true },
+      { source: "/en/portfolio/genesis-mining", destination: "/en/portfolio", permanent: true },
+      { source: "/en/portfolio/art-vision-agency", destination: "/en/portfolio", permanent: true },
+      { source: "/en/portfolio/klinicon-healthcare", destination: "/en/portfolio", permanent: true },
     ];
   },
   async headers() {

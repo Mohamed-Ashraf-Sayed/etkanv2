@@ -18,26 +18,18 @@ interface ClientLogo {
 
 const companiesAr: ClientLogo[] = [
   { name: "عرب فيوتشر المحدودة", logo: "/images/logos/arab-future.png" },
-  { name: "شركة مسار", logo: "/images/logos/masar.png" },
-  { name: "جينيسيس للتعدين", logo: "/images/logos/genesis-mining.png" },
-  { name: "Art Vision", logo: "/images/logos/art-vision.png" },
   { name: "الصالح للقدرات التعليمية", logo: "/images/logos/al-saleh.png" },
   { name: "فواصل الجوف", logo: "/images/logos/fwaljouf.png" },
   { name: "ميدة التأسيسية", logo: "/images/logos/mida.png" },
-  { name: "Klinicon", logo: "/images/logos/klinicon.png" },
   { name: "مسارات" },
   { name: "القيروانة للمقاولات" },
 ];
 
 const companiesEn: ClientLogo[] = [
   { name: "Arab Future Ltd", logo: "/images/logos/arab-future.png" },
-  { name: "Masar Company", logo: "/images/logos/masar.png" },
-  { name: "Genesis Mining", logo: "/images/logos/genesis-mining.png" },
-  { name: "Art Vision", logo: "/images/logos/art-vision.png" },
   { name: "Al-Saleh Educational", logo: "/images/logos/al-saleh.png" },
   { name: "Fawasil Aljouf", logo: "/images/logos/fwaljouf.png" },
   { name: "Mida United", logo: "/images/logos/mida.png" },
-  { name: "Klinicon", logo: "/images/logos/klinicon.png" },
   { name: "Masarat" },
   { name: "Al-Qayrawana Contracting" },
 ];

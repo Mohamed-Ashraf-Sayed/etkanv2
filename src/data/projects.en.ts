@@ -44,37 +44,6 @@ export const projectsEn: Project[] = [
     year: "2025",
   },
   {
-    slug: "masar-infrastructure",
-    title: "Masar Infrastructure Company Website",
-    client: "Masar Company",
-    industry: "Construction & Infrastructure",
-    category: "website",
-    categoryLabel: "Websites",
-    summary: "Corporate website for a major construction company specializing in large-scale infrastructure projects in Egypt",
-    description:
-      "We designed a professional website for Masar that reflects the scale of their major infrastructure projects, with detailed project showcases, partnerships, and technical capabilities.",
-    problem:
-      "The company needed a website that reflects its true scale as a major infrastructure firm and showcases its national projects professionally.",
-    solution:
-      "We built a comprehensive corporate website with a strong design showcasing major projects like the New Suez Canal and Electric Train, with detailed pages for each project.",
-    results: [
-      { metric: "Projects Showcased", value: "15+", description: "National projects featured on the website" },
-      { metric: "Partnerships", value: "Siemens", description: "International partnerships with major companies" },
-      { metric: "Capital", value: "4 Billion", description: "EGP in showcased project value" },
-    ],
-    tags: ["WordPress", "Corporate Website", "Infrastructure", "Construction"],
-    thumbnail: "/images/projects/masar-infrastructure.jpg",
-    images: [
-      "/images/projects/masar-infrastructure-2.jpg",
-      "/images/projects/masar-infrastructure-3.jpg",
-      "/images/projects/masar-infrastructure-4.jpg",
-      "/images/projects/masar-infrastructure-5.jpg",
-    ],
-    techStack: ["WordPress", "Elementor", "PHP", "MySQL"],
-    duration: "8 weeks",
-    year: "2024",
-  },
-  {
     slug: "masarat-education-platform",
     title: "Masarat Educational Platform",
     client: "Masarat",
@@ -103,68 +72,6 @@ export const projectsEn: Project[] = [
     ],
     techStack: ["Next.js", "React", "Node.js", "PostgreSQL", "Stripe"],
     duration: "12 weeks",
-    year: "2024",
-  },
-  {
-    slug: "genesis-mining",
-    title: "Genesis Mining Company Website",
-    client: "Genesis Mining",
-    industry: "Mining & Mineral Resources",
-    category: "website",
-    categoryLabel: "Websites",
-    summary: "Corporate website for a major Egyptian mining company with global export operations",
-    description:
-      "We designed a professional bilingual website for Genesis Mining showcasing their mineral products, operational processes, and global expansion plans.",
-    problem:
-      "The company with $300M capital needed a website that reflects its global scale and targets clients in Asia, Africa, and Europe.",
-    solution:
-      "We built a multilingual website with modern design showcasing products and operations with a digital catalog and detailed product pages.",
-    results: [
-      { metric: "Monthly Production", value: "500K tons", description: "Monthly production capacity" },
-      { metric: "Workforce", value: "1,800+", description: "Engineers, technicians, and workers" },
-      { metric: "Markets", value: "4 Continents", description: "Exports to Asia, Africa, Europe, and Americas" },
-    ],
-    tags: ["WordPress", "Corporate Website", "Mining", "Export"],
-    thumbnail: "/images/projects/genesis-mining-new.jpg",
-    images: [
-      "/images/projects/genesis-mining-2.jpg",
-      "/images/projects/genesis-mining-3.jpg",
-      "/images/projects/genesis-mining-4.jpg",
-      "/images/projects/genesis-mining-5.jpg",
-    ],
-    techStack: ["WordPress", "Elementor", "WooCommerce", "PHP"],
-    duration: "10 weeks",
-    year: "2024",
-  },
-  {
-    slug: "art-vision-agency",
-    title: "Art Vision Creative Agency Website",
-    client: "Art Vision",
-    industry: "Marketing & Digital Creativity",
-    category: "website",
-    categoryLabel: "Websites",
-    summary: "Website for a full-service creative agency specializing in digital content and marketing",
-    description:
-      "We designed a distinctive website for Art Vision agency showcasing their digital marketing, content creation, and brand management services with a creative and attractive design.",
-    problem:
-      "The agency needed a website that reflects their creativity and showcases their work in a distinctive way to attract clients and brands.",
-    solution:
-      "We built a website with a unique creative design, interactive portfolio, detailed service pages, and a blog to showcase expertise.",
-    results: [
-      { metric: "New Clients", value: "+60%", description: "Increase in client inquiries" },
-      { metric: "Engagement", value: "3x", description: "Increase in website browsing time" },
-      { metric: "Projects", value: "25+", description: "Projects showcased in portfolio" },
-    ],
-    tags: ["WordPress", "Creative Agency", "Digital Marketing", "Content"],
-    thumbnail: "/images/projects/art-vision-agency.jpg",
-    images: [
-      "/images/projects/art-vision-agency-2.jpg",
-      "/images/projects/art-vision-agency-3.jpg",
-      "/images/projects/art-vision-agency-4.jpg",
-      "/images/projects/art-vision-agency-5.jpg",
-    ],
-    techStack: ["WordPress", "Elementor", "PHP", "Bootstrap"],
-    duration: "8 weeks",
     year: "2024",
   },
   {
@@ -289,37 +196,6 @@ export const projectsEn: Project[] = [
     ],
     techStack: ["HTML/CSS", "JavaScript", "Responsive Design"],
     duration: "7 weeks",
-    year: "2024",
-  },
-  {
-    slug: "klinicon-healthcare",
-    title: "Klinicon Medical Platform",
-    client: "Klinicon",
-    industry: "Healthcare",
-    category: "website",
-    categoryLabel: "Websites",
-    summary: "A comprehensive medical platform for delivering healthcare services and medical consultations",
-    description:
-      "We developed a comprehensive medical platform for Klinicon connecting patients with doctors and providing integrated healthcare services with a modern and user-friendly design.",
-    problem:
-      "The client needed a medical platform connecting patients with doctors and simplifying the search, booking, and consultation process.",
-    solution:
-      "We built a medical platform with smart doctor and specialty search, appointment booking system, and easy interface for patients and doctors.",
-    results: [
-      { metric: "Doctors", value: "100+", description: "Doctors registered on the platform" },
-      { metric: "Specialties", value: "20+", description: "Available medical specialties" },
-      { metric: "Bookings", value: "2,000+", description: "Monthly bookings through the platform" },
-    ],
-    tags: ["WordPress", "Medical Platform", "Healthcare", "Appointment Booking"],
-    thumbnail: "/images/projects/klinicon-healthcare.jpg",
-    images: [
-      "/images/projects/klinicon-healthcare-2.jpg",
-      "/images/projects/klinicon-healthcare-3.jpg",
-      "/images/projects/klinicon-healthcare-4.jpg",
-      "/images/projects/klinicon-healthcare-5.jpg",
-    ],
-    techStack: ["WordPress", "Elementor", "PHP", "MySQL"],
-    duration: "14 weeks",
     year: "2024",
   },
 ];

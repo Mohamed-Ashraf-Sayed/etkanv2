@@ -122,26 +122,6 @@ const caseStudies: CaseStudy[] = [
     },
     projectUrl: "/portfolio/masarat-education-platform",
   },
-  {
-    slug: "masar-infrastructure",
-    client: "شركة مسار",
-    clientEn: "Masar Company",
-    industry: "البنية التحتية والمقاولات — مصر",
-    logo: "/images/logos/masar.png",
-    thumbnail: "/images/projects/masar-infrastructure.jpg",
-    challenge:
-      "شركة مقاولات مصرية كبرى برأس مال 4 مليار جنيه ومشاريع قومية ضخمة زي قناة السويس الجديدة والقطار الكهربائي. المشكلة: موقعهم القديم ما كانش يوصّل حجم المشاريع للمستثمرين الدوليين والحكومات الخليجية. كانوا محتاجين منصة تعرض المشاريع القومية بطريقة احترافية تساعدهم يحصلوا على تعاقدات حكومية أكبر.",
-    solution:
-      "صممنا موقع مؤسسي بهوية بصرية قوية تتناسب مع حجم الشركة، مع صفحات تفصيلية لكل مشروع قومي بتشمل: التحديات، الحلول التقنية، الجدول الزمني، شركاء التنفيذ (Siemens، الهيئة الهندسية، إلخ). نظام إدارة شراكات يعرض اتفاقيات الشركة مع جهات حكومية ودولية، وصفحة استثمارية للمستثمرين والمناقصات.",
-    techStack: ["WordPress", "Elementor", "PHP", "MySQL", "Custom CMS"],
-    results: [
-      { label: "مشاريع قومية معروضة", value: "15+" },
-      { label: "شركاء دوليون موثقون", value: "Siemens, Alstom" },
-      { label: "حجم المشاريع المعروضة", value: "4 مليار جنيه" },
-      { label: "مدة التنفيذ", value: "8 أسابيع" },
-    ],
-    projectUrl: "/portfolio/masar-infrastructure",
-  },
 ];
 
 const aggregateRatingValue = "4.9";

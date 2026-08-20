@@ -2,10 +2,18 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { findProjectBySlug } from "@/lib/data";
+import { projects } from "@/data/projects";
 import { getAlternates, getBreadcrumbSchema } from "@/lib/seo";
 import ProjectDetailClient from "./ProjectDetailClient";
 
 export const revalidate = 3600;
+// Slugs come from a static list; unknown slugs must be a real 404, not a
+// streamed 200 "not found" page (soft 404 in GSC).
+export const dynamicParams = false;
+
+export async function generateStaticParams() {
+  return projects.map((p) => ({ slug: p.slug }));
+}
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://etqanly.com";
