@@ -5,6 +5,7 @@ import MagneticButton from "@/components/shared/MagneticButton";
 import { getTranslations } from "next-intl/server";
 import HeroScrollButton from "./HeroScrollButton";
 import HeroParallax from "./HeroParallax";
+import StatCounter from "./StatCounter";
 import { SITE_STATS } from "@/config/site-stats";
 
 export default async function Hero() {
@@ -16,10 +17,10 @@ export default async function Hero() {
       <HeroParallax />
 
       {/* Dark navy overlay */}
-      <div className="absolute inset-0 bg-navy/85" />
+      <div className="absolute inset-0 bg-navy/75" />
 
       {/* Gradient overlay for depth */}
-      <div className="absolute inset-0 bg-gradient-to-b from-navy/60 via-navy/80 to-navy" />
+      <div className="absolute inset-0 bg-gradient-to-b from-navy/50 via-navy/75 to-navy" />
 
       {/* Grid pattern */}
       <div
@@ -47,16 +48,16 @@ export default async function Hero() {
 
           {/* Main heading */}
           <h1 className="text-display font-black font-cairo text-white max-w-5xl mt-8">
-            {t("titleLine1")}
+            {t("titleLine1")}{" "}
             <span className="relative inline-block">
-              <span className="text-accent"> {t("titleHighlight")} </span>
-              <span className="absolute -bottom-1 left-0 w-full h-[3px] bg-accent/40 rounded-full" />
-            </span>
+              <span className="text-accent">{t("titleHighlight")}</span>
+              <span className="absolute -bottom-2 left-0 w-full h-[3px] bg-accent/50 rounded-full origin-center animate-[drawLine_0.8s_ease-out_0.6s_both]" />
+            </span>{" "}
             {t("titleLine2")}
           </h1>
 
           {/* Subtitle */}
-          <p className="text-lg sm:text-xl text-white/45 max-w-2xl font-cairo mt-8 leading-relaxed animate-[slideUp_0.5s_ease-out_0.15s_both]">
+          <p className="text-lg sm:text-xl text-white/70 max-w-2xl font-cairo mt-8 leading-relaxed animate-[slideUp_0.5s_ease-out_0.15s_both]">
             {t("subtitle")}
           </p>
 
@@ -116,16 +117,16 @@ export default async function Hero() {
           {/* Stats row */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8 mt-16 pt-10 border-t border-white/[0.06] animate-[slideUp_0.5s_ease-out_0.35s_both]">
             {[
-              { value: `+${SITE_STATS.clients}`, label: t("clients") },
-              { value: `+${SITE_STATS.projects}`, label: t("projects") },
-              { value: `+${SITE_STATS.yearsExperience}`, label: t("years") },
-              { value: `٪${SITE_STATS.satisfaction}`, label: t("satisfaction") },
+              { value: SITE_STATS.clients, prefix: "+", label: t("clients") },
+              { value: SITE_STATS.projects, prefix: "+", label: t("projects") },
+              { value: SITE_STATS.yearsExperience, prefix: "+", label: t("years") },
+              { value: SITE_STATS.satisfaction, prefix: "٪", label: t("satisfaction") },
             ].map((stat) => (
               <div key={stat.label} className="text-center sm:text-start">
-                <span className="block text-2xl sm:text-3xl font-bold text-accent font-cairo">
-                  {stat.value}
+                <span className="block text-3xl sm:text-4xl font-bold text-accent font-cairo">
+                  <StatCounter value={stat.value} prefix={stat.prefix} />
                 </span>
-                <span className="block text-xs sm:text-sm text-white/40 font-cairo mt-1">
+                <span className="block text-xs sm:text-sm text-white/50 font-cairo mt-1.5">
                   {stat.label}
                 </span>
               </div>

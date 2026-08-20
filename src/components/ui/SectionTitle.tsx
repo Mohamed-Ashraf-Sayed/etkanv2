@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import GoldDivider from "@/components/ui/GoldDivider";
 
 interface SectionTitleProps {
   title: string;
@@ -15,7 +16,7 @@ export default function SectionTitle({
 }: SectionTitleProps) {
   return (
     <div className={cn("mb-14", center && "text-center")}>
-      <div className={cn("gold-line mb-4", center && "mx-auto")} />
+      <GoldDivider center={center} className="mb-5" />
       <h2
         className={cn(
           "text-h2 font-bold mb-4 font-cairo",

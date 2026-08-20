@@ -16,7 +16,7 @@ interface ButtonProps {
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  gold: "bg-accent text-navy font-bold hover:bg-accent-light hover:shadow-[0_4px_20px_rgba(212,175,55,0.3)]",
+  gold: "bg-gradient-to-b from-accent-light to-accent text-navy font-bold shadow-[inset_0_1px_0_rgba(255,255,255,0.3)] hover:from-accent hover:to-accent-dark hover:shadow-[0_6px_24px_rgba(212,175,55,0.35),inset_0_1px_0_rgba(255,255,255,0.2)]",
   navy: "bg-navy text-white hover:bg-navy-light border border-transparent hover:border-accent",
   outline: "bg-transparent text-text-primary border border-border hover:border-accent hover:text-accent",
   "outline-light": "bg-transparent text-white border border-white/20 hover:border-accent hover:text-accent",
@@ -40,7 +40,7 @@ export default function Button({
   onClick,
 }: ButtonProps) {
   const baseStyles = cn(
-    "inline-flex items-center justify-center font-cairo font-semibold transition-all duration-300 cursor-pointer select-none",
+    "inline-flex items-center justify-center font-cairo font-semibold transition-all duration-300 cursor-pointer select-none active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
     variantStyles[variant],
     sizeStyles[size],
     disabled && "opacity-50 cursor-not-allowed pointer-events-none",

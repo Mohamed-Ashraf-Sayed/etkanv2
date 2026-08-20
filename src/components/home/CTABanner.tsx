@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
+import GoldDivider from "@/components/ui/GoldDivider";
 import MagneticButton from "@/components/shared/MagneticButton";
 import { useTranslations } from "next-intl";
 
@@ -34,8 +35,8 @@ export default function CTABanner() {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] as const }}
         >
-          {/* Gold accent line */}
-          <div className="gold-line mx-auto mb-8" />
+          {/* Manuscript divider */}
+          <GoldDivider className="mb-8" />
 
           <h2 className="text-h2 md:text-h1 font-bold font-cairo text-white mb-6 leading-tight">
             {t("title")}
